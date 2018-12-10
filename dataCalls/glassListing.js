@@ -14,11 +14,15 @@ axios("https://www.glassdoor.com/Job/jobs.htm?suggestCount=0&suggestChosen=true&
     // looperArr[7].map(val=>console.log(val))
     looperArr.map((jobArr, i) => {
         console.log(i)
+        let easyApp = false
+        if(jobArr[13] == "true"){
+            easyApp = true
+        }
         let jobObj = {
             jobSite: "GlassDoor",
             jobId: jobArr[1],
             empId: jobArr[3],
-            easyApply: jobArr[13],
+            easilyApply: easyApp,
             jobField: jobArr[15],
             jobLocation: jobArr[17],
             companyImage: jobArr[43],
