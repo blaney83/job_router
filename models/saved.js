@@ -5,8 +5,8 @@ const savedSchema = new Schema({
     isSaved: { type: Boolean, required: true, default: true },
     hasApplied: { type: Boolean, required: true, default: false },
     jobSite: { type: String, required: true },
-    jobId: [Schema.Types.Mixed],
-    empId: [Schema.Types.Mixed],
+    jobId: String,
+    empId: String,
     easily: Boolean,
     jobField: String,
     jobLocation: String,
@@ -21,6 +21,7 @@ const savedSchema = new Schema({
     employerId : String,
     jobReqId : String,
     jobDescription : String,
+    userId: String,
 });
 
 const Saved = mongoose.model("Saved", savedSchema);

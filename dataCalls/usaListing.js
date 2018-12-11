@@ -7,7 +7,7 @@ function useGetData(search, loc, numb) {
     let sP4 = sP3.map(strArr => strArr.join(""))
     let sP5 = sP4.join("%20")
     let lP1 = loc.split(", ")
-    console.log(lP1)
+    // console.log(lP1)
     let lP2 = lP1[0].split(" ")
     let lP25 = lP2.map(str=>str.split())
     let lP3 = lP25.map(strArr=>strArr.map((letter, ind)=> ind ==0 ? letter.toUpperCase(): letter))
