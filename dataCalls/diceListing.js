@@ -2,6 +2,7 @@
 // https://www.dice.com/jobs/q-software_engineer-Phoenix,_AZ-radius-30-startPage-2-jobs
 
 const axios = require("axios")
+
 async function diceGetData(search, loc, numb) {
     try {
         let sP = search.trim()
@@ -22,17 +23,20 @@ async function diceGetData(search, loc, numb) {
             }
             dicePromiseHolder[carI - 1] = axios(builtURL).catch(err => err)
         }
+        let darnArray = []
         await Promise.all(dicePromiseHolder).then(respArr => {
-            return(respArr.map(resp => {
+            respArr.map(resp => {
                 if (resp.status != undefined) {
-                    return (diceUpSomeData(resp))
+                    darnArray.push(diceUpSomeData(resp))
                 } else {
-                    return (diceUpSomeData(resp.response))
+                    darnArray.push(diceUpSomeData(resp.response))
                 }
-            }))
+            })
         }).catch(err => err)
+        return (darnArray)
     } catch{ e => e }
 }
+
 
 //then
 function diceUpSomeData(resp) {
@@ -98,7 +102,8 @@ function diceRegEx(str) {
 }
 
 module.exports = {
-    diceDataGet: diceDataGet,
+    // diceFunction: diceFunction,
+    diceDataGet: diceGetData,
     diceRegEx: diceRegEx,
     diceUpSomeData: diceUpSomeData
 }

@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const jobSchema = new Schema({
     jobSite: { type: String, required: true },
-    jobId: [Schema.Types.Mixed],
-    empId: [Schema.Types.Mixed],
+    jobId: String,
+    empId: String,
     easily: Boolean,
     jobField: String,
     jobLocation: String,

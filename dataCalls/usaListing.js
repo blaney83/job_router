@@ -32,11 +32,11 @@ function useGetData(search, loc, numb) {
     }
 
 
+    let usaDataHolder = []
     axios(reqSettings).then(resp => {
         let jobsArr = resp.data.SearchResult.SearchResultItems
-        console.log(resp.data)
-        console.log(jobsArr.length)
-        let usaDataHolder = []
+        // console.log(resp.data)
+        // console.log(jobsArr.length)
         jobsArr.map((val, i) => {
             let jobObj = {
                 jobSite: "USA Jobs",
@@ -56,9 +56,10 @@ function useGetData(search, loc, numb) {
             }
             usaDataHolder.push(jobObj)
         })
-        console.log(usaDataHolder)
+        // console.log(usaDataHolder)
         return (usaDataHolder)
     })
+    return([usaDataHolder])
 }
 //example call
 // useGetData("software engineer", "Phoenix, az", 0)

@@ -76,6 +76,7 @@ async function glassGetData(search, loc, numb) {
             glassPromiseHolder[carI - 1] = axios(builtURL)
         }
         // console.log(glassPromiseHolder)
+        let glassDataArray = []
         await Promise.all(glassPromiseHolder).then(respArr => {
             let parseDataPromiseArr = []
             respArr.forEach((val, i) => {
@@ -85,11 +86,13 @@ async function glassGetData(search, loc, numb) {
                 })
             })
             Promise.all(parseDataPromiseArr).then(resp=>{
-                console.log(resp)
-                return(resp)
+                resp.map(val=>{
+                    glassDataArray.push(val)
+                })
             })
         })
-    } catch{ e => console.log(e) }
+        return(glassDataArray)
+    } catch{ e => e}
 }
 
 function glassUpSomeData(resp) {

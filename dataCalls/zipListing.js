@@ -2,22 +2,28 @@
 const axios = require("axios")
 
 async function zipGetData(search, loc, numb) {
-    let sP1 = search.toLowerCase()
-    let sP2 = sP1.replace(/ /g, "%20")
-    let lP1 = loc.split(", ")
-    let state1 = lP1[1].toUpperCase()
-    let lP2 = lP1[0].replace(/ /g, "%20")
-    let lP3 = lP2 + "%2C%20" + state1
-    let zipPromiseHolder = []
-    for (var carI = 1; carI < numb; carI++) {
-        let builtURL = "https://www.ziprecruiter.com/candidate/search?search="+sP2+"&location="+lP3+"&page="+ carI +"&radius=25"
-        // console.log(builtURL)
-        zipPromiseHolder[carI -1] = axios(builtURL)
-    }
-    // console.log(zipPromiseHolder)
-    await Promise.all(zipPromiseHolder).then(resp=>{
-        return(resp.map(val=>zipSomeData(val)))
-    })
+    try {
+        let sP1 = search.toLowerCase()
+        let sP2 = sP1.replace(/ /g, "%20")
+        let lP1 = loc.split(", ")
+        let state1 = lP1[1].toUpperCase()
+        let lP2 = lP1[0].replace(/ /g, "%20")
+        let lP3 = lP2 + "%2C%20" + state1
+        let zipPromiseHolder = []
+        for (var carI = 1; carI < numb; carI++) {
+            let builtURL = "https://www.ziprecruiter.com/candidate/search?search=" + sP2 + "&location=" + lP3 + "&page=" + carI + "&radius=25"
+            // console.log(builtURL)
+            zipPromiseHolder[carI - 1] = axios(builtURL)
+        }
+        // console.log(zipPromiseHolder)
+        let zipDataArray = []
+        await Promise.all(zipPromiseHolder).then(resp => {
+            resp.map(val => {
+                zipDataArray.push(zipSomeData(val))
+            })
+        })
+        return (zipDataArray)
+    } catch{ e => e }
 }
 
 function zipSomeData(resp) {

@@ -21,6 +21,7 @@ async function indeedGetData(search, loc, numb) {
             urlHolder[carI - 1] = builtURL
         }
         // console.log(indeedPromiseHolder)
+        let indeedDataArray = []
         await Promise.all(indeedPromiseHolder).then(resp => {
             // console.log("resolved")
             let dataPromiseHolder = []
@@ -32,9 +33,12 @@ async function indeedGetData(search, loc, numb) {
             Promise.all(dataPromiseHolder).then(resp => {
                 // console.log(resp.length)
                 // console.log(resp[0].length)
-                return(resp)
+                resp.map(val=>{
+                    indeedDataArray.push(val)
+                })
             })
         })
+        return(indeedDataArray)
     } catch{ e => e }
 }
 

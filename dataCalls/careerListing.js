@@ -1,10 +1,8 @@
 
 const axios = require("axios")
-const fs = require('fs')
 
 async function careerDataGet(search, loc, numb) {
     try {
-        console.log("working")
         let sP = search.toLowerCase()
         let sP1 = sP.trim()
         let searchParams = sP1.replace(/ /g, "-")
@@ -23,12 +21,14 @@ async function careerDataGet(search, loc, numb) {
             careerPromiseHolder[carI-1] = axios(builtURL)
         }
         // console.log(careerPromiseHolder)
+        let careerDataArray = []
         await Promise.all(careerPromiseHolder).then(respArr => {
-            return(respArr.map(info=>funkUpSomeData(info)))
+            respArr.map(info=>{
+                careerDataArray.push(funkUpSomeData(info))
+            })
         })
-    } catch (e) {
-        return (e)
-    }
+        return(careerDataArray)
+    } catch{e=>e}
 }
 //then
 function funkUpSomeData(resp) {
