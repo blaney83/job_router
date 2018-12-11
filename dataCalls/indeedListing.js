@@ -1,31 +1,71 @@
 
 const axios = require("axios")
 
-let builtURL = "https://www.indeed.com/jobs?q=software%20engineer&l=Phoenix%2C%20AZ"
-axios(builtURL, {
-    method: "GET"
-}).then(resp => {
+async function indeedGetData(search, loc, numb) {
+    try {
+        let lP1 = loc.trim()
+        let lP4 = lP1.split(",")
+        let lP5 = lP4[1].toUpperCase()
+        let lP25 = lP4[0] + lP5
+        let lP2 = lP25.replace(",", "%2C")
+        let lP3 = lP2.replace(/ /g, "+")
+        let sP1 = search.trim()
+        let sP2 = sP1.toLowerCase()
+        let sP3 = sP2.replace(/ /g, "+")
+        let indeedPromiseHolder = []
+        let urlHolder = []
+        for (var carI = 1; carI < numb; carI++) {
+            let builtURL = "https://www.indeed.com/jobs?q=" + sP3 + "&l=" + lP3 + "&start=" + (carI - 1) + "0"
+            // console.log(builtURL)
+            indeedPromiseHolder[carI - 1] = axios(builtURL)
+            urlHolder[carI - 1] = builtURL
+        }
+        // console.log(indeedPromiseHolder)
+        let indeedDataArray = []
+        await Promise.all(indeedPromiseHolder).then(resp => {
+            // console.log("resolved")
+            let dataPromiseHolder = []
+            resp.forEach((val, i) => {
+                dataPromiseHolder[i] = new Promise(function (resolve, reject) {
+                    resolve(indeedSomeData(val, urlHolder[i]))
+                })
+            })
+            Promise.all(dataPromiseHolder).then(resp => {
+                // console.log(resp.length)
+                // console.log(resp[0].length)
+                resp.map(val=>{
+                    indeedDataArray.push(val)
+                })
+            })
+        })
+        return(indeedDataArray)
+    } catch{ e => e }
+}
+
+function indeedSomeData(resp, builtURL) {
+    // console.log("resolved")
     let secArr = resp.data.split('<td id="resultsCol">')
     let firArr = secArr[1].split('<div class="result-link-bar-container">')
-    let myInd = firArr.length-1
+    let myInd = firArr.length - 1
     firArr.splice(myInd, 1)
-    firArr.map((jobArr, i)=>{
+    let finishedDataArray = []
+    firArr.map((jobArr, i) => {
         // console.log(jobArr.length)
         let ageArr = jobArr.split('JobAge\'] = "')
         let secAgeArr = [null]
-        if(ageArr.length > 1){
+        if (ageArr.length > 1) {
             secAgeArr = ageArr[1].split('";window')
         }
         let compArr = jobArr.split('"company">\n')
         let secCompArr = compArr[1].split('</span>')
         let yaz = secCompArr[0].split('rel="noopener"\n')
-        if(yaz.length >1){
-                let zay = yaz[1].split('</a>')
-                secCompArr = [zay[0]]
+        if (yaz.length > 1) {
+            let zay = yaz[1].split('</a>')
+            secCompArr = [zay[0]]
         }
         let salArr = jobArr.split('salary no-wrap">')
         let secSalArr = [null]
-        if(salArr.length >1){
+        if (salArr.length > 1) {
             let blah = salArr[1].split("</span>")
             secSalArr = [regEx(blah[0])]
         }
@@ -33,14 +73,14 @@ axios(builtURL, {
         let secLocArr = locArr[1].split('" style')
         let posArr = jobArr.split('(\'SJ\')">')
         let secPosArr = [null]
-        if(posArr.length > 1){
+        if (posArr.length > 1) {
             let booNahNah = posArr[1].split('</a')
             secPosArr = [regEx(booNahNah[0])]
-        }else{
+        } else {
             let zyt = posArr[0].split('title="')
             let xtw = zyt[2].split('"\n')
             let garbArb = xtw[0].split('/salaries/')
-            if(garbArb.length >1){
+            if (garbArb.length > 1) {
                 let secGarbArb = garbArb[1].split("-Salaries")
                 secPosArr = [regEx(secGarbArb[0])]
             }
@@ -50,14 +90,14 @@ axios(builtURL, {
         let secDescArr = [regEx(booEy[0])]
         let linkArr = jobArr.split('jobtitle turnstileLink" href="')
         let secLinkArr = [builtURL]
-        if(linkArr.length > 1){
+        if (linkArr.length > 1) {
             let blooBloo = linkArr[1].split('"')
             secLinkArr = ["https://www.indeed.com" + blooBloo[0]]
-        }else{
+        } else {
             secLinkArr = [builtURL]
         }
         let easyArr = [false]
-        if(jobArr.includes('Easily apply')){
+        if (jobArr.includes('Easily apply')) {
             easyArr = [true]
         }
         let idArr = jobArr.split('<a id="')
@@ -65,7 +105,7 @@ axios(builtURL, {
         let jobObj = {
             jobSite: "Indeed",
             postingAge: secAgeArr[0],
-            jobLink : secLinkArr[0],
+            jobLink: secLinkArr[0],
             positionTitle: secPosArr[0],
             easilyApply: easyArr[0],
             jobId: secIdArr[0],
@@ -75,11 +115,13 @@ axios(builtURL, {
             salaryRange: secSalArr[0],
             jobDescription: secDescArr[0]
         }
-        console.log(jobObj)
+        // console.log(jobObj)
+        finishedDataArray.push(jobObj)
     })
-})
+    return(finishedDataArray)
+}
 
-function regEx(str){
+function regEx(str) {
     let sN = str.replace(/>\n/g, "")
     let s1 = sN.trim();
     let s2 = s1.replace(/<b>/g, "")
@@ -89,5 +131,14 @@ function regEx(str){
     let s6 = s5.replace(/&amp;/g, "&")
     let s7 = s6.replace(/&#x27;/g, "'")
     let s8 = s7.replace(/\'/g, "'")
-    return(s8)
+    return (s8)
+}
+
+//example call
+// indeedGetData("software engineer", "phoenix, az", 4)
+
+module.exports = {
+    indeedGetData: indeedGetData,
+    indeedSomeData: indeedSomeData,
+    regEx: regEx
 }

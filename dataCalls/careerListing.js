@@ -1,21 +1,48 @@
-let builtURL = "https://www.careerbuilder.com/jobs-software-engineer-in-phoenix,az"
 
 const axios = require("axios")
-const fs = require('fs')
 
-axios(builtURL, {
-    method: "GET"
-}).then(resp => {
+async function careerDataGet(search, loc, numb) {
+    try {
+        let sP = search.toLowerCase()
+        let sP1 = sP.trim()
+        let searchParams = sP1.replace(/ /g, "-")
+        let lP = loc.toLowerCase()
+        let lP1 = lP.trim()
+        let lP2 = lP1.replace(" ", "")
+        let locationParams = lP1.replace(" ", ",")
+        if (lP1.length - lP2 > 1) {
+            let lP3 = lP1.replace(" ", "-")
+            locationParams = lP3.replace(" ", ",")
+        }
+        let careerPromiseHolder = []
+        for (var carI = 1; carI < numb; carI++) {
+            // let builtURL = "https://www.careerbuilder.com/jobs-software-engineer-in-phoenix,az" ?page_number=1
+            let builtURL = "https://www.careerbuilder.com/jobs-" + searchParams + "-in-" + locationParams + "?page_number=" + carI;
+            careerPromiseHolder[carI-1] = axios(builtURL)
+        }
+        // console.log(careerPromiseHolder)
+        let careerDataArray = []
+        await Promise.all(careerPromiseHolder).then(respArr => {
+            respArr.map(info=>{
+                careerDataArray.push(funkUpSomeData(info))
+            })
+        })
+        return(careerDataArray)
+    } catch{e=>e}
+}
+//then
+function funkUpSomeData(resp) {
     let firstArr = resp.data.split("div class='jobs'>")
-    firstArr.splice(0,1)
+    firstArr.splice(0, 1)
     let secArr = firstArr[0].split('jobs-email')
-    secArr.splice(1,1)
+    secArr.splice(1, 1)
     let finArr = secArr[0].split('job-row')
-    let myInd = finArr.length -1
+    let myInd = finArr.length - 1
     finArr.splice(myInd, 1)
-    finArr.splice(3,1)
-    finArr.splice(0,1)
-    finArr.map((val, i)=>{
+    finArr.splice(3, 1)
+    finArr.splice(0, 1)
+    let dataHolder = []
+    finArr.map((val, i) => {
         let easilyApply = false
         let idSplit = val.split('data-job-did="')
         let secIdSplit = idSplit[1].split('"')
@@ -33,17 +60,17 @@ axios(builtURL, {
         let firEmpSplit = val.split("company-click")
         let locSplit = val.split("job-text'>")
         let secLocSplit = locSplit[2].split("<")
-        if(firEmpSplit.length >1){
+        if (firEmpSplit.length > 1) {
             let empSplit = firEmpSplit[1].split('">')
             secEmpSplit = empSplit[1].split("<")
         }
-        if(val.includes("CAREERBUILDER APPLY")){
+        if (val.includes("CAREERBUILDER APPLY")) {
             easilyApply = true
         }
         let jobObj = {
             jobSite: "CareerBuilder",
             postingAge: regEx(secPosAgeSplit[0]),
-            jobLink : "https://www.careerbuilder.com" + secLinkSplit[0],
+            jobLink: "https://www.careerbuilder.com" + secLinkSplit[0],
             positionTitle: secPosSplit[0],
             easilyApply: easilyApply,
             jobId: secIdSplit[0],
@@ -54,12 +81,13 @@ axios(builtURL, {
             salaryRange: null,
             jobDescription: regEx(thirDescSplit[0])
         }
-        console.log(jobObj)
+        // console.log(i)
+        dataHolder.push(jobObj)
     })
-    // fs.writeFile('log.txt', finArr[0], err=> console.log(err))
-})
+    return(dataHolder)
+}
 
-function regEx(str){
+function regEx(str) {
     let sN = str.replace(/>\n/g, "")
     let sY = sN.replace(/\n/g, " ")
     let s1 = sY.trim();
@@ -70,5 +98,14 @@ function regEx(str){
     let s6 = s5.replace(/&amp;/g, "&")
     let s7 = s6.replace(/&#x27;/g, "'")
     let s8 = s7.replace(/\'/g, "'")
-    return(s8)
+    return (s8)
 }
+
+module.exports = {
+    careerDataGet: careerDataGet,
+    regEx: regEx,
+    funkUpSomeData: funkUpSomeData
+}
+
+//example call
+// careerDataGet("software engineering", "Phoenix AZ", 5)
