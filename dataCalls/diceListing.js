@@ -1,28 +1,48 @@
 // let builtURL = "https://www.dice.com/jobs/q-Software_Engineer-l-Phoenix%2C_AZ-radius-30-startPage-1-jobs"
-
-let dicePackage = {
-    "async": true,
-    "crossDomain": true,
-    "url": "https://www.dice.com/jobs/q-Software_Engineer-l-Phoenix,_AZ-radius-30-startPage-1-jobs",
-    "method": "GET",
-    "headers": {
-        "cache-control": "no-cache",
-        "Postman-Token": "757221dc-de3d-4dab-ba79-e152bcc16156"
-    }
-}
+// https://www.dice.com/jobs/q-software_engineer-Phoenix,_AZ-radius-30-startPage-2-jobs
 
 const axios = require("axios")
+async function diceGetData(search, loc, numb) {
+    try {
+        let sP = search.trim()
+        let sP1 = sP.toLowerCase()
+        let sP2 = sP1.replace(/ /g, "_")
+        let sP3 = sP1.replace(/ /g, "_")
+        let lP = loc.trim()
+        let lP2 = lP.replace(/ /g, "_")
+        let lP21 = lP.replace(/ /g, "+")
+        let lP3 = lP2.replace(/,/, "%2C")
+        let lP31 = lP21.replace(/,/, "%2C")
+        let dicePromiseHolder = []
+        for (var carI = 1; carI < numb; carI++) {
+            let builtURL = "https://www.dice.com/jobs/q-" + sP2 + "-" + lP3 + "-radius-30-startPage-" + carI + "-jobs"
+            if (carI == 1) {
+                builtURL = "https://www.dice.com/jobs?q=" + sP3 + "&l=" + lP31
+                // builtURL = "https://www.dice.com/jobs/q-" + sP2 + "-" + lP3 + "-radius-30-startPage-jobs"
+            }
+            dicePromiseHolder[carI - 1] = axios(builtURL).catch(err => err)
+        }
+        await Promise.all(dicePromiseHolder).then(respArr => {
+            return(respArr.map(resp => {
+                if (resp.status != undefined) {
+                    return (diceUpSomeData(resp))
+                } else {
+                    return (diceUpSomeData(resp.response))
+                }
+            }))
+        }).catch(err => err)
+    } catch{ e => e }
+}
 
-axios("https://www.dice.com/jobs?q=Software+Engineer&l=Phoenix%2C+AZ", {
-    method: "GET"
-}).then(resp => {
-    console.log("working")
+//then
+function diceUpSomeData(resp) {
     let begArr = resp.data.split('<div id="serp">')
-    begArr.splice(0,1)
+    begArr.splice(0, 1)
     let bob = begArr[0].split("<div id='dice_paging_btm'></div>")
     let jobArr = bob[0].split('<div class="complete-serp-result-div"')
-    jobArr.splice(0,1)
-    jobArr.map((val, i)=>{
+    jobArr.splice(0, 1)
+    let diceDataHolder = []
+    jobArr.map((val, i) => {
         let linkSplit = val.split('href="')
         let secLinkSplit = linkSplit[1].split('"')
         let titleSplit = val.split('title="')
@@ -40,40 +60,47 @@ axios("https://www.dice.com/jobs?q=Software+Engineer&l=Phoenix%2C+AZ", {
         let idSplit = val.split('id ="viewedId')
         let secIdSplit = idSplit[1].split('"')
         let secLogoSplit = logoSplit[1].split('</div')
-        if(secLogoSplit[0].includes("<img")){
+        if (secLogoSplit[0].includes("<img")) {
             let thirLogoSplit = secLogoSplit[0].split('src="')
             let fourLogoSplit = thirLogoSplit[1].split('"')
             compLogo = "https:" + fourLogoSplit[0]
         }
         let easilyApply = false
-        if(val.includes("easy-apply")){
+        if (val.includes("easy-apply")) {
             easilyApply = true
         }
         let jobObj = {
-                jobSite: "Dice",
-                postingAge: diceRegEx(secPostAge[0]),
-                jobLink : "https://www.dice.com" + secLinkSplit[0],
-                positionTitle: secTitleSplit[0],
-                easilyApply: easilyApply,
-                jobId: secIdSplit[0],
-                companyImage: compLogo,
-                jobCompany: secCompSplit[0],
-                jobLocation: secLocSplit[0],
-                salaryRange: null,
-                jobDescription: thirDescSplit[0]
+            jobSite: "Dice",
+            postingAge: diceRegEx(secPostAge[0]),
+            jobLink: "https://www.dice.com" + secLinkSplit[0],
+            positionTitle: secTitleSplit[0],
+            easilyApply: easilyApply,
+            jobId: secIdSplit[0],
+            companyImage: compLogo,
+            jobCompany: secCompSplit[0],
+            jobLocation: secLocSplit[0],
+            salaryRange: null,
+            jobDescription: thirDescSplit[0]
         }
-        console.log(jobObj)
+        diceDataHolder.push(jobObj)
     })
-}).catch(err => {
-    console.log("Something broke: " + err)
-})
+    return (diceDataHolder)
+}
 
-function diceRegEx(str){
+function diceRegEx(str) {
     let str1 = str.replace(/\n/g, "")
     let str2 = str1.replace(/\t/g, "")
-    if(str2.length>0){
+    if (str2.length > 0) {
         return str2.trim()
-    }else{
+    } else {
         return null
     }
 }
+
+module.exports = {
+    diceDataGet: diceDataGet,
+    diceRegEx: diceRegEx,
+    diceUpSomeData: diceUpSomeData
+}
+//example call
+// diceGetData("Software Engineer", "Phoenix, AZ", 5)
