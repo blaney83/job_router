@@ -2,9 +2,10 @@
   "name": "material-dashboard-react",
   "homepage": "https://github.com/creativetimofficial/material-dashboard-react",
   "authors": [
+    "blaney83",
     "creative-tim"
   ],
-  "description": "A Badass Material-UI Kit based on Material Design",
+  "description": "A Badass Job Search Website built with front-end help from Material-UI Kit based on Material Design",
   "main": "public/index.html",
   "keywords": [
     "material",
