@@ -141,7 +141,7 @@ function mapDispatchToProps(dispatch) {
                     numberApplied: res.data.numberSaved,
                     recentSearches: []
                 }));
-                reroute.go("/")
+                reroute.push("/")
             }).catch(err => {
                 alert("Please complete all of the inputs before creating your account")
                 console.error(err);

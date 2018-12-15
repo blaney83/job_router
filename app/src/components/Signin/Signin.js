@@ -55,7 +55,7 @@ function SignUp(props) {
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => props.signin(email, password)}>
+                            onClick={() => props.signin(email, password, props.router.history)}>
                             Sign In!
                 </Button>
                     </Grid>
@@ -81,7 +81,7 @@ SignUp.propTypes = {
 
 function mapDispatchToProps(dispatch) {
     return {
-        signin(email, password) {
+        signin(email, password, reroute) {
             axios.post("/v1/auth/signin", { email, password }).then(res => {
                 console.log(res.data)
                 dispatch(updateAuth({
@@ -95,6 +95,7 @@ function mapDispatchToProps(dispatch) {
                     numberApplied: res.data.numberSaved,
                     recentSearches: []
                 }));
+                reroute.push("/dashboard")
             }).catch(err => {
                 console.error(err);
             })
