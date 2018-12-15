@@ -26,13 +26,14 @@ router.get("/protected", requireAuth, function (req, res) {
 });
 
 router.post("/signin", requireSignin, function (req, res) {
+    console.log("listening")
     res.json({ token: tokenizer(req.user) });
 });
 
 router.post("/signup", function (req, res) {
-    const { email, password } = req.body;
-
+    const { email, password, username, firstName, lastName, userCity, userStateCode } = req.body;
     if (!email || !password) {
+        console.log("this is broken")
         res.status(422).send({ error: "You must provide an email and password" });
     }
 
@@ -40,15 +41,29 @@ router.post("/signup", function (req, res) {
         .then(dbuser => {
             // if the user exists return an error
             if (dbuser) {
+                console.log("this is broken")
                 return res.status(422).send({ error: "Email already in use" });
             }
             //create new user object
-            const user = new db.User({ email, password });
+            const user = new db.User({ email, password, username, firstName, lastName, userCity, userStateCode });
             // save the user
             user.save().then(user => {
+                console.log("fired")
                 console.log(user);
                 // respond with the success if the user existed
-                res.json({ token: tokenizer(user) });
+                let userResponse = {
+                    username: user.username,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    userCity: user.userCity,
+                    userStateCode: user.userStateCode,
+                    numberSaved: user.numberSaved,
+                    numberApplied: user.numberApplied,
+                    recentSearches: user.recentSearches,
+                    token: tokenizer(user),   
+                }
+                console.log(userResponse)
+                res.json(userResponse);
             });
         })
         .catch(err => {

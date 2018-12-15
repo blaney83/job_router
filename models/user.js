@@ -3,8 +3,16 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
 
 const UserSchema = new Schema({
-    email: { type: String, required: true, lowercase: true },
-    password: String
+    email: { type: String, required: true, lowercase: true, unique: true },
+    password: String,
+    username: { type: String, required: true, lowercase: true, unique: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    numberSaved: { type: Number, default: 0 },
+    numberApplied: { type: Number, default: 0 },
+    userCity: String,
+    userStateCode: String,
+    recentSearches: Array,
 });
 
 // On save hook, encrypt password
@@ -13,7 +21,6 @@ UserSchema.pre("save", function (next) {
         if (err) {
             return next(err);
         }
-
         bcrypt.hash(this.password, salt, (err, hash) => {
             if (err) {
                 return next(err);
