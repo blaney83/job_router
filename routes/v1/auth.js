@@ -3,8 +3,8 @@ const db = require("../../models");
 const jwt = require("jwt-simple");
 const config = require("../../config");
 const passport = require("passport");
-const requireSignin = passport.authenticate("local", { session: false });
-const requireAuth = passport.authenticate("jwt", { session: false });
+const requireSignin = passport.authenticate("local", { session: false, failureFlash: true });
+const requireAuth = passport.authenticate("jwt", { session: false, failureFlash: true });
 
 function tokenizer(user) {
     const timestamp = new Date().getTime();
@@ -26,8 +26,22 @@ router.get("/protected", requireAuth, function (req, res) {
 });
 
 router.post("/signin", requireSignin, function (req, res) {
-    console.log("listening")
-    res.json({ token: tokenizer(req.user) });
+    const { email, password } = req.body
+    db.User.findOne({ "email": email })
+        .then(userResp => {
+            let userResponse = {
+                username: userResp.username,
+                firstName: userResp.firstName,
+                lastName: userResp.lastName,
+                userCity: userResp.userCity,
+                userStateCode: userResp.userStateCode,
+                numberSaved: userResp.numberSaved,
+                numberApplied: userResp.numberApplied,
+                recentSearches: userResp.recentSearches,
+                token: tokenizer(userResp),
+            }
+            res.json(userResponse)
+        })
 });
 
 router.post("/signup", function (req, res) {
@@ -41,15 +55,12 @@ router.post("/signup", function (req, res) {
         .then(dbuser => {
             // if the user exists return an error
             if (dbuser) {
-                console.log("this is broken")
                 return res.status(422).send({ error: "Email already in use" });
             }
             //create new user object
             const user = new db.User({ email, password, username, firstName, lastName, userCity, userStateCode });
             // save the user
             user.save().then(user => {
-                console.log("fired")
-                console.log(user);
                 // respond with the success if the user existed
                 let userResponse = {
                     username: user.username,
@@ -60,9 +71,8 @@ router.post("/signup", function (req, res) {
                     numberSaved: user.numberSaved,
                     numberApplied: user.numberApplied,
                     recentSearches: user.recentSearches,
-                    token: tokenizer(user),   
+                    token: tokenizer(user),
                 }
-                console.log(userResponse)
                 res.json(userResponse);
             });
         })

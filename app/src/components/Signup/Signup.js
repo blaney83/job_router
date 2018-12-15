@@ -13,17 +13,6 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
-
-// function handleSignin(email, password){
-//     console.log(email)
-//     console.log(password)
-//     axios.post("/v1/auth/signup", {email, password}).then(res => {
-//         console.log(res);
-//     }).catch(err => {
-//         console.error(err);
-//     })
-// }
-
 const styles = () => ({
 
 })
@@ -123,11 +112,7 @@ function SignUp(props) {
                     <Grid item >or</Grid>
                     <Grid item >
                         <Link to="/">
-                            <Button
-                                variant="contained"
-                            >
-                                Sign In
-                        </Button>
+                            <Button variant="contained">Sign In</Button>
                         </Link>
                     </Grid>
                 </Grid>

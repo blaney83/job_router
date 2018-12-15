@@ -13,7 +13,6 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
-
 const styles = () => ({
 
 })
@@ -33,7 +32,7 @@ function SignUp(props) {
             <CardContent>
                 <TextField
                     // id="standard-with-placeholder"
-                    label="Email or Username"
+                    label="Email"
                     placeholder="example@example.com"
                     className={classes.textField}
                     margin="normal"
@@ -51,16 +50,16 @@ function SignUp(props) {
                 />
             </CardContent>
             <CardActions>
-            <Grid container direction="row" alignItems="center" justify="space-between">
+                <Grid container direction="row" alignItems="center" justify="space-between">
                     <Grid item >
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => props.signin(email, password)}>
-                    Sign In!
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => props.signin(email, password)}>
+                            Sign In!
                 </Button>
-                </Grid>
-                <Grid item >or</Grid>
+                    </Grid>
+                    <Grid item >or</Grid>
                     <Grid item >
                         <Link to="/signup">
                             <Button
@@ -83,42 +82,22 @@ SignUp.propTypes = {
 function mapDispatchToProps(dispatch) {
     return {
         signin(email, password) {
-            if (email.includes("@" && ".")) {
-                axios.post("/v1/auth/signin", { email, password }).then(res => {
-                    console.log(res.data)
-                    dispatch(updateAuth({
-                        token: res.data.token,
-                        username: res.data.username,
-                        firstName: res.data.firstName,
-                        lastName: res.data.lastName,
-                        userCity: res.data.userCity,
-                        userStateCode: res.data.userStateCode,
-                        numberSaved: res.data.numberSaved,
-                        numberApplied: res.data.numberSaved,
-                        recentSearches: []
-                    }));
-                }).catch(err => {
-                    console.error(err);
-                })
-            } else {
-                axios.post("/v1/auth/signin", { email, password }).then(res => {
-                    console.log(res.data)
-                    dispatch(updateAuth({
-                        token: res.data.token,
-                        username: res.data.username,
-                        firstName: res.data.firstName,
-                        lastName: res.data.lastName,
-                        userCity: res.data.userCity,
-                        userStateCode: res.data.userStateCode,
-                        numberSaved: res.data.numberSaved,
-                        numberApplied: res.data.numberSaved,
-                        recentSearches: []
-                    }));
-                }).catch(err => {
-                    console.error(err);
-                })
-            }
-
+            axios.post("/v1/auth/signin", { email, password }).then(res => {
+                console.log(res.data)
+                dispatch(updateAuth({
+                    token: res.data.token,
+                    username: res.data.username,
+                    firstName: res.data.firstName,
+                    lastName: res.data.lastName,
+                    userCity: res.data.userCity,
+                    userStateCode: res.data.userStateCode,
+                    numberSaved: res.data.numberSaved,
+                    numberApplied: res.data.numberSaved,
+                    recentSearches: []
+                }));
+            }).catch(err => {
+                console.error(err);
+            })
         }
     }
 }
