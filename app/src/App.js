@@ -15,7 +15,7 @@ function App(props) {
           <Route exact path="/" component={Landing}/>
           <Route exact path="/signin" component={Landing}/>
           <Route exact path="/signup" component={Landing}/>
-          <Route path="/dashboard" component={Dashboard}/>
+          <Route path="/dashboard/:params?" component={Dashboard}/>
         </Switch>
       </Router>
     </Provider>

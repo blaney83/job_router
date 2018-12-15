@@ -6,6 +6,8 @@ import { connect } from "react-redux";
 import store from "../../state";
 import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
+import Sidebar from "../../components/Sidebar/Sidebar"
+import Main from "../../components/Main/Main"
 import "./style.css"
 
 const styles = () => ({
@@ -25,24 +27,45 @@ function Dashboard(props) {
     // const [lastName, setLastName] = useState("");
     // const [userCity, setUserCity] = useState("");
     // const [userStateCode, setUserStateCode] = useState("");
-
-    if (store.getState().auth.authenticated) {
-        return (
+    function miniRoutes() {
+        console.log(props.location.pathname)
+        switch (props.location.pathname) {
+            case ("/dashboard/home"):
+                console.log("fired")
+                return (<Main props={props} />)
+            case ("/dashboard/search"):
+                console.log("fired")
+                return ("helllo")
+            case ("/dashboard/saved"):
+                console.log("fired")
+                return (<Main props={props} />)
+            case ("/dashboard/account"):
+                console.log("fired")
+                return (<Main props={props} />)
+            default:
+                props.history.push("/dashboard/home")
+                return
+        }
+    }
+    //IMPORTANT DONT DELETE, JUST TIRED OF LOGGING
+    // if (store.getState().auth.authenticated) {
+    return (
+        <div>
+            <Sidebar />
             <Grid container className={classes.root} alignItems="center">
                 <Grid item xs={12}>
                     <Grid container justify="center">
                         <Grid item xs={10}>
-                            <Paper>
-                                {/* {props.location.pathname === "/signup" ? <Signup router={props}/> :  <Signin router={props}/>} */}
-                            </Paper>
+                            {miniRoutes()}
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
-        )
-    } else {
-        return (<Redirect to="/" />)
-    }
+        </div>
+    )
+    // } else {
+    //     return (<Redirect to="/" />)
+    // }
 }
 Dashboard.propTypes = {
     classes: PropTypes.object.isRequired,
