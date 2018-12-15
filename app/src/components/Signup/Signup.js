@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import { updateAuth } from "../../state/auth/actions";
 import PropTypes from 'prop-types';
@@ -10,6 +11,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
 
 // function handleSignin(email, password){
@@ -22,11 +24,12 @@ import Button from '@material-ui/core/Button';
 //     })
 // }
 
-const styles = ()=> ({
+const styles = () => ({
 
 })
 
 function SignUp(props) {
+    console.log(props.router.history)
     const { classes } = props;
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -39,7 +42,8 @@ function SignUp(props) {
     return (
         <Card className={classes.card}>
             <CardHeader
-            title="Create a Job-Router Account"
+                title="Create a Job-Router Account"
+                subheader="If you already have an account, choose the sign in option below"
             />
             <CardContent>
                 <TextField
@@ -107,12 +111,26 @@ function SignUp(props) {
                 />
             </CardContent>
             <CardActions>
-                <Button 
-                    variant="contained" 
-                    color="primary" 
-                    onClick={() => props.signup(email, password, username, firstName, lastName, userCity, userStateCode)}>
-                    Sign In!
-                </Button>
+                <Grid container direction="row" alignItems="center" justify="space-between">
+                    <Grid item >
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => props.signup(email, password, username, firstName, lastName, userCity, userStateCode, props.router.history)}>
+                            Create Account
+                        </Button>
+                    </Grid>
+                    <Grid item >or</Grid>
+                    <Grid item >
+                        <Link to="/">
+                            <Button
+                                variant="contained"
+                            >
+                                Sign In
+                        </Button>
+                        </Link>
+                    </Grid>
+                </Grid>
             </CardActions>
         </Card>
     )
@@ -124,7 +142,7 @@ SignUp.propTypes = {
 
 function mapDispatchToProps(dispatch) {
     return {
-        signup(email, password, username, firstName, lastName, userCity, userStateCode) {
+        signup(email, password, username, firstName, lastName, userCity, userStateCode, reroute) {
             axios.post("/v1/auth/signup", { email, password, username, firstName, lastName, userCity, userStateCode }).then(res => {
                 console.log(res.data)
                 dispatch(updateAuth({
@@ -138,7 +156,9 @@ function mapDispatchToProps(dispatch) {
                     numberApplied: res.data.numberSaved,
                     recentSearches: []
                 }));
+                reroute.go("/")
             }).catch(err => {
+                alert("Please complete all of the inputs before creating your account")
                 console.error(err);
             })
         }

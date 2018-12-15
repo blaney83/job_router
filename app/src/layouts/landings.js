@@ -5,16 +5,17 @@ import Signin from "../components/Signin/Signin";
 import Signup from '../components/Signup/Signup';
 import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
-
+import "./style.css"
 
 const styles = () => ({
     root: {
         flexGrow: 1,
-        height: "100vh"
+        height: "100vh",
     },
 })
 
 function LandingLayout(props) {
+    console.log(props)
     const { classes } = props;
     return (
         <Grid container className={classes.root} alignItems="center" spacing={16}>
@@ -22,7 +23,7 @@ function LandingLayout(props) {
                 <Grid container justify="center">
                     <Grid item xs={10}>
                         <Paper>
-                            {window.location === "/" ? <Signin></Signin> : <Signup></Signup>}
+                            {props.location.pathname === "/signup" ? <Signup router={props}/> :  <Signin router={props}/>}
                         </Paper>
                     </Grid>
                 </Grid>
