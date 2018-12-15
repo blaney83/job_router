@@ -3,8 +3,8 @@ const db = require("../../models");
 const jwt = require("jwt-simple");
 const config = require("../../config");
 const passport = require("passport");
-const requireSignin = passport.authenticate("local", { session: false });
-const requireAuth = passport.authenticate("jwt", { session: false });
+const requireSignin = passport.authenticate("local", { session: false, failureFlash: true });
+const requireAuth = passport.authenticate("jwt", { session: false, failureFlash: true });
 
 function tokenizer(user) {
     const timestamp = new Date().getTime();
@@ -26,13 +26,28 @@ router.get("/protected", requireAuth, function (req, res) {
 });
 
 router.post("/signin", requireSignin, function (req, res) {
-    res.json({ token: tokenizer(req.user) });
+    const { email, password } = req.body
+    db.User.findOne({ "email": email })
+        .then(userResp => {
+            let userResponse = {
+                username: userResp.username,
+                firstName: userResp.firstName,
+                lastName: userResp.lastName,
+                userCity: userResp.userCity,
+                userStateCode: userResp.userStateCode,
+                numberSaved: userResp.numberSaved,
+                numberApplied: userResp.numberApplied,
+                recentSearches: userResp.recentSearches,
+                token: tokenizer(userResp),
+            }
+            res.json(userResponse)
+        })
 });
 
 router.post("/signup", function (req, res) {
-    const { email, password } = req.body;
-
+    const { email, password, username, firstName, lastName, userCity, userStateCode } = req.body;
     if (!email || !password) {
+        console.log("this is broken")
         res.status(422).send({ error: "You must provide an email and password" });
     }
 
@@ -43,12 +58,22 @@ router.post("/signup", function (req, res) {
                 return res.status(422).send({ error: "Email already in use" });
             }
             //create new user object
-            const user = new db.User({ email, password });
+            const user = new db.User({ email, password, username, firstName, lastName, userCity, userStateCode });
             // save the user
             user.save().then(user => {
-                console.log(user);
                 // respond with the success if the user existed
-                res.json({ token: tokenizer(user) });
+                let userResponse = {
+                    username: user.username,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    userCity: user.userCity,
+                    userStateCode: user.userStateCode,
+                    numberSaved: user.numberSaved,
+                    numberApplied: user.numberApplied,
+                    recentSearches: user.recentSearches,
+                    token: tokenizer(user),
+                }
+                res.json(userResponse);
             });
         })
         .catch(err => {
