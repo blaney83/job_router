@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
+import { connect, getState } from "react-redux";
+import store from "../../state";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import { updateAuth } from "../../state/auth/actions";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -17,65 +19,128 @@ const styles = () => ({
 
 })
 
-function SignUp(props) {
-    console.log(props)
+function Main(props) {
+    let state = store.getState()
+    console.log(state)
     const { classes } = props;
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
+    // const [email, setEmail] = useState("");
+    // const [password, setPassword] = useState("");
     return (
-        <Card className={classes.card}>
-            <CardHeader
-                title="Welcome to Job Router"
-                subheader="Please sign in"
-            />
-            <CardContent>
-                <TextField
-                    // id="standard-with-placeholder"
-                    label="Email"
-                    placeholder="example@example.com"
-                    className={classes.textField}
-                    margin="normal"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <TextField
-                    // id="standard-with-placeholder"
-                    label="Password"
-                    placeholder="Secret123!@#"
-                    className={classes.textField}
-                    margin="normal"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-            </CardContent>
-            <CardActions>
-                <Grid container direction="row" alignItems="center" justify="space-between">
-                    <Grid item >
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => props.signin(email, password, props.router.history)}>
-                            Sign In!
-                </Button>
-                    </Grid>
-                    <Grid item >or</Grid>
-                    <Grid item >
-                        <Link to="/signup">
-                            <Button
-                                variant="contained"
-                            >
-                                Create an Account
+        <div>
+            <Grid container>
+                <Grid item xsm={12} md={4}>
+                    <Card className={classes.card} color="success">
+                        <CardContent>
+                            <Typography variant="h4" >Number of Searches</Typography>
+                            <Typography variant="h3" >0</Typography>
+                        </CardContent>
+                        {/* <CardActions>
+                            <Grid container direction="row" alignItems="center" justify="space-between">
+                                <Grid item >
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        // onClick={() => props.signin(email, password, props.router.history)}
+                                        >
+                                        Sign In!
+                                </Button>
+                                </Grid>
+                                <Grid item >or</Grid>
+                                <Grid item >
+                                    <Link to="/signup">
+                                        <Button
+                                            variant="contained"
+                                        >
+                                            Create an Account
                         </Button>
-                        </Link>
-                    </Grid>
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                        </CardActions> */}
+                    </Card>
                 </Grid>
-            </CardActions>
-        </Card>
+                <Grid item xsm={12} md={4}>
+                    <Card className={classes.card}>
+                        <CardContent>
+                            <Typography variant="h4" >Number of Saved Jobs</Typography>
+                            <Typography variant="h3" >{state.auth.user.numberSaved}</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xsm={12} md={4}>
+                    <Card className={classes.card}>
+                        <CardContent>
+                        <Typography variant="h4" >Number of Applied Jobs</Typography>
+                            <Typography variant="h3" >{state.auth.user.numberApplied}</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>
+            <Grid container>
+                <Grid item xsm={12} md={6}>
+                    <Card className={classes.card}>
+                        <CardContent>
+                        </CardContent>
+                        <CardActions>
+                            <Grid container direction="row" alignItems="center" justify="space-between">
+                                <Grid item >
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                    // onClick={() => props.signin(email, password, props.router.history)}
+                                    >
+                                        Sign In!
+                    </Button>
+                                </Grid>
+                                <Grid item >or</Grid>
+                                <Grid item >
+                                    <Link to="/signup">
+                                        <Button
+                                            variant="contained"
+                                        >
+                                            Create an Account
+                            </Button>
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                        </CardActions>
+                    </Card>
+                </Grid>
+                <Grid item xsm={12} md={6}>
+                    <Card className={classes.card}>
+                        <CardContent>
+                        </CardContent>
+                        <CardActions>
+                            <Grid container direction="row" alignItems="center" justify="space-between">
+                                <Grid item >
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                    // onClick={() => props.signin(email, password, props.router.history)}
+                                    >
+                                        Sign In!
+                    </Button>
+                                </Grid>
+                                <Grid item >or</Grid>
+                                <Grid item >
+                                    <Link to="/signup">
+                                        <Button
+                                            variant="contained"
+                                        >
+                                            Create an Account
+                            </Button>
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                        </CardActions>
+                    </Card>
+                </Grid>
+            </Grid>
+        </div>
     )
 }
 
-SignUp.propTypes = {
+Main.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
@@ -103,4 +168,4 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(SignUp));
+export default connect(null, mapDispatchToProps)(withStyles(styles)(Main));

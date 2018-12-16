@@ -222,7 +222,6 @@ class Sidebar extends React.Component {
                         </div>
                         <Divider />
                         <List>
-
                             <ListItem button key={"Home"}>
                                 <ListItemIcon><Link to="/dashboard/home"><HomeIcon /></Link></ListItemIcon>
                                 <ListItemText primary="Home" />

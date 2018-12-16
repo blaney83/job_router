@@ -1,9 +1,11 @@
 import { combineReducers, createStore } from "redux";
 
 import auth from "./auth/reducer"
+import search from "./search/reducer"
 
 const reducers = combineReducers({
-    auth
+    auth,
+    search
 });
 
 const store = createStore(

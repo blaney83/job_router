@@ -9,11 +9,14 @@ import PropTypes from 'prop-types';
 import Sidebar from "../../components/Sidebar/Sidebar"
 import Main from "../../components/Main/Main"
 import "./style.css"
+import Search from "../../components/Search/Search"
 
 const styles = () => ({
     root: {
         flexGrow: 1,
         height: "100vh",
+        width: "auto",
+        "padding-top": "1rem"
     },
 })
 
@@ -35,7 +38,7 @@ function Dashboard(props) {
                 return (<Main props={props} />)
             case ("/dashboard/search"):
                 console.log("fired")
-                return ("helllo")
+                return (<Search props={props} />)
             case ("/dashboard/saved"):
                 console.log("fired")
                 return (<Main props={props} />)
@@ -52,9 +55,11 @@ function Dashboard(props) {
     return (
         <div>
             <Sidebar />
-            <Grid container className={classes.root} alignItems="center">
+            <Grid container className={classes.root}
+                // alignItems="center"
+            >
                 <Grid item xs={12}>
-                    <Grid container justify="center">
+                    <Grid container justify="center" alignItems="center">
                         <Grid item xs={10}>
                             {miniRoutes()}
                         </Grid>
