@@ -20,13 +20,13 @@ const styles = () => ({
 function Account(props) {
     console.log(props)
     const { classes } = props;
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [username, setUsername] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [userCity, setUserCity] = useState("");
-    const [userStateCode, setUserStateCode] = useState("");
+    // const [email, setEmail] = useState("");
+    // const [password, setPassword] = useState("");
+    const [username, setUsername] = useState(props.user.username);
+    const [firstName, setFirstName] = useState(props.user.firstName);
+    const [lastName, setLastName] = useState(props.user.lastName);
+    const [userCity, setUserCity] = useState(props.user.userCity);
+    const [userStateCode, setUserStateCode] = useState(props.user.userStateCode);
 
     return (
         <Card className={classes.card}>
@@ -35,7 +35,7 @@ function Account(props) {
             // subheader="If you already have an account, choose the sign in option below"
             />
             <CardContent>
-                <TextField
+                {/* <TextField
                     // id="standard-with-placeholder"
                     label="Email"
                     placeholder="example@example.com"
@@ -54,7 +54,7 @@ function Account(props) {
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                />
+                /> */}
                 <TextField
                     // id="standard-with-placeholder"
                     label="Username"
@@ -107,7 +107,8 @@ function Account(props) {
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => props.signup(email, password, username, firstName, lastName, userCity, userStateCode, props.router.history)}>
+                            // onClick={() => props.signup(email, password, username, firstName, lastName, userCity, userStateCode, props.router.history)}
+                            >
                             Update Account
                         </Button>
                     </Grid>
@@ -125,26 +126,26 @@ function Account(props) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        signin(email, password, reroute) {
-            axios.post("/v1/auth/signin", { email, password }).then(res => {
-                console.log(res.data)
-                dispatch(updateAuth({
-                    token: res.data.token,
-                    username: res.data.username,
-                    firstName: res.data.firstName,
-                    lastName: res.data.lastName,
-                    userCity: res.data.userCity,
-                    userStateCode: res.data.userStateCode,
-                    numberSaved: res.data.numberSaved,
-                    numberApplied: res.data.numberSaved,
-                    userId: res.data._id,
-                    recentSearches: []
-                }));
-                reroute.push("/dashboard")
-            }).catch(err => {
-                console.error(err);
-            })
-        }
+        // signin(email, password, reroute) {
+        //     axios.post("/v1/auth/signin", { email, password }).then(res => {
+        //         console.log(res.data)
+        //         dispatch(updateAuth({
+        //             token: res.data.token,
+        //             username: res.data.username,
+        //             firstName: res.data.firstName,
+        //             lastName: res.data.lastName,
+        //             userCity: res.data.userCity,
+        //             userStateCode: res.data.userStateCode,
+        //             numberSaved: res.data.numberSaved,
+        //             numberApplied: res.data.numberSaved,
+        //             userId: res.data._id,
+        //             recentSearches: []
+        //         }));
+        //         reroute.push("/dashboard")
+        //     }).catch(err => {
+        //         console.error(err);
+        //     })
+        // }
     }
 }
 

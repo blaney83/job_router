@@ -80,13 +80,13 @@ function Saved(props) {
                                     <Button size="small" variant="contained"
                                         color="primary"
                                         id={obj.jobId}
-                                        // replace the long string below with props.auth.user.userId
+                                        // replace the long string below with props.auth.user.userId "5c148efcb2d70e3ae0325019"
                                         onClick={(e) => props.deleteJob(e.target.id, "5c148efcb2d70e3ae0325019", savedResults, setSavedResults)}
                                     >Delete</Button>
                                     <Button size="small" variant="contained"
                                         color={obj.hasApplied ? "primary" : "danger"}
                                         id={obj.jobId}
-                                        // replace the long string below with props.auth.user.userId
+                                        // replace the long string below with props.auth.user.userId "5c148efcb2d70e3ae0325019"
                                         onClick={(e) => props.toggleApply(e.target.id, "5c148efcb2d70e3ae0325019", savedResults, setSavedResults)}
                                     >{obj.hasApplied ? "Already Applied" : "Mark as Applied"}</Button>
                                 </Paper>

@@ -6,6 +6,7 @@ const defaultState = {
     searchState: "",
     searchJob: "",
     searchResults: [],
+    numberResults: 15
 };
 
 const searchReducer = handleActions({
@@ -17,6 +18,7 @@ const searchReducer = handleActions({
             searchState: action.payload.searchState,
             searchJob: action.payload.searchJob,
             searchResults: action.payload.searchResults,
+            numberResults: action.payload.numberResults
         }
     }
 }, defaultState);
