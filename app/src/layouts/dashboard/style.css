@@ -1,12 +1,17 @@
 
-@media only screen and (min-width: 600px) {
 .Dashboard-root-1{
-    margin-left: 72px;
-    margin-top: 64px;
+    margin-top: 50px;
 }
 
 .MuiGrid-grid-xs-10-220{
     max-width: 95% !important;
     flex-basis: 95% !important
 }
+
+@media only screen and (min-width: 600px) {
+.Dashboard-root-1{
+    margin-left: 72px;
+    margin-top: 64px;
+}
+
 }

@@ -17,17 +17,22 @@ const styles = () => ({
 
 })
 
-function SignUp(props) {
+function Account(props) {
     console.log(props)
     const { classes } = props;
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [userCity, setUserCity] = useState("");
+    const [userStateCode, setUserStateCode] = useState("");
 
     return (
         <Card className={classes.card}>
             <CardHeader
-                title="Welcome to Job Router"
-                subheader="Please sign in"
+                title="Update Your Account"
+            // subheader="If you already have an account, choose the sign in option below"
             />
             <CardContent>
                 <TextField
@@ -50,6 +55,51 @@ function SignUp(props) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
+                <TextField
+                    // id="standard-with-placeholder"
+                    label="Username"
+                    placeholder="JohnDoe123"
+                    className={classes.textField}
+                    margin="normal"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <TextField
+                    // id="standard-with-placeholder"
+                    label="First Name"
+                    placeholder="John"
+                    className={classes.textField}
+                    margin="normal"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                />
+                <TextField
+                    // id="standard-with-placeholder"
+                    label="Last Name"
+                    placeholder="Doe"
+                    className={classes.textField}
+                    margin="normal"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                />
+                <TextField
+                    // id="standard-with-placeholder"
+                    label="City"
+                    placeholder="Phoenix"
+                    className={classes.textField}
+                    margin="normal"
+                    value={userCity}
+                    onChange={(e) => setUserCity(e.target.value)}
+                />
+                <TextField
+                    // id="standard-with-placeholder"
+                    label="State"
+                    placeholder="AZ (two letters)"
+                    className={classes.textField}
+                    margin="normal"
+                    value={userStateCode}
+                    onChange={(e) => setUserStateCode(e.target.value)}
+                />
             </CardContent>
             <CardActions>
                 <Grid container direction="row" alignItems="center" justify="space-between">
@@ -57,18 +107,14 @@ function SignUp(props) {
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => props.signin(email, password, props.router.history)}>
-                            Sign In!
-                </Button>
+                            onClick={() => props.signup(email, password, username, firstName, lastName, userCity, userStateCode, props.router.history)}>
+                            Update Account
+                        </Button>
                     </Grid>
                     <Grid item >or</Grid>
                     <Grid item >
-                        <Link to="/signup">
-                            <Button
-                                variant="contained"
-                            >
-                                Create an Account
-                        </Button>
+                        <Link to="/">
+                            <Button variant="contained">Sign In</Button>
                         </Link>
                     </Grid>
                 </Grid>
@@ -76,10 +122,6 @@ function SignUp(props) {
         </Card>
     )
 }
-
-SignUp.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -106,4 +148,12 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(SignUp));
+function mapStateToProps(state) {
+    return { user: state.auth.user, email: state.auth.email }
+}
+
+Account.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Account));

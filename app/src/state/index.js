@@ -2,10 +2,12 @@ import { combineReducers, createStore } from "redux";
 
 import auth from "./auth/reducer"
 import search from "./search/reducer"
+import saved from "./saved/reducer"
 
 const reducers = combineReducers({
     auth,
-    search
+    search,
+    saved
 });
 
 const store = createStore(

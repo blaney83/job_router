@@ -50,6 +50,8 @@ function SignUp(props) {
                     placeholder="Secret123!@#"
                     className={classes.textField}
                     margin="normal"
+                    type="password"
+                    autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
@@ -139,6 +141,7 @@ function mapDispatchToProps(dispatch) {
                     userStateCode: res.data.userStateCode,
                     numberSaved: res.data.numberSaved,
                     numberApplied: res.data.numberSaved,
+                    userId: res.data._id,
                     recentSearches: []
                 }));
                 reroute.push("/")

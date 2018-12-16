@@ -42,21 +42,24 @@ const styles = {
 };
 
 
+
+
 function Search(props) {
+    console.log(props)
     const { classes } = props;
-    const [searchCity, setSearchCity] = useState("");
-    const [searchState, setSearchState] = useState("");
-    const [searchJob, setSearchJob] = useState("");
-    const [searchResults, setSearchResults] = useState([]);
+    const [searchCity, setSearchCity] = useState(props.search.searchCity);
+    const [searchState, setSearchState] = useState(props.search.searchState);
+    const [searchJob, setSearchJob] = useState(props.search.searchJob);
+    const [searchResults, setSearchResults] = useState(props.search.searchResults);
 
     function displayResults() {
-        // console.log(props.location.pathname)
+        console.log(props)
         console.log(searchResults.length)
         switch (true) {
-            case (searchResults.length===0):
+            case (searchResults.length === 0):
                 console.log("pre")
                 return (<PreSearch props={props} />)
-            case (searchResults.length===1):
+            case (searchResults.length === 1):
                 console.log("fired")
                 return (<BadSearch props={props} />)
             case (searchResults.length > 10):
@@ -75,6 +78,12 @@ function Search(props) {
                                         primary={obj.positionTitle + "   " + obj.jobLocation + "   " + obj.jobCompany}
                                         secondary={obj.jobDescription}
                                     />
+                                    <Button size="small" variant="contained"
+                                        color="primary"
+                                        id={obj.jobId}
+                                        // replace the long string below with props.auth.user.userId
+                                        onClick={(e) => props.saveJob(e.target.id, "5c148efcb2d70e3ae0325019")}
+                                    >Save</Button>
                                 </Paper>
                             )
                         })}
@@ -135,7 +144,7 @@ function Search(props) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return {
+    const jobSearchMethods = {
         searchJobs(searchCity, searchState, searchJob, setSearchResults) {
             console.log(searchJob)
             let searchLocation = searchCity + ", " + searchState.toUpperCase()
@@ -157,12 +166,34 @@ function mapDispatchToProps(dispatch) {
             }).catch(err => {
                 console.error(err);
             })
+        },
+
+        saveJob(jobId, userId) {
+            console.log(userId)
+            axios.post("/v1/saved/" + jobId + "/" + userId).then(res => {
+                console.log(res)
+                if (res.status === 200) {
+                    alert("Job saved!")
+                } else if (res.status === 202) {
+                    alert("Job previously saved!")
+                }
+            }).catch(err => {
+                console.log(err.status)
+                console.log("Error")
+
+            })
         }
     }
+    console.log(jobSearchMethods)
+    return jobSearchMethods
+}
+
+function mapStateToProps(state) {
+    return { user: state.auth.user, search: state.search }
 }
 
 Search.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(Search));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Search));

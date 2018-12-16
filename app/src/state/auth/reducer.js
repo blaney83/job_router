@@ -13,6 +13,7 @@ const defaultState = {
         userStateCode: "",
         numberSaved: 0,
         numberApplied: 0,
+        userId: "",
         recentSearches: "",
     }
 };

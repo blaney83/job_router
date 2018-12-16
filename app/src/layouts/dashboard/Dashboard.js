@@ -8,8 +8,10 @@ import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import Sidebar from "../../components/Sidebar/Sidebar"
 import Main from "../../components/Main/Main"
-import "./style.css"
 import Search from "../../components/Search/Search"
+import Saved from "../../components/Saved/Saved"
+import Account from "../../components/Account/Account"
+import "./style.css"
 
 const styles = () => ({
     root: {
@@ -35,16 +37,16 @@ function Dashboard(props) {
         switch (props.location.pathname) {
             case ("/dashboard/home"):
                 console.log("fired")
-                return (<Main props={props} />)
+                return (<Main routeProps={props} />)
             case ("/dashboard/search"):
                 console.log("fired")
-                return (<Search props={props} />)
+                return (<Search routeProps={props} />)
             case ("/dashboard/saved"):
                 console.log("fired")
-                return (<Main props={props} />)
+                return (<Saved routeProps={props} />)
             case ("/dashboard/account"):
                 console.log("fired")
-                return (<Main props={props} />)
+                return (<Account routeProps={props} />)
             default:
                 props.history.push("/dashboard/home")
                 return
