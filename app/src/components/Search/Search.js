@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
-import { searchJobs } from "../../state/search/actions";
+import { searchJobs, updateNumberResults } from "../../state/search/actions";
+import { createMuiTheme } from '@material-ui/core/styles';
+import { withTheme } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -19,6 +21,12 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import axios from "axios";
 import PreSearch from "../../components/Holders/PreSearch"
 import BadSearch from "../../components/Holders/BadSearch"
+import CareerBuilder from "../../assets/img/careerbuilder.png"
+import Dice from "../../assets/img/dice.png"
+import Glassdoor from "../../assets/img/glassdoor.png"
+import Indeed from "../../assets/img/indeed.png"
+import USA from "../../assets/img/usa.png"
+import Zip from "../../assets/img/zip.png"
 
 const styles = {
     card: {
@@ -39,9 +47,33 @@ const styles = {
     pos: {
         marginBottom: 12,
     },
+    specialBox: {
+        "max-width": "83.333333% !important",
+        "flex-basis": "83.333333% !important",
+    },
+    badResult: {
+        color: "grey",
+        fontSize: 10,
+    },
+    smallMessages: {
+        "max-width": "100% !important"
+    },
+    goodResult: {
+        color: "green",
+        fontSize: 16
+    }
 };
 
-
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            main: '#f4511e',
+        },
+        secondary: {
+            main: '#d84315',
+        },
+    },
+});
 
 
 function Search(props) {
@@ -52,6 +84,25 @@ function Search(props) {
     const [searchJob, setSearchJob] = useState(props.search.searchJob);
     const [searchResults, setSearchResults] = useState(props.search.searchResults);
     const [numberResults, setNumberResults] = useState(props.search.numberResults);
+
+    function chooseIcon(obj) {
+        switch (true) {
+            case (obj.jobSite === "CareerBuilder"):
+                return (CareerBuilder)
+            case (obj.jobSite === "Dice"):
+                return (Dice)
+            case (obj.jobSite === "GlassDoor"):
+                return (Glassdoor)
+            case (obj.jobSite === "Indeed"):
+                return (Indeed)
+            case (obj.jobSite === "USA Jobs"):
+                return (USA)
+            case (obj.jobSite === "ZipRecruiter"):
+                return (Zip)
+            default:
+                return
+        }
+    }
 
     function displayResults() {
         console.log(props)
@@ -73,20 +124,59 @@ function Search(props) {
                                     return (
                                         <Paper key={obj._id}>
                                             <ListItem alignItems="flex-start" key={obj._id}>
-                                                <ListItemAvatar>
-                                                    <Avatar alt={obj.companyName} src={obj.companyImage} />
-                                                </ListItemAvatar>
+                                                <Grid container><Grid item xs={8}>
+                                                    <Grid container><Grid item xs={2}>
+                                                        <ListItemAvatar>
+                                                            <Avatar alt={obj.companyName} src={obj.companyImage} />
+                                                        </ListItemAvatar>
+                                                    </Grid>
+                                                        <Grid item xs={10} className={classes.specialBox}>
+                                                            <ListItemText
+                                                                primary={obj.positionTitle + "   " + obj.jobLocation + "   " + obj.jobCompany}
+                                                                secondary={obj.jobDescription}
+                                                            />
+                                                        </Grid></Grid>
+                                                </Grid>
+                                                    <Grid item xs={4}>
+                                                        <Grid container><Grid item xs={6}>
+                                                            <Grid container direction="column"><Grid item xs={4} className={classes.smallMessages}>
+                                                                <ListItemText
+                                                                    secondary={obj.salaryRange ? <Typography variant="body" className={classes.goodResult} >{obj.salaryRange}</Typography> : <Typography className={classes.badResult} color="grey" variant="body">No Salary Info</Typography>}
+                                                                />
+                                                            </Grid>
+                                                                <Grid item xs={4}>
+                                                                    <ListItemText
+                                                                        secondary={obj.jobRating ? <Typography variant="body" className={classes.goodResult}>{obj.jobRating}</Typography> : <Typography></Typography>}
+                                                                    />
+                                                                </Grid>
+                                                                <Grid item xs={4}>
+                                                                    <ListItemText
+                                                                        secondary={obj.easilyApply ? <Typography variant="body" className={classes.goodResult}>Fast Apply!</Typography> : <Typography variant="body" className={classes.badResult} color="grey"></Typography>}
+                                                                    />
+                                                                </Grid>
+                                                            </Grid>
+                                                        </Grid>
+                                                            <Grid item xs={6}>
+
+                                                                <Button size="small" variant="contained"
+                                                                    color="primary"
+                                                                    id={obj.jobId}
+                                                                    // replace the long string below with props.auth.user.userId
+                                                                    onClick={(e) => props.saveJob(e.target.id, "5c148efcb2d70e3ae0325019")}
+                                                                >Save</Button>
+                                                                <Button size="small" variant="contained"
+                                                                    color="primary"
+                                                                    id={obj.jobId}
+                                                                    href={obj.jobLink}
+                                                                    target="_blank"
+                                                                // replace the long string below with props.auth.user.userId
+                                                                // onClick={(e) => props.saveJob(e.target.id, "5c148efcb2d70e3ae0325019")}
+                                                                >Visit Site
+                                                    <Avatar alt={obj.jobSite} src={chooseIcon(obj)} />
+                                                                </Button>
+                                                            </Grid></Grid>
+                                                    </Grid></Grid>
                                             </ListItem>
-                                            <ListItemText
-                                                primary={obj.positionTitle + "   " + obj.jobLocation + "   " + obj.jobCompany}
-                                                secondary={obj.jobDescription}
-                                            />
-                                            <Button size="small" variant="contained"
-                                                color="primary"
-                                                id={obj.jobId}
-                                                // replace the long string below with props.auth.user.userId
-                                                onClick={(e) => props.saveJob(e.target.id, "5c148efcb2d70e3ae0325019")}
-                                            >Save</Button>
                                         </Paper>
                                     )
                                 }
@@ -198,14 +288,14 @@ function mapDispatchToProps(dispatch) {
         },
         showMore(numberResults, setNumberResults) {
             let newResults = numberResults + 15
-            dispatch(searchJobs({
+            dispatch(updateNumberResults({
                 numberResults: newResults
             }))
             setNumberResults(newResults)
         },
         showLess(numberResults, setNumberResults) {
             let newResults = numberResults - 15
-            dispatch(searchJobs({
+            dispatch(updateNumberResults({
                 numberResults: newResults
             }))
             setNumberResults(newResults)
@@ -223,7 +313,7 @@ Search.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Search));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withTheme(theme)(Search)));
 
 
 // import React, { useState } from "react";

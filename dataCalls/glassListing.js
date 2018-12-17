@@ -110,7 +110,7 @@ function glassUpSomeData(resp) {
             jobSite: "GlassDoor",
             jobId: jobArr[1],
             empId: jobArr[3],
-            easyApply: jobArr[13],
+            easyApply: (jobArr[13]=== "true"?true:false),
             jobField: jobArr[15],
             jobLocation: jobArr[17],
             companyImage: jobArr[43],

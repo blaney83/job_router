@@ -4,8 +4,9 @@ const Schema = mongoose.Schema;
 const jobSchema = new Schema({
     jobSite: { type: String, required: true },
     jobId: String,
+    jobLink: String,
     empId: String,
-    easily: Boolean,
+    easilyApply: Boolean,
     jobField: String,
     jobLocation: String,
     companyImage: String,

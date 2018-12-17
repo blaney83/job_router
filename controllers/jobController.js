@@ -8,9 +8,9 @@ module.exports = {
         let searchP = req.params.search
         let locationP = req.params.location
         let dataPromiseArr = [
-            dataCalls.cbData.careerDataGet(searchP, locationP, 3),
+            // dataCalls.cbData.careerDataGet(searchP, locationP, 3),
             dataCalls.diData.diceDataGet(searchP, locationP, 3),
-            // dataCalls.glData.glassGetData(searchP, locationP, 3),
+            dataCalls.glData.glassGetData(searchP, locationP, 3),
             // dataCalls.inData.indeedGetData(searchP, locationP, 3),
             // dataCalls.usData.usaGetData(searchP, locationP, 5),
             // dataCalls.ziData.zipGetData(searchP, locationP, 3)
