@@ -36,6 +36,9 @@ function SignUp(props) {
                     placeholder="example@example.com"
                     className={classes.textField}
                     margin="normal"
+                    type="email"
+                    name="email"
+                    autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
@@ -45,6 +48,8 @@ function SignUp(props) {
                     placeholder="Secret123!@#"
                     className={classes.textField}
                     margin="normal"
+                    type="password"
+                    autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
@@ -55,7 +60,7 @@ function SignUp(props) {
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => props.signin(email, password)}>
+                            onClick={() => props.signin(email, password, props.router.history)}>
                             Sign In!
                 </Button>
                     </Grid>
@@ -81,7 +86,7 @@ SignUp.propTypes = {
 
 function mapDispatchToProps(dispatch) {
     return {
-        signin(email, password) {
+        signin(email, password, reroute) {
             axios.post("/v1/auth/signin", { email, password }).then(res => {
                 console.log(res.data)
                 dispatch(updateAuth({
@@ -93,8 +98,10 @@ function mapDispatchToProps(dispatch) {
                     userStateCode: res.data.userStateCode,
                     numberSaved: res.data.numberSaved,
                     numberApplied: res.data.numberSaved,
+                    userId: res.data._id,
                     recentSearches: []
                 }));
+                reroute.push("/dashboard")
             }).catch(err => {
                 console.error(err);
             })

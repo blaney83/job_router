@@ -11,8 +11,9 @@ const defaultState = {
         lastName: "",
         userCity: "",
         userStateCode: "",
-        numberSaved: "",
-        numberApplied: "",
+        numberSaved: 0,
+        numberApplied: 0,
+        userId: "",
         recentSearches: "",
     }
 };

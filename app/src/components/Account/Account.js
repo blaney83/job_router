@@ -17,33 +17,30 @@ const styles = () => ({
 
 })
 
-function SignUp(props) {
-    console.log(props.router.history)
+function Account(props) {
+    console.log(props)
     const { classes } = props;
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [username, setUsername] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [userCity, setUserCity] = useState("");
-    const [userStateCode, setUserStateCode] = useState("");
+    // const [email, setEmail] = useState("");
+    // const [password, setPassword] = useState("");
+    const [username, setUsername] = useState(props.user.username);
+    const [firstName, setFirstName] = useState(props.user.firstName);
+    const [lastName, setLastName] = useState(props.user.lastName);
+    const [userCity, setUserCity] = useState(props.user.userCity);
+    const [userStateCode, setUserStateCode] = useState(props.user.userStateCode);
 
     return (
         <Card className={classes.card}>
             <CardHeader
-                title="Create a Job-Router Account"
-                subheader="If you already have an account, choose the sign in option below"
+                title="Update Your Account"
+            // subheader="If you already have an account, choose the sign in option below"
             />
             <CardContent>
-                <TextField
+                {/* <TextField
                     // id="standard-with-placeholder"
                     label="Email"
                     placeholder="example@example.com"
                     className={classes.textField}
                     margin="normal"
-                    type="email"
-                    name="email"
-                    autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
@@ -57,7 +54,7 @@ function SignUp(props) {
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                />
+                /> */}
                 <TextField
                     // id="standard-with-placeholder"
                     label="Username"
@@ -110,8 +107,9 @@ function SignUp(props) {
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => props.signup(email, password, username, firstName, lastName, userCity, userStateCode, props.router.history)}>
-                            Create Account
+                            // onClick={() => props.signup(email, password, username, firstName, lastName, userCity, userStateCode, props.router.history)}
+                            >
+                            Update Account
                         </Button>
                     </Grid>
                     <Grid item >or</Grid>
@@ -126,34 +124,37 @@ function SignUp(props) {
     )
 }
 
-SignUp.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
 function mapDispatchToProps(dispatch) {
     return {
-        signup(email, password, username, firstName, lastName, userCity, userStateCode, reroute) {
-            axios.post("/v1/auth/signup", { email, password, username, firstName, lastName, userCity, userStateCode }).then(res => {
-                console.log(res.data)
-                dispatch(updateAuth({
-                    token: res.data.token,
-                    username: res.data.username,
-                    firstName: res.data.firstName,
-                    lastName: res.data.lastName,
-                    userCity: res.data.userCity,
-                    userStateCode: res.data.userStateCode,
-                    numberSaved: res.data.numberSaved,
-                    numberApplied: res.data.numberSaved,
-                    userId: res.data._id,
-                    recentSearches: []
-                }));
-                reroute.push("/")
-            }).catch(err => {
-                alert("Please complete all of the inputs before creating your account")
-                console.error(err);
-            })
-        }
+        // signin(email, password, reroute) {
+        //     axios.post("/v1/auth/signin", { email, password }).then(res => {
+        //         console.log(res.data)
+        //         dispatch(updateAuth({
+        //             token: res.data.token,
+        //             username: res.data.username,
+        //             firstName: res.data.firstName,
+        //             lastName: res.data.lastName,
+        //             userCity: res.data.userCity,
+        //             userStateCode: res.data.userStateCode,
+        //             numberSaved: res.data.numberSaved,
+        //             numberApplied: res.data.numberSaved,
+        //             userId: res.data._id,
+        //             recentSearches: []
+        //         }));
+        //         reroute.push("/dashboard")
+        //     }).catch(err => {
+        //         console.error(err);
+        //     })
+        // }
     }
 }
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(SignUp));
+function mapStateToProps(state) {
+    return { user: state.auth.user, email: state.auth.email }
+}
+
+Account.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Account));
