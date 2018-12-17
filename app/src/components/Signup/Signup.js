@@ -12,6 +12,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
+import JobRouter from "../../assets/img/JobRouter.ico"
 
 const styles = () => ({
 
@@ -31,7 +33,11 @@ function SignUp(props) {
     return (
         <Card className={classes.card}>
             <CardHeader
-                title="Create a Job-Router Account"
+                avatar={
+                    <Avatar src={JobRouter} />
+                }
+                title="Create an Account"
+                titleTypographyProps={{ variant: "h3" }}
                 subheader="If you already have an account, choose the sign in option below"
             />
             <CardContent>

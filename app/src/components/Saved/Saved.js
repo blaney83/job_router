@@ -26,6 +26,7 @@ import Glassdoor from "../../assets/img/glassdoor.png"
 import Indeed from "../../assets/img/indeed.png"
 import USA from "../../assets/img/usa.png"
 import Zip from "../../assets/img/zip.png"
+import { CardHeader } from "@material-ui/core";
 
 const styles = {
     card: {
@@ -181,6 +182,14 @@ function Saved(props) {
 
     return (
         <Grid container direction="column">
+            <Grid item xsm={12}>
+                <Card className={classes.card1}>
+                    <CardHeader title="Your Saved Jobs"></CardHeader>
+                    <CardContent>
+                        <Typography variant="body1">View your saved jobs below! Use the links to Navigate to the listings and apply! Then come back to mark them as applied and keep track of your employment journey. Use the sort feature to choose which results you see first or use the filter feature to hide jobs you've already applied to! Once you delete a job from your saved jobs, it will no longer be linked to your account, so only delete jobs you aren't interested in applying to.</Typography>
+                    </CardContent>
+                </Card>
+            </Grid>
             <Grid item xsm={12}>
                 <Card className={classes.card}>
                     {displayResults()}

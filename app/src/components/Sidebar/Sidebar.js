@@ -24,6 +24,7 @@ import SavedIcon from '@material-ui/icons/Save';
 import AccountIcon from '@material-ui/icons/PersonPin';
 import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
+import "./style.css"
 // import JobRouter from "../../assets/img/JobRouter"
 
 const drawerWidth = 240;
@@ -142,6 +143,9 @@ const styles = theme => ({
             },
         },
     },
+    sideIcons: {
+        color: "white !important"
+    }
 });
 
 class Sidebar extends React.Component {
@@ -206,9 +210,10 @@ class Sidebar extends React.Component {
                         className={classNames(classes.drawer, {
                             [classes.drawerOpen]: this.state.open,
                             [classes.drawerClose]: !this.state.open,
+                            
                         })}
                         classes={{
-                            paper: classNames({
+                            paper: classNames( "sidebarClass",{
                                 [classes.drawerOpen]: this.state.open,
                                 [classes.drawerClose]: !this.state.open,
                             }),
@@ -223,19 +228,19 @@ class Sidebar extends React.Component {
                         <Divider />
                         <List>
                             <ListItem button key={"Home"}>
-                                <ListItemIcon><Link to="/dashboard/home"><HomeIcon /></Link></ListItemIcon>
+                                <ListItemIcon><Link to="/dashboard/home"><HomeIcon className={classes.sideIcons}/></Link></ListItemIcon>
                                 <ListItemText primary="Home" />
                             </ListItem>
                             <ListItem button key={"Search Jobs"}>
-                                <ListItemIcon><Link to="/dashboard/search"><SearchIcon /></Link></ListItemIcon>
+                                <ListItemIcon><Link to="/dashboard/search"><SearchIcon className={classes.sideIcons}/></Link></ListItemIcon>
                                 <ListItemText primary="Search Jobs" />
                             </ListItem>
                             <ListItem button key={"Saved Jobs"}>
-                                <ListItemIcon><Link to="/dashboard/saved"><SavedIcon /></Link></ListItemIcon>
+                                <ListItemIcon><Link to="/dashboard/saved"><SavedIcon className={classes.sideIcons}/></Link></ListItemIcon>
                                 <ListItemText primary="Saved Jobs" />
                             </ListItem>
                             <ListItem button key={"Account"}>
-                                <ListItemIcon><Link to="/dashboard/account"><AccountIcon /></Link></ListItemIcon>
+                                <ListItemIcon><Link to="/dashboard/account"><AccountIcon className={classes.sideIcons}/></Link></ListItemIcon>
                                 <ListItemText primary="Account" />
                             </ListItem>
                         </List>

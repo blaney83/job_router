@@ -2131,6 +2131,11 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
+chartist-plugin-axistitle@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/chartist-plugin-axistitle/-/chartist-plugin-axistitle-0.0.4.tgz#102d7b84260061292dff666b918fedc955deb144"
+  integrity sha512-yMZYXMfU0qibE0mt+8wXl44WdttjpcgTOAeCYlSdMwbLmlGaVLpPBl44fvMumaxuE34JGLNjWJ6twxoPUxITNg==
+
 chartist@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/chartist/-/chartist-0.11.0.tgz#84ba5e05490d096d93dcfa9343ebc31ef6a3bd28"

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
+import { CardHeader } from "@material-ui/core";
 import { searchJobs, updateNumberResults } from "../../state/search/actions";
 import { createMuiTheme } from '@material-ui/core/styles';
 import { withTheme } from '@material-ui/core/styles';
@@ -27,6 +28,7 @@ import Glassdoor from "../../assets/img/glassdoor.png"
 import Indeed from "../../assets/img/indeed.png"
 import USA from "../../assets/img/usa.png"
 import Zip from "../../assets/img/zip.png"
+import StarIcon from '@material-ui/icons/Star';
 
 const styles = {
     card: {
@@ -146,7 +148,7 @@ function Search(props) {
                                                             </Grid>
                                                                 <Grid item xs={4}>
                                                                     <ListItemText
-                                                                        secondary={obj.jobRating ? <Typography variant="body" className={classes.goodResult}>{obj.jobRating}</Typography> : <Typography></Typography>}
+                                                                        secondary={obj.jobRating ? <Typography variant="body" className={classes.goodResult}>{obj.jobRating}<StarIcon/></Typography> : <Typography></Typography>}
                                                                     />
                                                                 </Grid>
                                                                 <Grid item xs={4}>
@@ -194,6 +196,12 @@ function Search(props) {
         <Grid container direction="column">
             <Grid item xsm={12}>
                 <Card className={classes.card1}>
+                <CardHeader title="Your Saved Jobs"></CardHeader>
+                    <CardContent>
+                        <Typography variant="body1">Start your job search here! Enter the position you are interested in and the city and state you want to work in and hit the search button. We'll do the rest. We bring your the most relevant results for your job search from the 6 leading job-board sites! Use the filter options to control which jobs you see and the sort options to futher customize your results. Please excuse any incomplete data, we are always working to improve our site.</Typography>
+                    </CardContent>
+                    <CardContent>
+
                     <TextField
                         // id="standard-with-placeholder"
                         label="Job Title"
@@ -221,6 +229,7 @@ function Search(props) {
                         value={searchState}
                         onChange={(e) => setSearchState(e.target.value)}
                     />
+                    </CardContent>
                     <CardActions>
                         <Button size="small" variant="contained"
                             color="primary"

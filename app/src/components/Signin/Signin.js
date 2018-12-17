@@ -12,6 +12,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
+import JobRouter from "../../assets/img/JobRouter.ico"
 
 const styles = () => ({
 
@@ -26,8 +28,12 @@ function SignUp(props) {
     return (
         <Card className={classes.card}>
             <CardHeader
+                avatar={
+                    <Avatar src={JobRouter} />
+                }
                 title="Welcome to Job Router"
                 subheader="Please sign in"
+                titleTypographyProps={{variant:"h3"}}
             />
             <CardContent>
                 <TextField
