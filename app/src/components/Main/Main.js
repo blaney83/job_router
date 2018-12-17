@@ -34,8 +34,8 @@ const styles = () => ({
 })
 
 function Main(props) {
-    let state = store.getState()
-    console.log(state)
+    // let state = store.getState()
+    // console.log(state)
     const { classes } = props;
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
@@ -51,7 +51,7 @@ function Main(props) {
                             avatar={
                                 <Avatar src={JobRouter}/>
                             }
-                            title="YourName's Job-Search Dashboard"
+                            title={props.user.firstName + "'s Job-Search Dashboard"}
                             titleTypographyProps={{variant:"h5"}}
                         />
                         <CardContent>
@@ -76,7 +76,7 @@ function Main(props) {
 
                         <CardContent>
                             {/* <Typography variant="h4" >Number of Saved Jobs</Typography> */}
-                            <Typography variant="h3" >{state.auth.user.numberSaved}</Typography>
+                            <Typography variant="h3" >{props.user.numberSaved}</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
@@ -86,7 +86,7 @@ function Main(props) {
 
                         <CardContent>
                             {/* <Typography variant="h4" >Number of Applied Jobs</Typography> */}
-                            <Typography variant="h3" >{state.auth.user.numberApplied}</Typography>
+                            <Typography variant="h3" >{props.user.numberApplied}</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
@@ -146,4 +146,8 @@ function mapDispatchToProps(dispatch) {
 
 }
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(Main));
+function mapStateToProps(state) {
+    return { user: state.auth.user }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Main));

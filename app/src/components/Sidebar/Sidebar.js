@@ -24,6 +24,8 @@ import SavedIcon from '@material-ui/icons/Save';
 import AccountIcon from '@material-ui/icons/PersonPin';
 import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
+import Avatar from '@material-ui/core/Avatar';
+import JobRouter from "../../assets/img/JobRouterWhite.png"
 import "./style.css"
 // import JobRouter from "../../assets/img/JobRouter"
 
@@ -145,6 +147,9 @@ const styles = theme => ({
     },
     sideIcons: {
         color: "white !important"
+    },
+    mainIconJR: {
+        "border-radius" : "0 !important"
     }
 });
 
@@ -186,9 +191,10 @@ class Sidebar extends React.Component {
                         >
                             <MenuIcon />
                         </IconButton>
-                        <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                            Job Router <i src="../../assets/img/JobRouter.ico"></i>
-          </Typography>
+                        <Avatar className={classes.mainIconJR} img={{color:"transparent"}} src={JobRouter} />
+                        <Typography align="center" className={classes.title} variant="h6" color="inherit" noWrap>
+                            Job Router
+                        </Typography>
                         <div className={classes.grow} />
                         <div className={classes.search}>
                             <div className={classes.searchIcon}>
@@ -210,10 +216,10 @@ class Sidebar extends React.Component {
                         className={classNames(classes.drawer, {
                             [classes.drawerOpen]: this.state.open,
                             [classes.drawerClose]: !this.state.open,
-                            
+
                         })}
                         classes={{
-                            paper: classNames( "sidebarClass",{
+                            paper: classNames("sidebarClass", {
                                 [classes.drawerOpen]: this.state.open,
                                 [classes.drawerClose]: !this.state.open,
                             }),
@@ -228,19 +234,19 @@ class Sidebar extends React.Component {
                         <Divider />
                         <List>
                             <ListItem button key={"Home"}>
-                                <ListItemIcon><Link to="/dashboard/home"><HomeIcon className={classes.sideIcons}/></Link></ListItemIcon>
+                                <ListItemIcon><Link to="/dashboard/home"><HomeIcon className={classes.sideIcons} /></Link></ListItemIcon>
                                 <ListItemText primary="Home" />
                             </ListItem>
                             <ListItem button key={"Search Jobs"}>
-                                <ListItemIcon><Link to="/dashboard/search"><SearchIcon className={classes.sideIcons}/></Link></ListItemIcon>
+                                <ListItemIcon><Link to="/dashboard/search"><SearchIcon className={classes.sideIcons} /></Link></ListItemIcon>
                                 <ListItemText primary="Search Jobs" />
                             </ListItem>
                             <ListItem button key={"Saved Jobs"}>
-                                <ListItemIcon><Link to="/dashboard/saved"><SavedIcon className={classes.sideIcons}/></Link></ListItemIcon>
+                                <ListItemIcon><Link to="/dashboard/saved"><SavedIcon className={classes.sideIcons} /></Link></ListItemIcon>
                                 <ListItemText primary="Saved Jobs" />
                             </ListItem>
                             <ListItem button key={"Account"}>
-                                <ListItemIcon><Link to="/dashboard/account"><AccountIcon className={classes.sideIcons}/></Link></ListItemIcon>
+                                <ListItemIcon><Link to="/dashboard/account"><AccountIcon className={classes.sideIcons} /></Link></ListItemIcon>
                                 <ListItemText primary="Account" />
                             </ListItem>
                         </List>
