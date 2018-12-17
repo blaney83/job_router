@@ -29,6 +29,9 @@ import Indeed from "../../assets/img/indeed.png"
 import USA from "../../assets/img/usa.png"
 import Zip from "../../assets/img/zip.png"
 import StarIcon from '@material-ui/icons/Star';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = {
     card: {
@@ -148,7 +151,7 @@ function Search(props) {
                                                             </Grid>
                                                                 <Grid item xs={4}>
                                                                     <ListItemText
-                                                                        secondary={obj.jobRating ? <Typography variant="body" className={classes.goodResult}>{obj.jobRating}<StarIcon/></Typography> : <Typography></Typography>}
+                                                                        secondary={obj.jobRating ? <Typography variant="body" className={classes.goodResult}>{obj.jobRating}<StarIcon /></Typography> : <Typography></Typography>}
                                                                     />
                                                                 </Grid>
                                                                 <Grid item xs={4}>
@@ -196,39 +199,93 @@ function Search(props) {
         <Grid container direction="column">
             <Grid item xsm={12}>
                 <Card className={classes.card1}>
-                <CardHeader title="Your Saved Jobs"></CardHeader>
+                    <CardHeader title="Your Saved Jobs"></CardHeader>
                     <CardContent>
                         <Typography variant="body1">Start your job search here! Enter the position you are interested in and the city and state you want to work in and hit the search button. We'll do the rest. We bring your the most relevant results for your job search from the 6 leading job-board sites! Use the filter options to control which jobs you see and the sort options to futher customize your results. Please excuse any incomplete data, we are always working to improve our site.</Typography>
                     </CardContent>
                     <CardContent>
 
-                    <TextField
-                        // id="standard-with-placeholder"
-                        label="Job Title"
-                        placeholder="Software Engineer"
-                        className={classes.textField}
-                        margin="normal"
-                        value={searchJob}
-                        onChange={(e) => setSearchJob(e.target.value)}
-                    />
-                    <TextField
-                        // id="standard-with-placeholder"
-                        label="City"
-                        placeholder="San Francisco"
-                        className={classes.textField}
-                        margin="normal"
-                        value={searchCity}
-                        onChange={(e) => setSearchCity(e.target.value)}
-                    />
-                    <TextField
-                        // id="standard-with-placeholder"
-                        label="State (2 letters)"
-                        placeholder="CA"
-                        className={classes.textField}
-                        margin="normal"
-                        value={searchState}
-                        onChange={(e) => setSearchState(e.target.value)}
-                    />
+                        <TextField
+                            // id="standard-with-placeholder"
+                            label="Job Title"
+                            placeholder="Software Engineer"
+                            className={classes.textField}
+                            margin="normal"
+                            value={searchJob}
+                            onChange={(e) => setSearchJob(e.target.value)}
+                        />
+                        <TextField
+                            // id="standard-with-placeholder"
+                            label="City"
+                            placeholder="San Francisco"
+                            className={classes.textField}
+                            margin="normal"
+                            value={searchCity}
+                            onChange={(e) => setSearchCity(e.target.value)}
+                        />
+                        <InputLabel htmlFor="age-simple">State</InputLabel>
+                        <Select
+                            value={searchState}
+                            onChange={(e) => setSearchState(e.target.value)}
+                            inputProps={{
+                                name: 'age',
+                                id: 'age-simple',
+                            }}
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value={"AL"}>AL</MenuItem>
+                            <MenuItem value={"AK"}>AK</MenuItem>
+                            <MenuItem value={"AZ"}>AZ</MenuItem>
+                            <MenuItem value={"AR"}>AR</MenuItem>
+                            <MenuItem value={"CA"}>CA</MenuItem>
+                            <MenuItem value={"CO"}>CO</MenuItem>
+                            <MenuItem value={"CT"}>CT</MenuItem>
+                            <MenuItem value={"DE"}>DE</MenuItem>
+                            <MenuItem value={"FL"}>FL</MenuItem>
+                            <MenuItem value={"GA"}>GA</MenuItem>
+                            <MenuItem value={"HI"}>HI</MenuItem>
+                            <MenuItem value={"ID"}>ID</MenuItem>
+                            <MenuItem value={"IL"}>IL</MenuItem>
+                            <MenuItem value={"IN"}>IN</MenuItem>
+                            <MenuItem value={"IA"}>IA</MenuItem>
+                            <MenuItem value={"KS"}>KS</MenuItem>
+                            <MenuItem value={"KY"}>KY</MenuItem>
+                            <MenuItem value={"LA"}>LA</MenuItem>
+                            <MenuItem value={"ME"}>ME</MenuItem>
+                            <MenuItem value={"MD"}>MD</MenuItem>
+                            <MenuItem value={"MA"}>MA</MenuItem>
+                            <MenuItem value={"MI"}>MI</MenuItem>
+                            <MenuItem value={"MN"}>MN</MenuItem>
+                            <MenuItem value={"MS"}>MS</MenuItem>
+                            <MenuItem value={"MO"}>MO</MenuItem>
+                            <MenuItem value={"MT"}>MT</MenuItem>
+                            <MenuItem value={"NE"}>NE</MenuItem>
+                            <MenuItem value={"NV"}>NV</MenuItem>
+                            <MenuItem value={"NH"}>NH</MenuItem>
+                            <MenuItem value={"NJ"}>NJ</MenuItem>
+                            <MenuItem value={"NM"}>NM</MenuItem>
+                            <MenuItem value={"NY"}>NY</MenuItem>
+                            <MenuItem value={"NC"}>NC</MenuItem>
+                            <MenuItem value={"ND"}>ND</MenuItem>
+                            <MenuItem value={"OH"}>OH</MenuItem>
+                            <MenuItem value={"OK"}>OK</MenuItem>
+                            <MenuItem value={"OR"}>OR</MenuItem>
+                            <MenuItem value={"PA"}>PA</MenuItem>
+                            <MenuItem value={"RI"}>RI</MenuItem>
+                            <MenuItem value={"SC"}>SC</MenuItem>
+                            <MenuItem value={"SD"}>SD</MenuItem>
+                            <MenuItem value={"TN"}>TN</MenuItem>
+                            <MenuItem value={"TX"}>TX</MenuItem>
+                            <MenuItem value={"UT"}>UT</MenuItem>
+                            <MenuItem value={"VT"}>VT</MenuItem>
+                            <MenuItem value={"VA"}>VA</MenuItem>
+                            <MenuItem value={"WA"}>WA</MenuItem>
+                            <MenuItem value={"WV"}>WV</MenuItem>
+                            <MenuItem value={"WI"}>WI</MenuItem>
+                            <MenuItem value={"WY"}>WY</MenuItem>
+                        </Select>
                     </CardContent>
                     <CardActions>
                         <Button size="small" variant="contained"
