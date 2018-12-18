@@ -22,11 +22,23 @@ module.exports = {
                 res.json([{ error: "bad search" }])
             } else {
                 let dbMassiveArray = []
-                resp.map((val, i) => val.map(val => val.map(val => dbMassiveArray.push(val))))
-                db.Job.deleteMany({}).then(info => {
+                resp.map((val, i) => val.map(val => val.map(val => {
+                    val.userId = req.body.userId
+                    dbMassiveArray.push(val)
+                })))
+                db.Job.deleteMany({userId : req.body.userId}).then(info => {
+                    console.log("well this happened")
                     db.Job
                         .create(dbMassiveArray)
-                        .then(dbModel => res.json(dbModel))
+                        .then(dbModel => {
+                            // console.log(dbModel)
+                            let firstRespondersLoL = []
+                            for(let ntm = 0; ntm < 15; ntm ++){
+                                firstRespondersLoL.push(dbModel[ntm])
+                            }
+                            // console.log(fir)
+                            res.json(firstRespondersLoL)
+                        })
                         .catch(err => res.status(422).json(err));
                 }).catch(err => res.status(422).json(err))
             }
@@ -34,4 +46,16 @@ module.exports = {
         })
 
     },
+
+    findMore: function (req, res) {
+        let magicNumber = parseInt(req.params.number)
+        db.Job.find({userId: req.body.userId}).limit(magicNumber)
+            .then(moreJobPostings=>{
+                let moreDataForChu = []
+                for(let ntm = magicNumber-15; ntm < magicNumber; ntm ++){
+                    moreDataForChu.push(moreJobPostings[ntm])
+                }
+                res.json(moreDataForChu)
+            })
+    }
 }

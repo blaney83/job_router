@@ -76,26 +76,23 @@ router.put("/updateApplied", function (req, res) {
 })
 
 router.put("/updateViewed", function (req, res) {
-    // console.log("hit")
-    // // console.log(req.body.jobId)
-    // // let newNumbersYay = fixMyProblems()
-    // // console.log(newNumbersYay)
-    // db.User.findById(req.body.userId).then(userObj => {
-    //     console.log(userObj.postingsSaved)
-    //     let oldSavedChartDataArray = userObj.savedChartData
-    //     let oldPostingsSaved = userObj.postingsSaved
-    //     let trueOrFalseSavedAlready = oldPostingsSaved.indexOf(req.body.jobId)
-    //     //could replace req.body.added with t/f >=0
-    //         oldSavedChartDataArray[newNumbersYay] = oldSavedChartDataArray[newNumbersYay] + 1
-    //         console.log(oldSavedChartDataArray)
-    //         db.User.findOneAndUpdate({ _id: req.body.userId }, { $inc: { numberSaved: 1 }, $push: { postingsSaved: req.body.jobId }, $set: { savedChartData: oldSavedChartDataArray } }, { new: true })
-    //             .then(resp => {
-    //                 console.log(resp)
-    //                 res.status(200).json(resp)
-    //             })
-    //             .catch(err => err)
-
-    // }).catch(e => { e })
+    console.log("hit")
+    db.User.findById(req.body.userId).then(userObj => {
+        let newViewed = [...req.body.viewed, ...userObj.postingsViewed]
+        let newerViewed = []
+        newViewed.forEach(function (item) {
+            if (newerViewed.indexOf(item) < 0) {
+                newerViewed.push(item);
+            }
+        });
+        console.log(req.body.userId)
+        console.log(newerViewed)
+        db.User.findByIdAndUpdate(req.body.userId , { $set: { postingsViewed: newerViewed } })
+            .then(resp => {
+                console.log(newerViewed)
+                res.status(200).json(newerViewed)
+            }).catch(e => e)
+    }).catch(e => e)
 })
 
 function fixMyProblems() {
@@ -142,7 +139,7 @@ router.put("/updateSearchStats", function (req, res) {
         }
         oldRecentSearches.push(newSearchObject)
         console.log(oldRecentSearches)
-        db.User.findOneAndUpdate({ _id: req.body.userId }, { $set: { recentSearches: oldRecentSearches }, $inc: { totalSearches: 1} }, { new: true })
+        db.User.findOneAndUpdate({ _id: req.body.userId }, { $set: { recentSearches: oldRecentSearches }, $inc: { totalSearches: 1 } }, { new: true })
             .then(resp => {
                 console.log(resp)
                 res.status(200).json(resp)

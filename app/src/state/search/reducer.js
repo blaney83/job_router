@@ -1,5 +1,5 @@
 import { handleActions } from "redux-actions";
-import { searchJobs, updateNumberResults } from "./actions";
+import { searchJobs, updateNumberResults, moreResults } from "./actions";
 
 const defaultState = {
     searchCity: "",
@@ -26,6 +26,13 @@ const searchReducer = handleActions({
         return {
             ...state,
             numberResults: action.payload.numberResults
+        }
+    },
+    [moreResults]: (state, action) => {
+        console.log(action)
+        return {
+            ...state,
+            searchResults: action.payload.searchResults
         }
     }
 }, defaultState);

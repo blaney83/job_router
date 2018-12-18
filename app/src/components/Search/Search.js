@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { changeSavedUserStats, changeUserSearchInfo } from "../../state/auth/actions";
+import { changeSavedUserStats, changeUserSearchInfo, updatePostingsViewed } from "../../state/auth/actions";
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import { CardHeader } from "@material-ui/core";
-import { searchJobs, updateNumberResults } from "../../state/search/actions";
+import { searchJobs, updateNumberResults, moreResults } from "../../state/search/actions";
 import { createMuiTheme } from '@material-ui/core/styles';
 import { withTheme } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
@@ -112,23 +112,23 @@ function Search(props) {
 
     function displayResults() {
         console.log(props)
-        console.log(searchResults.length)
+        console.log(props.search.searchResults.length)
         switch (true) {
-            case (searchResults.length === 0):
+            case (props.search.searchResults.length === 0):
                 console.log("pre")
                 return (<PreSearch props={props} />)
-            case (searchResults.length === 1):
+            case (props.search.searchResults.length === 1):
                 console.log("fired")
                 return (<BadSearch props={props} />)
-            case (searchResults.length > 10):
+            case (props.search.searchResults.length > 10):
                 console.log("fired")
                 return (
                     <List>
                         {
-                            searchResults.map((obj, i) => {
+                            props.search.searchResults.map((obj, i) => {
                                 if (numberResults >= i) {
                                     return (
-                                        <Paper key={obj._id}>
+                                        <Paper key={i}>
                                             <ListItem alignItems="flex-start" key={obj._id}>
                                                 <Grid container><Grid item xs={8}>
                                                     <Grid container><Grid item xs={2}>
@@ -303,11 +303,12 @@ function Search(props) {
                 </Card>
                 <Button size="small" variant="contained"
                     color="primary"
-                    onClick={() => props.showMore(numberResults, setNumberResults)}
+                    //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
+                    onClick={() => props.showMore(props.search.searchResults, setSearchResults, "5c1864b85aa602347476c5e7", props.search.numberResults, setNumberResults)}
                 >Show more</Button>
                 <Button size="small" variant="contained"
                     color="primary"
-                    onClick={() => props.showLess(numberResults, setNumberResults)}
+                    onClick={() => props.showLess(props.search.numberResults, setNumberResults)}
                 >Show Less</Button>
             </Grid>
         </Grid>
@@ -318,7 +319,10 @@ function mapDispatchToProps(dispatch) {
     const jobSearchMethods = {
         searchJobs(searchCity, searchState, searchJob, setSearchResults, userId) {
             let searchLocation = searchCity + ", " + searchState.toUpperCase()
-            axios.post("/v1/job/" + searchLocation + "/" + searchJob).then(res => {
+            let data = {
+                userId: userId
+            }
+            axios.post("/v1/job/" + searchLocation + "/" + searchJob, data).then(res => {
                 setSearchResults(res.data)
                 dispatch(searchJobs({
                     searchCity: searchCity,
@@ -338,24 +342,24 @@ function mapDispatchToProps(dispatch) {
             // axios.post("/v1/user/updateSearchStats")
             axios(
                 // "/v1/user/updateSaved"
-            {
-                method: "put",
-                url: "/v1/user/updateSearchStats",
-                data: {
-                    searchJob: searchJob,
-                    searchCity: searchCity,
-                    searchState: searchState,
-                    userId: userId
-                }
-            }).then(resp=>{
-                console.log("searched the search")
-                dispatch(changeUserSearchInfo({
-                    recentSearches: resp.data.recentSearches,
-                    totalSearches: resp.data.totalSearches,
-                    
-                }))
-                console.log(resp)
-            })
+                {
+                    method: "put",
+                    url: "/v1/user/updateSearchStats",
+                    data: {
+                        searchJob: searchJob,
+                        searchCity: searchCity,
+                        searchState: searchState,
+                        userId: userId
+                    }
+                }).then(resp => {
+                    console.log("searched the search")
+                    dispatch(changeUserSearchInfo({
+                        recentSearches: resp.data.recentSearches,
+                        totalSearches: resp.data.totalSearches,
+
+                    }))
+                    console.log(resp)
+                })
         },
 
         saveJob(jobId, userId) {
@@ -374,16 +378,16 @@ function mapDispatchToProps(dispatch) {
             })
             axios(
                 // "/v1/user/updateSaved"
-            {
-                method: "put",
-                url: "/v1/user/updateSaved",
-                data: {
-                    added: true,
-                    userId: userId,
-                    jobId: jobId
+                {
+                    method: "put",
+                    url: "/v1/user/updateSaved",
+                    data: {
+                        added: true,
+                        userId: userId,
+                        jobId: jobId
+                    }
                 }
-            }
-            ).then(resp=>{
+            ).then(resp => {
                 console.log("hit")
                 dispatch(changeSavedUserStats({
                     numberSaved: resp.data.numberSaved,
@@ -391,14 +395,48 @@ function mapDispatchToProps(dispatch) {
                     postingsSaved: resp.data.postingsSaved
                 }))
                 console.log(resp)
-            }).catch(err=>{console.log(err)})
+            }).catch(err => { console.log(err) })
         },
-        showMore(numberResults, setNumberResults) {
+
+        showMore(searchResults, setSearchResults, userId, numberResults, setNumberResults, ) {
+            console.log("these are the results", searchResults)
             let newResults = numberResults + 15
             dispatch(updateNumberResults({
                 numberResults: newResults
             }))
             setNumberResults(newResults)
+            let data = {
+                userId: userId
+            }
+            if (searchResults.length < newResults) {
+                axios.get("/v1/job/more/" + newResults, data).then(res => {
+                    let newDataWoo = [...searchResults, ...res.data]
+                    setSearchResults(res.data)
+                    dispatch(moreResults({
+                        searchResults: newDataWoo,
+                    }));
+                    let myArray = []
+                    res.data.forEach(jobObj => {
+                        myArray.push(jobObj.jobId)
+                    })
+                    axios(
+                        {
+                            method: "put",
+                            url: "/v1/user/updateViewed",
+                            data: {
+                                userId: userId,
+                                viewed: myArray
+                            }
+                        }
+                    ).then(resp => {
+                        dispatch(updatePostingsViewed({
+                            postingsViewed: resp.date
+                        }))
+                    }).catch(err => { console.log(err) })
+                }).catch(err => {
+                    console.error(err);
+                })
+            }
         },
         showLess(numberResults, setNumberResults) {
             let newResults = numberResults - 15
