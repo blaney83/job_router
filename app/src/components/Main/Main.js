@@ -39,6 +39,7 @@ function Main(props) {
     const { classes } = props;
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
+    firstChart.data.series = [props.user.savedChartData, props.user.appliedChartData]
     return (
         <div>            
             <Grid container spacing="16">
@@ -64,7 +65,7 @@ function Main(props) {
                         <CardHeader title="Searches" />
                         <CardContent>
                             {/* <Typography variant="h4" >Number of Searches</Typography> */}
-                            <Typography variant="h3" >0</Typography>
+                            <Typography variant="h3" >{props.user.totalSearches}</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
@@ -110,8 +111,8 @@ function Main(props) {
                         <CardContent>
                             {/* <Typography variant="h4" >Recent Searches</Typography> */}
                             <List className={classes.root}>
-                                {[0, 1, 2, 3].map(value => (
-                                    <ListItem key={value} role={undefined} dense button
+                                {props.user.recentSearches.map((searchObj, i)=> (
+                                    <ListItem key={i} role={undefined} dense button
                                     // onClick={this.handleToggle(value)}
                                     >
                                         {/* <Checkbox
@@ -119,7 +120,7 @@ function Main(props) {
                                             tabIndex={-1}
                                             disableRipple
                                         /> */}
-                                        <ListItemText primary={`Line item ${value + 1}`} />
+                                        <ListItemText primary={searchObj.searchJob +" jobs in " + searchObj.searchCity + ", " + searchObj.searchState} />
                                         <ListItemSecondaryAction>
                                             <IconButton aria-label="Comments">
                                                 {/* <CommentIcon /> */}

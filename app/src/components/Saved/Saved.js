@@ -6,6 +6,7 @@ import store from "../../state";
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import { changeSavedUserStats, changeUserSearchInfo, changeAppliedUserStats } from "../../state/auth/actions";
 import { searchJobs, updateNumberResults } from "../../state/search/actions";
 import { getSaved } from "../../state/saved/actions"
 import Button from '@material-ui/core/Button';
@@ -236,6 +237,27 @@ function mapDispatchToProps(dispatch) {
                 console.log(err.status)
                 console.log("Error")
             })
+            axios(
+                // "/v1/user/updateSaved"
+            {
+                method: "put",
+                url: "/v1/user/updateSaved",
+                data: {
+                    added: false,
+                    userId: userId,
+                    jobId: jobId,
+                    savedId: jobId
+                }
+            }
+            ).then(resp=>{
+                console.log("hit")
+                dispatch(changeSavedUserStats({
+                    numberSaved: resp.data.numberSaved,
+                    savedChartData: resp.data.savedChartData,
+                    postingsSaved: resp.data.postingsSaved
+                }))
+                console.log(resp)
+            }).catch(err=>{console.log(err)})
         },
         toggleApply(jobId, userId, savedResults, setSavedResults) {
             console.log(userId)
@@ -245,8 +267,50 @@ function mapDispatchToProps(dispatch) {
                     let newArray = savedResults.map(obj => obj.jobId === jobId ? true : obj)
                     if (savedResults[newArray.indexOf(true)].hasApplied) {
                         savedResults[newArray.indexOf(true)].hasApplied = false
+                        console.log("true ")
+                        axios(
+                            // "/v1/user/updateSaved"
+                        {
+                            method: "put",
+                            url: "/v1/user/updateApplied",
+                            data: {
+                                added: false,
+                                userId: userId,
+                                jobId: jobId,
+                            }
+                        }
+                        ).then(resp=>{
+                            // console.log("hit")
+                            // dispatch(changeSavedUserStats({
+                            //     numberSaved: resp.data.numberSaved,
+                            //     savedChartData: resp.data.savedChartData,
+                            //     postingsSaved: resp.data.postingsSaved
+                            // }))
+                            console.log(resp)
+                        }).catch(err=>{console.log(err)})
                     } else {
                         savedResults[newArray.indexOf(true)].hasApplied = true
+                        axios(
+                            // "/v1/user/updateSaved"
+                        {
+                            method: "put",
+                            url: "/v1/user/updateApplied",
+                            data: {
+                                added: true,
+                                userId: userId,
+                                jobId: jobId,
+                            }
+                        }
+                        ).then(resp=>{
+                            // console.log("hit")
+                            dispatch(changeAppliedUserStats({
+                                numberApplied: resp.data.numberApplied,
+                                appliedChartData: resp.data.appliedChartData,
+                                postingsApplied: resp.data.postingsApplied
+                            }))
+                            console.log(resp)
+                        }).catch(err=>{console.log(err)})
+                    
                     }
                     setSavedResults(savedResults)
                 } else if (res.status === 202) {
@@ -256,6 +320,7 @@ function mapDispatchToProps(dispatch) {
                 console.log(err.status)
                 console.log("Error")
             })
+            
         }
     }
     return savedMethods

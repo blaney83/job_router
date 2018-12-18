@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { changeSavedUserStats } from "../../state/auth/actions";
+import { changeSavedUserStats, changeUserSearchInfo } from "../../state/auth/actions";
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import { CardHeader } from "@material-ui/core";
@@ -349,6 +349,11 @@ function mapDispatchToProps(dispatch) {
                 }
             }).then(resp=>{
                 console.log("searched the search")
+                dispatch(changeUserSearchInfo({
+                    recentSearches: resp.data.recentSearches,
+                    totalSearches: resp.data.totalSearches,
+                    
+                }))
                 console.log(resp)
             })
         },
@@ -375,7 +380,7 @@ function mapDispatchToProps(dispatch) {
                 data: {
                     added: true,
                     userId: userId,
-                    savedId: jobId
+                    jobId: jobId
                 }
             }
             ).then(resp=>{

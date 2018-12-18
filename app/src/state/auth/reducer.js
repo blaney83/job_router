@@ -1,5 +1,5 @@
 import { handleActions } from "redux-actions";
-import { updateAuth, changeSavedUserStats } from "./actions";
+import { updateAuth, changeSavedUserStats, changeUserSearchInfo, changeAppliedUserStats } from "./actions";
 
 const defaultState = {
     authenticated: false,
@@ -60,7 +60,28 @@ const authReducer = handleActions({
                 postingsSaved: action.payload.postingsSaved,
             }
         }
-    }
+    },
+    [changeUserSearchInfo]: (state, action) => {
+        return {
+            ...state,
+            user: {
+                ...state.user,
+                recentSearches: action.payload.recentSearches,
+                totalSearches: action.payload.totalSearches
+            }
+        }
+    },
+    [changeAppliedUserStats]: (state, action) => {
+        return {
+            ...state,
+            user: {
+                ...state.user,
+                numberApplied: action.payload.numberApplied,
+                appliedChartData: action.payload.appliedChartData,
+                postingsApplied: action.payload.postingsApplied,
+            }
+        }
+    },
 }, defaultState);
 
 export default authReducer;

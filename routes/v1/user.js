@@ -7,10 +7,11 @@ const moment = require("moment")
 //Routes for /v1/user, this first route updates numberSaved, adds
 router.put("/updateSaved", function (req, res) {
     console.log("hit")
+    console.log(req.body.jobId)
     let newNumbersYay = fixMyProblems()
     console.log(newNumbersYay)
     db.User.findById(req.body.userId).then(userObj => {
-        console.log(userObj)
+        console.log(userObj.postingsSaved)
         let oldSavedChartDataArray = userObj.savedChartData
         let oldPostingsSaved = userObj.postingsSaved
         let trueOrFalseSavedAlready = oldPostingsSaved.indexOf(req.body.jobId)
@@ -30,6 +31,41 @@ router.put("/updateSaved", function (req, res) {
             oldPostingsSaved.splice(trueOrFalseSavedAlready, 1)
             console.log(oldSavedChartDataArray)
             db.User.findOneAndUpdate({ _id: req.body.userId }, { $inc: { numberSaved: -1 }, $set: { savedChartData: oldSavedChartDataArray, postingsSaved: oldPostingsSaved } }, { new: true })
+                .then(resp => {
+                    console.log(resp)
+                    res.status(200).json(resp)
+                })
+                .catch(err => err)
+        }
+    }).catch(e => { e })
+})
+
+router.put("/updateApplied", function (req, res) {
+    console.log("hit")
+    console.log(req.body.jobId)
+    let newNumbersYay = fixMyProblems()
+    console.log(newNumbersYay)
+    db.User.findById(req.body.userId).then(userObj => {
+        // console.log(userObj.postingsSaved)
+        let oldAppliedChartDataArray = userObj.appliedChartData
+        let oldPostingsApplied = userObj.postingsApplied
+        let trueOrFalseAppliedAlready = oldPostingsApplied.indexOf(req.body.jobId)
+        //could replace req.body.added with t/f >=0
+        if (req.body.added) {
+            oldAppliedChartDataArray[newNumbersYay] = oldAppliedChartDataArray[newNumbersYay] + 1
+            // console.log(oldSavedChartDataArray)
+            db.User.findOneAndUpdate({ _id: req.body.userId }, { $inc: { numberApplied: 1 }, $push: { postingsApplied: req.body.jobId }, $set: { appliedChartData: oldAppliedChartDataArray } }, { new: true })
+                .then(resp => {
+                    console.log(resp)
+                    res.status(200).json(resp)
+                })
+                .catch(err => err)
+            //could replace req.body.added with t/f != -1
+        } else if (!req.body.added) {
+            oldAppliedChartDataArray[newNumbersYay] = oldAppliedChartDataArray[newNumbersYay] - 1
+            oldPostingsApplied.splice(trueOrFalseAppliedAlready, 1)
+            console.log(oldAppliedChartDataArray)
+            db.User.findOneAndUpdate({ _id: req.body.userId }, { $inc: { numberApplied: -1 }, $set: { appliedChartData: oldAppliedChartDataArray, postingsApplied: oldPostingsApplied } }, { new: true })
                 .then(resp => {
                     console.log(resp)
                     res.status(200).json(resp)
