@@ -40,13 +40,11 @@ function Main(props) {
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
     return (
-        <div>
-            
+        <div>            
             <Grid container spacing="16">
                 <Grid item xs={12}>
                 {/* <Slide direction="up" mountOnEnter unmountOnExit> */}
                     <Card>
-
                         <CardHeader
                             avatar={
                                 <Avatar src={JobRouter}/>

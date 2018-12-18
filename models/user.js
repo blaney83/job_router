@@ -8,11 +8,17 @@ const UserSchema = new Schema({
     username: { type: String, required: true, lowercase: true, unique: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    numberSaved: { type: Number, default: 0 },
-    numberApplied: { type: Number, default: 0 },
     userCity: String,
     userStateCode: String,
+    numberSaved: { type: Number, default: 0 },
+    numberApplied: { type: Number, default: 0 },
+    savedChartData: { type: Array, default: [0,0,0,0,0,0,0]},
+    appliedChartData: { type: Array, default: [0,0,0,0,0,0,0]},
+    postingsViewed: Array,
+    postingsSaved: Array,
+    postingsApplied: Array,
     recentSearches: Array,
+    totalSearches: { type: Number, default: 0 },
 });
 
 // On save hook, encrypt password

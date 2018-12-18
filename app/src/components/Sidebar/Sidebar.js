@@ -13,6 +13,9 @@ import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import { updateAuth } from "../../state/auth/actions";
+import { connect } from "react-redux";
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -24,8 +27,11 @@ import SavedIcon from '@material-ui/icons/Save';
 import AccountIcon from '@material-ui/icons/PersonPin';
 import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
+import ExitIcon from '@material-ui/icons/FirstPage';
 import Avatar from '@material-ui/core/Avatar';
 import JobRouter from "../../assets/img/JobRouterWhite.png"
+import { searchJobs, updateNumberResults } from "../../state/search/actions";
+import { getSaved } from "../../state/saved/actions"
 import "./style.css"
 // import JobRouter from "../../assets/img/JobRouter"
 
@@ -148,8 +154,15 @@ const styles = theme => ({
     sideIcons: {
         color: "white !important"
     },
+    sideIconLabels: {
+        color: "white !important"
+    },
     mainIconJR: {
         "border-radius" : "0 !important"
+    },
+    signOutStayDown: {
+        position: "absolute",
+        bottom: "0px"
     }
 });
 
@@ -157,6 +170,7 @@ class Sidebar extends React.Component {
     state = {
         open: false,
         mediaQ: true,
+        path: this.props
     };
 
     handleDrawerOpen = () => {
@@ -168,8 +182,9 @@ class Sidebar extends React.Component {
         this.setState({ open: false });
         this.setState({ mediaQ: true });
     };
-
+    
     render() {
+        console.log(this.props)
         const { classes, theme } = this.props;
 
         return (
@@ -216,7 +231,6 @@ class Sidebar extends React.Component {
                         className={classNames(classes.drawer, {
                             [classes.drawerOpen]: this.state.open,
                             [classes.drawerClose]: !this.state.open,
-
                         })}
                         classes={{
                             paper: classNames("sidebarClass", {
@@ -233,21 +247,27 @@ class Sidebar extends React.Component {
                         </div>
                         <Divider />
                         <List>
-                            <ListItem button key={"Home"}>
-                                <ListItemIcon><Link to="/dashboard/home"><HomeIcon className={classes.sideIcons} /></Link></ListItemIcon>
-                                <ListItemText primary="Home" />
+                            <ListItem button="true" selected={this.props.locationProps.location.pathname === "/dashboard/home" ? "true" : ""} key={"Home"}>
+                                <ListItemIcon><Link to="/dashboard/home"><HomeIcon className={classes.sideIcons}/></Link></ListItemIcon>
+                                <ListItemText primary="Home" primaryTypographyProps={{className : classes.sideIconLabels}}/>
                             </ListItem>
-                            <ListItem button key={"Search Jobs"}>
-                                <ListItemIcon><Link to="/dashboard/search"><SearchIcon className={classes.sideIcons} /></Link></ListItemIcon>
-                                <ListItemText primary="Search Jobs" />
+                            <ListItem button key={"Search Jobs"} selected={this.props.locationProps.location.pathname === "/dashboard/search" ? "true" : ""}>
+                                <ListItemIcon><Link to="/dashboard/search"><SearchIcon className={classes.sideIcons}/></Link></ListItemIcon>
+                                <ListItemText primary="Search Jobs" primaryTypographyProps={{className : classes.sideIconLabels}}/>
                             </ListItem>
-                            <ListItem button key={"Saved Jobs"}>
-                                <ListItemIcon><Link to="/dashboard/saved"><SavedIcon className={classes.sideIcons} /></Link></ListItemIcon>
-                                <ListItemText primary="Saved Jobs" />
+                            <ListItem button key={"Saved Jobs"} selected={this.props.locationProps.location.pathname === "/dashboard/saved" ? "true" : ""}>
+                                <ListItemIcon><Link to="/dashboard/saved"><SavedIcon className={classes.sideIcons}/></Link></ListItemIcon>
+                                <ListItemText primary="Saved Jobs" primaryTypographyProps={{className : classes.sideIconLabels}}/>
                             </ListItem>
-                            <ListItem button key={"Account"}>
-                                <ListItemIcon><Link to="/dashboard/account"><AccountIcon className={classes.sideIcons} /></Link></ListItemIcon>
-                                <ListItemText primary="Account" />
+                            <ListItem button key={"Account"} selected={this.props.locationProps.location.pathname === "/dashboard/account" ? "true" : ""}>
+                                <ListItemIcon><Link to="/dashboard/account"><AccountIcon className={classes.sideIcons}/></Link></ListItemIcon>
+                                <ListItemText primary="Account" primaryTypographyProps={{className : classes.sideIconLabels}}/>
+                            </ListItem>
+                        </List>
+                        <List className={classes.signOutStayDown}>
+                            <ListItem button="true" selected={this.props.locationProps.location.pathname === "/" ? "true" : ""} key={"Home"}>
+                                <ListItemIcon onClick={this.props.signout}><Link to="/"><ExitIcon className={classes.sideIcons}/></Link></ListItemIcon>
+                                <ListItemText primary="Sign Out" primaryTypographyProps={{className : classes.sideIconLabels}}/>
                             </ListItem>
                         </List>
                     </Drawer>
@@ -259,9 +279,45 @@ class Sidebar extends React.Component {
     }
 }
 
+function mapDispatchToProps(dispatch) {
+    return {
+        signout() {
+                dispatch(updateAuth({
+                    authenticated: false,
+                    token: "",
+                    error: "",
+                    user: {
+                        username: "",
+                        firstName: "",
+                        lastName: "",
+                        userCity: "",
+                        userStateCode: "",
+                        numberSaved: 0,
+                        numberApplied: 0,
+                        userId: "",
+                        recentSearches: "",
+                    }
+                }));
+                dispatch(searchJobs({
+                    searchCity: "",
+                    searchState: "",
+                    searchJob: "",
+                    searchResults: [],
+                }));
+                dispatch(updateNumberResults({
+                    numberResults: 15
+                }));
+                dispatch(getSaved({
+                    savedResults: 0,
+                    savedLoaded: false,
+                }));
+        }
+    }
+}
+
 Sidebar.propTypes = {
     classes: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(Sidebar);
+export default connect(null, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Sidebar));

@@ -3,7 +3,7 @@ const Chartist = require("chartist")
 
 var firstChart = {
     data: {
-        labels: ['Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'],
+        labels: ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'],
         series: [
             [12, 9, 7, 8, 5, 4, 6],
             [4, 5, 3, 7, 3, 5, 5],

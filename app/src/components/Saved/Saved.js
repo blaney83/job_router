@@ -5,8 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import store from "../../state";
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
-import { searchJobs, updateNumberResults } from "../../state/search/actions";
 import CardContent from '@material-ui/core/CardContent';
+import { searchJobs, updateNumberResults } from "../../state/search/actions";
 import { getSaved } from "../../state/saved/actions"
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';

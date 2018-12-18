@@ -9,6 +9,7 @@
     "axios": "^0.18.0",
     "chartist": "^0.11.0",
     "chartist-plugin-axistitle": "^0.0.4",
+    "moment": "^2.23.0",
     "react": "^16.7.0-alpha.2",
     "react-chartist": "^0.13.1",
     "react-dom": "^16.7.0-alpha.2",

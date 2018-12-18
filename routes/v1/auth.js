@@ -31,12 +31,18 @@ router.post("/signin", requireSignin, function (req, res) {
         .then(userResp => {
             let userResponse = {
                 username: userResp.username,
+                userId: userResp._id,
                 firstName: userResp.firstName,
                 lastName: userResp.lastName,
                 userCity: userResp.userCity,
                 userStateCode: userResp.userStateCode,
                 numberSaved: userResp.numberSaved,
                 numberApplied: userResp.numberApplied,
+                savedChartData: userResp.savedChartData,
+                appliedChartData: userResp.appliedChartData,
+                postingsViewed: userResp.postingsViewed,
+                postingsSaved: userResp.postingsSaved,
+                postingsApplied: userResp.postingsApplied,
                 recentSearches: userResp.recentSearches,
                 token: tokenizer(userResp),
             }
@@ -64,12 +70,18 @@ router.post("/signup", function (req, res) {
                 // respond with the success if the user existed
                 let userResponse = {
                     username: user.username,
+                    userId: user._id,
                     firstName: user.firstName,
                     lastName: user.lastName,
                     userCity: user.userCity,
                     userStateCode: user.userStateCode,
                     numberSaved: user.numberSaved,
                     numberApplied: user.numberApplied,
+                    savedChartData: user.savedChartData,
+                    appliedChartData: user.appliedChartData,
+                    postingsViewed: user.postingsViewed,
+                    postingsSaved: user.postingsSaved,
+                    postingsApplied: user.postingsApplied,
                     recentSearches: user.recentSearches,
                     token: tokenizer(user),
                 }

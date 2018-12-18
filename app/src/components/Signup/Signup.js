@@ -201,14 +201,20 @@ function mapDispatchToProps(dispatch) {
                 dispatch(updateAuth({
                     token: res.data.token,
                     username: res.data.username,
+                    userId: res.data.userId,
                     firstName: res.data.firstName,
                     lastName: res.data.lastName,
                     userCity: res.data.userCity,
                     userStateCode: res.data.userStateCode,
                     numberSaved: res.data.numberSaved,
                     numberApplied: res.data.numberSaved,
-                    userId: res.data._id,
-                    recentSearches: []
+                    savedChartData: res.data.savedChartData,
+                    appliedChartData: res.data.appliedChartData,
+                    postingsViewed: res.data.postingsViewed,
+                    postingsSaved: res.data.postingsSaved,
+                    postingsApplied: res.data.postingsApplied,
+                    recentSearches: res.data.recentSearches,
+                    totalSearches: res.data.totalSearches,
                 }));
                 reroute.push("/")
             }).catch(err => {

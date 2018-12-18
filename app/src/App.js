@@ -10,14 +10,14 @@ import Dashboard from './layouts/dashboard/Dashboard';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#388e3c',
+      main: '#696969',
     },
     secondary: {
-      main: '#4caf50',
+      main: '#bb4403',
     },
   },
 });
-
+// febd6c
 function App(props) {
   console.log(store.getState().auth.authenticated)
   return (
