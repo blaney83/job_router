@@ -1,15 +1,15 @@
 
-.Dashboard-root-1{
+#immaSpecialGrid{
     margin-top: 50px;
 }
 
-.MuiGrid-grid-xs-10-220{
+#immaSpecialGridToo{
     max-width: 95% !important;
     flex-basis: 95% !important
 }
 
 @media only screen and (min-width: 600px) {
-.Dashboard-root-1{
+    #immaSpecialGrid{
     margin-left: 72px;
     margin-top: 64px;
 }

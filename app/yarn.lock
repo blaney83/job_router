@@ -2131,6 +2131,11 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
+chartist-plugin-axistitle@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/chartist-plugin-axistitle/-/chartist-plugin-axistitle-0.0.4.tgz#102d7b84260061292dff666b918fedc955deb144"
+  integrity sha512-yMZYXMfU0qibE0mt+8wXl44WdttjpcgTOAeCYlSdMwbLmlGaVLpPBl44fvMumaxuE34JGLNjWJ6twxoPUxITNg==
+
 chartist@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/chartist/-/chartist-0.11.0.tgz#84ba5e05490d096d93dcfa9343ebc31ef6a3bd28"
@@ -6345,6 +6350,11 @@ mkdirp@0.5.1, mkdirp@0.5.x, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkdirp@
   dependencies:
     minimist "0.0.8"
 
+moment@^2.23.0:
+  version "2.23.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.23.0.tgz#759ea491ac97d54bac5ad776996e2a58cc1bc225"
+  integrity sha512-3IE39bHVqFbWWaPOMHZF98Q9c3LDKGTmypMiTM2QygGXXElkFWIH7GxfmlwmY2vwa+wmNsoYZmG2iusf1ZjJoA==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -8291,6 +8301,11 @@ redux-actions@^2.6.4:
     loose-envify "^1.4.0"
     reduce-reducers "^0.4.3"
     to-camel-case "^1.0.0"
+
+redux-persist@^5.10.0:
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-5.10.0.tgz#5d8d802c5571e55924efc1c3a9b23575283be62b"
+  integrity sha512-sSJAzNq7zka3qVHKce1hbvqf0Vf5DuTVm7dr4GtsqQVOexnrvbV47RWFiPxQ8fscnyiuWyD2O92DOxPl0tGCRg==
 
 redux@^4.0.1:
   version "4.0.1"

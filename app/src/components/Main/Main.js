@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect, getState } from "react-redux";
-import store from "../../state";
+import { store } from "../../state";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import { updateAuth } from "../../state/auth/actions";
@@ -20,10 +20,14 @@ import CardContent from '@material-ui/core/CardContent';
 import ChartistGraph from "react-chartist";
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
+import Slide from '@material-ui/core/Slide';
 import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
+import JobRouter from "../../assets/img/JobRouter.ico"
+import ArrowForward from '@material-ui/icons/ArrowForward';
 
 import {
-    firstChart, 
+    firstChart,
 } from "../Chart/Chart.js";
 
 const styles = () => ({
@@ -31,42 +35,66 @@ const styles = () => ({
 })
 
 function Main(props) {
-    let state = store.getState()
-    console.log(state)
+    // let state = store.getState()
+    // console.log(state)
     const { classes } = props;
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
+    firstChart.data.series = [props.user.savedChartData, props.user.appliedChartData]
     return (
-        <div>
-            <Grid container>
-                <Grid item xsm={12} md={4}>
+        <div>            
+            <Grid container spacing="16">
+                <Grid item xs={12}>
+                {/* <Slide direction="up" mountOnEnter unmountOnExit> */}
+                    <Card>
+                        <CardHeader
+                            avatar={
+                                <Avatar src={JobRouter}/>
+                            }
+                            title={props.user.firstName + "'s Job-Search Dashboard"}
+                            titleTypographyProps={{variant:"h5"}}
+                        />
+                        <CardContent>
+                            Welcome home! This is the command center for you and your Job Search! Track your progress to keep up the pressure and land your dream job. If you have any suggestions for useful information that would help your on your journey, send us your idea in the contact us section. Happy Hunting!
+                </CardContent>
+                    </Card>
+                    {/* </Slide> */}
+                </Grid></Grid>
+            <Grid container spacing="16">
+                <Grid item xs={12} sm={4}>
                     <Card className={classes.card} color="success">
+                        <CardHeader title="Searches" />
                         <CardContent>
-                            <Typography variant="h4" >Number of Searches</Typography>
-                            <Typography variant="h3" >0</Typography>
+                            {/* <Typography variant="h4" >Number of Searches</Typography> */}
+                            <Typography variant="h3" >{props.user.totalSearches}</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xsm={12} md={4}>
+                <Grid item xs={12} sm={4}>
                     <Card className={classes.card}>
+                        <CardHeader title="Saved Jobs" />
+
                         <CardContent>
-                            <Typography variant="h4" >Number of Saved Jobs</Typography>
-                            <Typography variant="h3" >{state.auth.user.numberSaved}</Typography>
+                            {/* <Typography variant="h4" >Number of Saved Jobs</Typography> */}
+                            <Typography variant="h3" >{props.user.numberSaved}</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xsm={12} md={4}>
+                <Grid item xs={12} sm={4}>
                     <Card className={classes.card}>
+                        <CardHeader title="Applied Jobs" />
+
                         <CardContent>
-                            <Typography variant="h4" >Number of Applied Jobs</Typography>
-                            <Typography variant="h3" >{state.auth.user.numberApplied}</Typography>
+                            {/* <Typography variant="h4" >Number of Applied Jobs</Typography> */}
+                            <Typography variant="h3" >{props.user.numberApplied}</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
             </Grid>
-            <Grid container>
-                <Grid item xsm={12} md={6}>
+            <Grid container spacing="16">
+                <Grid item xs={12} sm={6}>
                     <Card className={classes.card}>
+                        <CardHeader title="Recent Activity" />
                         <ChartistGraph
                             className="ct-chart"
                             data={firstChart.data}
@@ -74,16 +102,18 @@ function Main(props) {
                             options={firstChart.options}
                             responsiveOptions={firstChart.responsiveOptions}
                             listener={firstChart.animation}
+                            plugins={firstChart.plugins.chartistPluginAxisTitle}
                         />
                     </Card>
                 </Grid>
-                <Grid item xsm={12} md={6}>
+                <Grid item xs={12} sm={6}>
                     <Card className={classes.card}>
+                        <CardHeader title="Recent Searches" />
                         <CardContent>
-                            <Typography variant="h4" >Recent Searches</Typography>
+                            {/* <Typography variant="h4" >Recent Searches</Typography> */}
                             <List className={classes.root}>
-                                {[0, 1, 2, 3].map(value => (
-                                    <ListItem key={value} role={undefined} dense button 
+                                {props.user.recentSearches.map((searchObj, i)=> (
+                                    <ListItem key={i} role={undefined} dense button
                                     // onClick={this.handleToggle(value)}
                                     >
                                         {/* <Checkbox
@@ -91,10 +121,10 @@ function Main(props) {
                                             tabIndex={-1}
                                             disableRipple
                                         /> */}
-                                        <ListItemText primary={`Line item ${value + 1}`} />
+                                        <ListItemText primary={searchObj.searchJob +" jobs in " + searchObj.searchCity + ", " + searchObj.searchState} />
                                         <ListItemSecondaryAction>
                                             <IconButton aria-label="Comments">
-                                                {/* <CommentIcon /> */}
+                                                <ArrowForward/>
                                             </IconButton>
                                         </ListItemSecondaryAction>
                                     </ListItem>
@@ -116,4 +146,8 @@ function mapDispatchToProps(dispatch) {
 
 }
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(Main));
+function mapStateToProps(state) {
+    return { user: state.auth.user }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Main));

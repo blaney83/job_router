@@ -3,8 +3,12 @@ const jobController = require("../../controllers/jobController");
 
 
 //Routes for /v1/job
-router.route("/:location/:search")
+router.route("/:location/:search/:number?")
     //create the initial search and results
     .post(jobController.create)
+
+router.route("/more/:number?")
+    .get(jobController.findMore)
+
 
 module.exports = router

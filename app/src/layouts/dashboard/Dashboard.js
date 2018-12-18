@@ -56,12 +56,13 @@ function Dashboard(props) {
     // if (store.getState().auth.authenticated) {
     return (
         <div>
-            <Sidebar />
+            <Sidebar locationProps={props}/>
             <Grid container className={classes.root}
                 // alignItems="center"
+                id="immaSpecialGrid"
             >
                 <Grid item xs={12}>
-                    <Grid container justify="center" alignItems="center">
+                    <Grid container justify="center" alignItems="center" id="immaSpecialGridToo">
                         <Grid item xs={10}>
                             {miniRoutes()}
                         </Grid>

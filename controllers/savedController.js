@@ -13,7 +13,7 @@ module.exports = {
     },
 
     create: function (req, res) {
-        console.log("we hittin")
+        // console.log("we hittin")
         let idP = req.params.id
         let userId = req.params.userId
         db.Saved.findOne({ "jobId": idP }).then(info => {
@@ -21,7 +21,7 @@ module.exports = {
 
 
                 db.Job.findOne({ "jobId": idP }).then(info => {
-                    console.log(info)
+                    // console.log(info)
                     let savedObj = {
                         isSaved: true,
                         hasApplied: false,
@@ -44,7 +44,7 @@ module.exports = {
                     savedObj.employerId = info.employerId ? info.employerId : null
                     savedObj.jobReqId = info.jobReqId ? info.jobReqId : null
                     savedObj.jobDescription = info.jobDescription ? info.jobDescription : null
-                    console.log(savedObj)
+                    // console.log(savedObj)
                     db.Saved
                         .create(savedObj)
                         .then(dbModel => res.status(200).json(dbModel))

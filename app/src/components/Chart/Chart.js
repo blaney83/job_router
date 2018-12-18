@@ -1,13 +1,14 @@
+const chartistPluginAxisTitle = require("../../../node_modules/chartist-plugin-axistitle/dist/chartist-plugin-axistitle")
 const Chartist = require("chartist")
 
 var firstChart = {
     data: {
-        labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+        labels: ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'],
         series: [
-            [12, 9, 7, 8, 5, 4, 6, 2, 3, 3, 4, 6],
-            [4, 5, 3, 7, 3, 5, 5, 3, 4, 4, 5, 5],
-            [5, 3, 4, 5, 6, 3, 3, 4, 5, 6, 3, 4],
-            [3, 4, 5, 6, 7, 6, 4, 5, 6, 7, 6, 3]
+            [12, 9, 7, 8, 5, 4, 6],
+            [4, 5, 3, 7, 3, 5, 5],
+            [5, 3, 4, 5, 6, 3, 3],
+            [3, 4, 5, 6, 7, 6, 4]
         ]
     },
     options: {
@@ -134,6 +135,31 @@ var firstChart = {
             }
         ]
     ],
+    plugins: {
+        chartistPluginAxisTitle: function(){
+            chartistPluginAxisTitle({
+            axisX: {
+                axisTitle : 'Time (mins)',
+                axisClass : 'ct-axis-title',
+                offset : {
+                    x: 0,
+                    y: 50
+                },
+                textAnchor : 'middle'
+            },
+            axisY: {
+                axisTitle : 'Goals',
+                axisClass : 'ct-axis-title',
+                offset : {
+                    x: 0,
+                    y: 0
+                },
+                textAnchor : 'middle',
+                flipTitle : false
+            }
+        })
+        }
+    }
 }
 // );
 

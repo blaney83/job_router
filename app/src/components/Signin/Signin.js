@@ -12,6 +12,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
+import JobRouter from "../../assets/img/JobRouter.ico"
 
 const styles = () => ({
 
@@ -26,8 +28,12 @@ function SignUp(props) {
     return (
         <Card className={classes.card}>
             <CardHeader
+                avatar={
+                    <Avatar src={JobRouter} />
+                }
                 title="Welcome to Job Router"
                 subheader="Please sign in"
+                titleTypographyProps={{variant:"h3"}}
             />
             <CardContent>
                 <TextField
@@ -92,14 +98,20 @@ function mapDispatchToProps(dispatch) {
                 dispatch(updateAuth({
                     token: res.data.token,
                     username: res.data.username,
+                    userId: res.data.userId,
                     firstName: res.data.firstName,
                     lastName: res.data.lastName,
                     userCity: res.data.userCity,
                     userStateCode: res.data.userStateCode,
                     numberSaved: res.data.numberSaved,
                     numberApplied: res.data.numberSaved,
-                    userId: res.data._id,
-                    recentSearches: []
+                    savedChartData: res.data.savedChartData,
+                    appliedChartData: res.data.appliedChartData,
+                    postingsViewed: res.data.postingsViewed,
+                    postingsSaved: res.data.postingsSaved,
+                    postingsApplied: res.data.postingsApplied,
+                    recentSearches: res.data.recentSearches,
+                    totalSearches: res.data.totalSearches,
                 }));
                 reroute.push("/dashboard")
             }).catch(err => {
