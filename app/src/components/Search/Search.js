@@ -16,6 +16,9 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
@@ -31,7 +34,7 @@ import USA from "../../assets/img/usa.png"
 import Zip from "../../assets/img/zip.png"
 import StarIcon from '@material-ui/icons/Star';
 import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = {
@@ -68,9 +71,13 @@ const styles = {
         color: "green",
         fontSize: 16
     },
-    textField:{
+    textField: {
         "margin-bottom": "0 !important"
-    }
+    },
+    formControl: {
+        minWidth: 120,
+        maxWidth: 300,
+    },
 };
 
 const theme = createMuiTheme({
@@ -86,14 +93,17 @@ const theme = createMuiTheme({
 
 
 function Search(props) {
-    console.log(props)
     const { classes } = props;
     const [searchCity, setSearchCity] = useState(props.search.searchCity);
     const [searchState, setSearchState] = useState(props.search.searchState);
     const [searchJob, setSearchJob] = useState(props.search.searchJob);
     const [searchResults, setSearchResults] = useState(props.search.searchResults);
+    const [sortTag, setSortTag] = useState([]);
+    const [filterTag, setFilterTag] = useState([]);
+    const [siteTag, setSiteTag] = useState([]);
     // const [searchResults, setSearchResults] = useState([]);
     const [numberResults, setNumberResults] = useState(props.search.numberResults);
+    console.log(props)
 
     function chooseIcon(obj) {
         switch (true) {
@@ -200,6 +210,25 @@ function Search(props) {
                 return
         }
     }
+    const sortTagOptions = [
+        'Job Site',
+        'Salary',
+    ];
+
+    const filterTagOptions = [
+        'Hide Viewed',
+        'Hide Saved',
+        'Hide Applied',
+    ];
+
+    const siteOptions = [
+        'CareerBuilder',
+        'Dice',
+        'GlassDoor',
+        'Indeed',
+        'USA Jobs',
+        'ZipRecruiter',
+    ];
 
     return (
         <Grid container direction="column">
@@ -207,7 +236,6 @@ function Search(props) {
                 <Card className={classes.card1}>
                     <CardHeader title="Search for Jobs"
                         titleTypographyProps={{ variant: "h4" }}
-
                     ></CardHeader>
                     <CardContent>
                         <Typography variant="body1">Start your job search here! Enter the position you are interested in and the city and state you want to work in and hit the search button. We'll do the rest. We bring your the most relevant results for your job search from the 6 leading job-board sites! Use the filter options to control which jobs you see and the sort options to futher customize your results. Please excuse any incomplete data, we are always working to improve our site.</Typography>
@@ -216,7 +244,6 @@ function Search(props) {
                         <Grid container alignItems="flex-end" justify="center">
                             <Grid item xs={12} sm={5}>
                                 <TextField
-                                    // id="standard-with-placeholder"
                                     label="Job Title"
                                     placeholder="Software Engineer"
                                     className={classes.textField}
@@ -227,7 +254,6 @@ function Search(props) {
                             </Grid>
                             <Grid item xs={12} sm={5}>
                                 <TextField
-                                    // id="standard-with-placeholder"
                                     label="City"
                                     placeholder="San Francisco"
                                     className={classes.textField}
@@ -302,16 +328,86 @@ function Search(props) {
                                 </Select>
                             </Grid>
                         </Grid>
-
-
-
                     </CardContent>
                     <CardActions>
-                        <Button size="small" variant="contained"
-                            color="primary"
-                            //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
-                            onClick={() => props.searchJobs(searchCity, searchState, searchJob, setSearchResults, props.user.userId)}
-                        >Search</Button>
+                        <Grid container >
+                            <Grid item xs={2}>
+                                <Button size="small" variant="contained"
+                                    color="primary"
+                                    //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
+                                    onClick={() => props.searchJobs(searchCity, searchState, searchJob, setSearchResults, props.user.userId)}
+                                >Search</Button>
+                            </Grid>
+                            <Grid item xs={10}>
+                                <Grid container>
+                                    <Grid item xs={3}>
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel htmlFor="select-multiple-checkbox">Sort</InputLabel>
+                                            <Select
+                                                multiple
+                                                value={sortTag}
+                                                onChange={e => setSortTag(e.target.value)}
+                                                input={<Input id="select-multiple-checkbox" />}
+                                                renderValue={selected => selected.join(', ')}
+                                            >
+                                                {sortTagOptions.map(tag => (
+                                                    <MenuItem key={tag} value={tag}>
+                                                        <Checkbox checked={sortTag.indexOf(tag) > -1} />
+                                                        <ListItemText primary={tag} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={3}>
+
+                                    <FormControl className={classes.formControl}>
+                                        <InputLabel htmlFor="select-multiple-checkbox">Filter</InputLabel>
+                                        <Select
+                                            multiple
+                                            value={filterTag}
+                                            onChange={e => setFilterTag(e.target.value)}
+                                            input={<Input id="select-multiple-checkbox" />}
+                                            renderValue={selected => selected.join(', ')}
+                                        >
+                                            {filterTagOptions.map(tag => (
+                                                <MenuItem key={tag} value={tag}>
+                                                    <Checkbox checked={filterTag.indexOf(tag) > -1} />
+                                                    <ListItemText primary={tag} />
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <FormControl className={classes.formControl}>
+                                        <InputLabel htmlFor="select-multiple-checkbox">Sources</InputLabel>
+                                        <Select
+                                            multiple
+                                            value={siteTag}
+                                            onChange={e => setSiteTag(e.target.value)}
+                                            input={<Input id="select-multiple-checkbox" />}
+                                            renderValue={selected => selected.join(', ')}
+                                        >
+                                            {siteOptions.map(tag => (
+                                                <MenuItem key={tag} value={tag}>
+                                                    <Checkbox checked={siteTag.indexOf(tag) > -1} />
+                                                    <ListItemText primary={tag} />
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={3}>
+                                <Button size="small" variant="contained"
+                                    color="primary"
+                                    //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
+                                    // onClick={() => props.searchJobs(searchCity, searchState, searchJob, setSearchResults, props.user.userId)}
+                                >Apply</Button>
+                            </Grid>
+                            </Grid>
+                            </Grid>
+                        </Grid>
                     </CardActions>
                 </Card>
             </Grid>
@@ -327,7 +423,6 @@ function Search(props) {
                                     onClick={() => props.showMore(props.search.searchResults, setSearchResults, props.user.userId, props.search.numberResults, setNumberResults)}
                                 >Show more</Button></Grid>
                             <Grid item >
-
                                 <Button size="small" variant="contained"
                                     color="primary"
                                     onClick={() => props.showLess(props.search.numberResults, setNumberResults)}
@@ -336,7 +431,6 @@ function Search(props) {
                         </Grid>
                     </CardActions>
                 </Card>
-
             </Grid>
         </Grid>
     );
@@ -345,6 +439,7 @@ function Search(props) {
 function mapDispatchToProps(dispatch) {
     const jobSearchMethods = {
         searchJobs(searchCity, searchState, searchJob, setSearchResults, userId) {
+            setSearchResults([])
             let searchLocation = searchCity + ", " + searchState.toUpperCase()
             let data = {
                 userId: userId
@@ -356,17 +451,10 @@ function mapDispatchToProps(dispatch) {
                     searchState: searchState,
                     searchJob: searchJob,
                     searchResults: res.data,
-                    // userCity: res.data.userCity,
-                    // userStateCode: res.data.userStateCode,
-                    // numberSaved: res.data.numberSaved,
-                    // numberApplied: res.data.numberSaved,
-                    // recentSearches: []
                 }));
-                // reroute.push("/dashboard")
             }).catch(err => {
                 console.error(err);
             })
-            // axios.post("/v1/user/updateSearchStats")
             axios(
                 // "/v1/user/updateSaved"
                 {
@@ -471,6 +559,9 @@ function mapDispatchToProps(dispatch) {
                 numberResults: newResults
             }))
             setNumberResults(newResults)
+        },
+        handleSorts(sortTag, setSortTag, filterTag, setFilterTag) {
+
         }
     }
     console.log(jobSearchMethods)

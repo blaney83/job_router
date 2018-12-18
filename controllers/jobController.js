@@ -57,6 +57,21 @@ module.exports = {
                 // }
                 res.json(senderResponse)
             })
+    },
+
+    sortSite: function (req, res) {
+        let mySortingArray = ["Dice", "GlassDoor"]
+        let magicNumber = parseInt(req.params.number)
+        db.Job.find({userId: req.body.userId})
+        // .limit(magicNumber)
+            .then(moreJobPostings=>{
+                let newResponse = shuffleShuffle(moreJobPostings, magicNumber, mySortingArray)
+                let senderResponse = newResponse.splice(magicNumber-16, 15)
+                // for(let ntm = magicNumber-15; ntm < magicNumber; ntm ++){
+                //     moreDataForChu.push(moreJobPostings[ntm])
+                // }
+                res.json(senderResponse)
+            })
     }
 }
 

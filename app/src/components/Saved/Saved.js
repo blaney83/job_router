@@ -280,12 +280,11 @@ function mapDispatchToProps(dispatch) {
                             }
                         }
                         ).then(resp=>{
-                            // console.log("hit")
-                            // dispatch(changeSavedUserStats({
-                            //     numberSaved: resp.data.numberSaved,
-                            //     savedChartData: resp.data.savedChartData,
-                            //     postingsSaved: resp.data.postingsSaved
-                            // }))
+                            dispatch(changeAppliedUserStats({
+                                numberApplied: resp.data.numberApplied,
+                                appliedChartData: resp.data.appliedChartData,
+                                postingsApplied: resp.data.postingsApplied
+                            }))
                             console.log(resp)
                         }).catch(err=>{console.log(err)})
                     } else {
@@ -302,15 +301,13 @@ function mapDispatchToProps(dispatch) {
                             }
                         }
                         ).then(resp=>{
-                            // console.log("hit")
                             dispatch(changeAppliedUserStats({
                                 numberApplied: resp.data.numberApplied,
                                 appliedChartData: resp.data.appliedChartData,
                                 postingsApplied: resp.data.postingsApplied
                             }))
                             console.log(resp)
-                        }).catch(err=>{console.log(err)})
-                    
+                        }).catch(err=>{console.log(err)})                   
                     }
                     setSavedResults(savedResults)
                 } else if (res.status === 202) {
