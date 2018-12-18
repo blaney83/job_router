@@ -75,8 +75,31 @@ router.put("/updateApplied", function (req, res) {
     }).catch(e => { e })
 })
 
+router.put("/updateViewed", function (req, res) {
+    // console.log("hit")
+    // // console.log(req.body.jobId)
+    // // let newNumbersYay = fixMyProblems()
+    // // console.log(newNumbersYay)
+    // db.User.findById(req.body.userId).then(userObj => {
+    //     console.log(userObj.postingsSaved)
+    //     let oldSavedChartDataArray = userObj.savedChartData
+    //     let oldPostingsSaved = userObj.postingsSaved
+    //     let trueOrFalseSavedAlready = oldPostingsSaved.indexOf(req.body.jobId)
+    //     //could replace req.body.added with t/f >=0
+    //         oldSavedChartDataArray[newNumbersYay] = oldSavedChartDataArray[newNumbersYay] + 1
+    //         console.log(oldSavedChartDataArray)
+    //         db.User.findOneAndUpdate({ _id: req.body.userId }, { $inc: { numberSaved: 1 }, $push: { postingsSaved: req.body.jobId }, $set: { savedChartData: oldSavedChartDataArray } }, { new: true })
+    //             .then(resp => {
+    //                 console.log(resp)
+    //                 res.status(200).json(resp)
+    //             })
+    //             .catch(err => err)
+
+    // }).catch(e => { e })
+})
+
 function fixMyProblems() {
-    let storageIndex = 0
+    // let storageIndex = 0
     switch (moment().format('dddd')) {
         case ("Sunday"):
             storageIndex = 0

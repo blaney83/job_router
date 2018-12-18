@@ -24,6 +24,7 @@ import Slide from '@material-ui/core/Slide';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import JobRouter from "../../assets/img/JobRouter.ico"
+import ArrowForward from '@material-ui/icons/ArrowForward';
 
 import {
     firstChart,
@@ -123,7 +124,7 @@ function Main(props) {
                                         <ListItemText primary={searchObj.searchJob +" jobs in " + searchObj.searchCity + ", " + searchObj.searchState} />
                                         <ListItemSecondaryAction>
                                             <IconButton aria-label="Comments">
-                                                {/* <CommentIcon /> */}
+                                                <ArrowForward/>
                                             </IconButton>
                                         </ListItemSecondaryAction>
                                     </ListItem>

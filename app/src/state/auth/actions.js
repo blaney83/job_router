@@ -8,4 +8,7 @@ export const changeUserSearchInfo = createAction("CHANGE_USER_SEARCH_INFO");
 
 export const changeAppliedUserStats = createAction("CHANGE_APPLIED_USER_STATS");
 
+export const updatePostingsViewed = createAction("UPDATE_POSTINGS_VIEWED");
+
+
 
