@@ -21,6 +21,8 @@ module.exports = {
                 console.log("happened")
                 res.json([{ error: "bad search" }])
             } else {
+                let mySortingArray = resp.map((val)=> val[0][0].jobSite)
+                console.log("my sorting array", mySortingArray)
                 let dbMassiveArray = []
                 resp.map((val, i) => val.map(val => val.map(val => {
                     val.userId = req.body.userId
@@ -31,13 +33,8 @@ module.exports = {
                     db.Job
                         .create(dbMassiveArray)
                         .then(dbModel => {
-                            // console.log(dbModel)
-                            let firstRespondersLoL = []
-                            for(let ntm = 0; ntm < 15; ntm ++){
-                                firstRespondersLoL.push(dbModel[ntm])
-                            }
-                            // console.log(fir)
-                            res.json(firstRespondersLoL)
+                            let firstReturn = shuffleShuffle(dbModel, 16, mySortingArray)
+                            res.json(firstReturn)
                         })
                         .catch(err => res.status(422).json(err));
                 }).catch(err => res.status(422).json(err))
@@ -48,14 +45,38 @@ module.exports = {
     },
 
     findMore: function (req, res) {
+        let mySortingArray = ["Dice", "GlassDoor"]
         let magicNumber = parseInt(req.params.number)
-        db.Job.find({userId: req.body.userId}).limit(magicNumber)
+        db.Job.find({userId: req.body.userId})
+        // .limit(magicNumber)
             .then(moreJobPostings=>{
-                let moreDataForChu = []
-                for(let ntm = magicNumber-15; ntm < magicNumber; ntm ++){
-                    moreDataForChu.push(moreJobPostings[ntm])
-                }
-                res.json(moreDataForChu)
+                let newResponse = shuffleShuffle(moreJobPostings, magicNumber, mySortingArray)
+                let senderResponse = newResponse.splice(magicNumber-16, 15)
+                // for(let ntm = magicNumber-15; ntm < magicNumber; ntm ++){
+                //     moreDataForChu.push(moreJobPostings[ntm])
+                // }
+                res.json(senderResponse)
             })
     }
+}
+
+function shuffleShuffle(arrOfObj, limit, mySortingArray){
+    let firstRespondersLoL = []
+    let sortingNumber = mySortingArray.length
+    let secondSortingNumber = sortingNumber - 1
+    let indexHolder = 0
+    while(firstRespondersLoL.length < limit){
+        firstRespondersLoL.push(arrOfObj.find(checkIfPasses))
+        if(indexHolder < secondSortingNumber){
+            indexHolder++
+        }else{
+            indexHolder = 0
+        }
+    }
+    function checkIfPasses(obj){
+        if(obj.jobSite === mySortingArray[indexHolder] && firstRespondersLoL.indexOf(obj) === -1){
+            return(obj)
+        }
+    }
+    return(firstRespondersLoL)
 }

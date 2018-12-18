@@ -134,7 +134,7 @@ router.put("/updateSearchStats", function (req, res) {
         console.log(userObj)
         console.log(userObj.totalSearches)
         let oldRecentSearches = userObj.recentSearches
-        if (oldRecentSearches > 4) {
+        if (oldRecentSearches.length > 4) {
             oldRecentSearches.splice(0, 1)
         }
         oldRecentSearches.push(newSearchObject)

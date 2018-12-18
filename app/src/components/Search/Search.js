@@ -67,6 +67,9 @@ const styles = {
     goodResult: {
         color: "green",
         fontSize: 16
+    },
+    textField:{
+        "margin-bottom": "0 !important"
     }
 };
 
@@ -89,6 +92,7 @@ function Search(props) {
     const [searchState, setSearchState] = useState(props.search.searchState);
     const [searchJob, setSearchJob] = useState(props.search.searchJob);
     const [searchResults, setSearchResults] = useState(props.search.searchResults);
+    // const [searchResults, setSearchResults] = useState([]);
     const [numberResults, setNumberResults] = useState(props.search.numberResults);
 
     function chooseIcon(obj) {
@@ -126,6 +130,7 @@ function Search(props) {
                     <List>
                         {
                             props.search.searchResults.map((obj, i) => {
+                                // searchResults.map((obj, i) => {
                                 if (numberResults >= i) {
                                     return (
                                         <Paper key={i}>
@@ -147,17 +152,17 @@ function Search(props) {
                                                         <Grid container><Grid item xs={6}>
                                                             <Grid container direction="column"><Grid item xs={4} className={classes.smallMessages}>
                                                                 <ListItemText
-                                                                    secondary={obj.salaryRange ? <Typography variant="body" className={classes.goodResult} >{obj.salaryRange}</Typography> : <Typography className={classes.badResult} color="grey" variant="body">No Salary Info</Typography>}
+                                                                    secondary={obj.salaryRange ? <Typography variant="body1" className={classes.goodResult} >{obj.salaryRange}</Typography> : <Typography className={classes.badResult} color="grey" variant="body">No Salary Info</Typography>}
                                                                 />
                                                             </Grid>
                                                                 <Grid item xs={4}>
                                                                     <ListItemText
-                                                                        secondary={obj.jobRating ? <Typography variant="body" className={classes.goodResult}>{obj.jobRating}<StarIcon /></Typography> : <Typography></Typography>}
+                                                                        secondary={obj.jobRating ? <Typography variant="body1" className={classes.goodResult}>{obj.jobRating}<StarIcon /></Typography> : <Typography></Typography>}
                                                                     />
                                                                 </Grid>
                                                                 <Grid item xs={4}>
                                                                     <ListItemText
-                                                                        secondary={obj.easilyApply ? <Typography variant="body" className={classes.goodResult}>Fast Apply!</Typography> : <Typography variant="body" className={classes.badResult} color="grey"></Typography>}
+                                                                        secondary={obj.easilyApply ? <Typography variant="body1" className={classes.goodResult}>Fast Apply!</Typography> : <Typography variant="body" className={classes.badResult} color="grey"></Typography>}
                                                                     />
                                                                 </Grid>
                                                             </Grid>
@@ -168,7 +173,7 @@ function Search(props) {
                                                                     color="primary"
                                                                     id={obj.jobId}
                                                                     // replace the long string below with props.auth.user.userId
-                                                                    onClick={(e) => props.saveJob(e.target.id, "5c148efcb2d70e3ae0325019")}
+                                                                    onClick={(e) => props.saveJob(e.target.id, props.user.userId)}
                                                                 >Save</Button>
                                                                 <Button size="small" variant="contained"
                                                                     color="primary"
@@ -200,99 +205,112 @@ function Search(props) {
         <Grid container direction="column">
             <Grid item xsm={12}>
                 <Card className={classes.card1}>
-                    <CardHeader title="Search for Jobs"></CardHeader>
+                    <CardHeader title="Search for Jobs"
+                        titleTypographyProps={{ variant: "h4" }}
+
+                    ></CardHeader>
                     <CardContent>
                         <Typography variant="body1">Start your job search here! Enter the position you are interested in and the city and state you want to work in and hit the search button. We'll do the rest. We bring your the most relevant results for your job search from the 6 leading job-board sites! Use the filter options to control which jobs you see and the sort options to futher customize your results. Please excuse any incomplete data, we are always working to improve our site.</Typography>
                     </CardContent>
                     <CardContent>
+                        <Grid container alignItems="flex-end" justify="center">
+                            <Grid item xs={12} sm={5}>
+                                <TextField
+                                    // id="standard-with-placeholder"
+                                    label="Job Title"
+                                    placeholder="Software Engineer"
+                                    className={classes.textField}
+                                    margin="normal"
+                                    value={searchJob}
+                                    onChange={(e) => setSearchJob(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={5}>
+                                <TextField
+                                    // id="standard-with-placeholder"
+                                    label="City"
+                                    placeholder="San Francisco"
+                                    className={classes.textField}
+                                    margin="normal"
+                                    value={searchCity}
+                                    onChange={(e) => setSearchCity(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={2}>
+                                <InputLabel htmlFor="age-simple">State</InputLabel>
+                                <Select
+                                    value={searchState}
+                                    onChange={(e) => setSearchState(e.target.value)}
+                                    inputProps={{
+                                        name: 'age',
+                                        id: 'age-simple',
+                                    }}
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    <MenuItem value={"AL"}>AL</MenuItem>
+                                    <MenuItem value={"AK"}>AK</MenuItem>
+                                    <MenuItem value={"AZ"}>AZ</MenuItem>
+                                    <MenuItem value={"AR"}>AR</MenuItem>
+                                    <MenuItem value={"CA"}>CA</MenuItem>
+                                    <MenuItem value={"CO"}>CO</MenuItem>
+                                    <MenuItem value={"CT"}>CT</MenuItem>
+                                    <MenuItem value={"DE"}>DE</MenuItem>
+                                    <MenuItem value={"FL"}>FL</MenuItem>
+                                    <MenuItem value={"GA"}>GA</MenuItem>
+                                    <MenuItem value={"HI"}>HI</MenuItem>
+                                    <MenuItem value={"ID"}>ID</MenuItem>
+                                    <MenuItem value={"IL"}>IL</MenuItem>
+                                    <MenuItem value={"IN"}>IN</MenuItem>
+                                    <MenuItem value={"IA"}>IA</MenuItem>
+                                    <MenuItem value={"KS"}>KS</MenuItem>
+                                    <MenuItem value={"KY"}>KY</MenuItem>
+                                    <MenuItem value={"LA"}>LA</MenuItem>
+                                    <MenuItem value={"ME"}>ME</MenuItem>
+                                    <MenuItem value={"MD"}>MD</MenuItem>
+                                    <MenuItem value={"MA"}>MA</MenuItem>
+                                    <MenuItem value={"MI"}>MI</MenuItem>
+                                    <MenuItem value={"MN"}>MN</MenuItem>
+                                    <MenuItem value={"MS"}>MS</MenuItem>
+                                    <MenuItem value={"MO"}>MO</MenuItem>
+                                    <MenuItem value={"MT"}>MT</MenuItem>
+                                    <MenuItem value={"NE"}>NE</MenuItem>
+                                    <MenuItem value={"NV"}>NV</MenuItem>
+                                    <MenuItem value={"NH"}>NH</MenuItem>
+                                    <MenuItem value={"NJ"}>NJ</MenuItem>
+                                    <MenuItem value={"NM"}>NM</MenuItem>
+                                    <MenuItem value={"NY"}>NY</MenuItem>
+                                    <MenuItem value={"NC"}>NC</MenuItem>
+                                    <MenuItem value={"ND"}>ND</MenuItem>
+                                    <MenuItem value={"OH"}>OH</MenuItem>
+                                    <MenuItem value={"OK"}>OK</MenuItem>
+                                    <MenuItem value={"OR"}>OR</MenuItem>
+                                    <MenuItem value={"PA"}>PA</MenuItem>
+                                    <MenuItem value={"RI"}>RI</MenuItem>
+                                    <MenuItem value={"SC"}>SC</MenuItem>
+                                    <MenuItem value={"SD"}>SD</MenuItem>
+                                    <MenuItem value={"TN"}>TN</MenuItem>
+                                    <MenuItem value={"TX"}>TX</MenuItem>
+                                    <MenuItem value={"UT"}>UT</MenuItem>
+                                    <MenuItem value={"VT"}>VT</MenuItem>
+                                    <MenuItem value={"VA"}>VA</MenuItem>
+                                    <MenuItem value={"WA"}>WA</MenuItem>
+                                    <MenuItem value={"WV"}>WV</MenuItem>
+                                    <MenuItem value={"WI"}>WI</MenuItem>
+                                    <MenuItem value={"WY"}>WY</MenuItem>
+                                </Select>
+                            </Grid>
+                        </Grid>
 
-                        <TextField
-                            // id="standard-with-placeholder"
-                            label="Job Title"
-                            placeholder="Software Engineer"
-                            className={classes.textField}
-                            margin="normal"
-                            value={searchJob}
-                            onChange={(e) => setSearchJob(e.target.value)}
-                        />
-                        <TextField
-                            // id="standard-with-placeholder"
-                            label="City"
-                            placeholder="San Francisco"
-                            className={classes.textField}
-                            margin="normal"
-                            value={searchCity}
-                            onChange={(e) => setSearchCity(e.target.value)}
-                        />
-                        <InputLabel htmlFor="age-simple">State</InputLabel>
-                        <Select
-                            value={searchState}
-                            onChange={(e) => setSearchState(e.target.value)}
-                            inputProps={{
-                                name: 'age',
-                                id: 'age-simple',
-                            }}
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value={"AL"}>AL</MenuItem>
-                            <MenuItem value={"AK"}>AK</MenuItem>
-                            <MenuItem value={"AZ"}>AZ</MenuItem>
-                            <MenuItem value={"AR"}>AR</MenuItem>
-                            <MenuItem value={"CA"}>CA</MenuItem>
-                            <MenuItem value={"CO"}>CO</MenuItem>
-                            <MenuItem value={"CT"}>CT</MenuItem>
-                            <MenuItem value={"DE"}>DE</MenuItem>
-                            <MenuItem value={"FL"}>FL</MenuItem>
-                            <MenuItem value={"GA"}>GA</MenuItem>
-                            <MenuItem value={"HI"}>HI</MenuItem>
-                            <MenuItem value={"ID"}>ID</MenuItem>
-                            <MenuItem value={"IL"}>IL</MenuItem>
-                            <MenuItem value={"IN"}>IN</MenuItem>
-                            <MenuItem value={"IA"}>IA</MenuItem>
-                            <MenuItem value={"KS"}>KS</MenuItem>
-                            <MenuItem value={"KY"}>KY</MenuItem>
-                            <MenuItem value={"LA"}>LA</MenuItem>
-                            <MenuItem value={"ME"}>ME</MenuItem>
-                            <MenuItem value={"MD"}>MD</MenuItem>
-                            <MenuItem value={"MA"}>MA</MenuItem>
-                            <MenuItem value={"MI"}>MI</MenuItem>
-                            <MenuItem value={"MN"}>MN</MenuItem>
-                            <MenuItem value={"MS"}>MS</MenuItem>
-                            <MenuItem value={"MO"}>MO</MenuItem>
-                            <MenuItem value={"MT"}>MT</MenuItem>
-                            <MenuItem value={"NE"}>NE</MenuItem>
-                            <MenuItem value={"NV"}>NV</MenuItem>
-                            <MenuItem value={"NH"}>NH</MenuItem>
-                            <MenuItem value={"NJ"}>NJ</MenuItem>
-                            <MenuItem value={"NM"}>NM</MenuItem>
-                            <MenuItem value={"NY"}>NY</MenuItem>
-                            <MenuItem value={"NC"}>NC</MenuItem>
-                            <MenuItem value={"ND"}>ND</MenuItem>
-                            <MenuItem value={"OH"}>OH</MenuItem>
-                            <MenuItem value={"OK"}>OK</MenuItem>
-                            <MenuItem value={"OR"}>OR</MenuItem>
-                            <MenuItem value={"PA"}>PA</MenuItem>
-                            <MenuItem value={"RI"}>RI</MenuItem>
-                            <MenuItem value={"SC"}>SC</MenuItem>
-                            <MenuItem value={"SD"}>SD</MenuItem>
-                            <MenuItem value={"TN"}>TN</MenuItem>
-                            <MenuItem value={"TX"}>TX</MenuItem>
-                            <MenuItem value={"UT"}>UT</MenuItem>
-                            <MenuItem value={"VT"}>VT</MenuItem>
-                            <MenuItem value={"VA"}>VA</MenuItem>
-                            <MenuItem value={"WA"}>WA</MenuItem>
-                            <MenuItem value={"WV"}>WV</MenuItem>
-                            <MenuItem value={"WI"}>WI</MenuItem>
-                            <MenuItem value={"WY"}>WY</MenuItem>
-                        </Select>
+
+
                     </CardContent>
                     <CardActions>
                         <Button size="small" variant="contained"
                             color="primary"
                             //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
-                            onClick={() => props.searchJobs(searchCity, searchState, searchJob, setSearchResults, "5c1864b85aa602347476c5e7")}
+                            onClick={() => props.searchJobs(searchCity, searchState, searchJob, setSearchResults, props.user.userId)}
                         >Search</Button>
                     </CardActions>
                 </Card>
@@ -300,16 +318,25 @@ function Search(props) {
             <Grid item xsm={12}>
                 <Card className={classes.card}>
                     {displayResults()}
+                    <CardActions>
+                        <Grid container direction="row" alignItems="center" justify="space-between">
+                            <Grid item >
+                                <Button size="small" variant="contained"
+                                    color="primary"
+                                    //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
+                                    onClick={() => props.showMore(props.search.searchResults, setSearchResults, props.user.userId, props.search.numberResults, setNumberResults)}
+                                >Show more</Button></Grid>
+                            <Grid item >
+
+                                <Button size="small" variant="contained"
+                                    color="primary"
+                                    onClick={() => props.showLess(props.search.numberResults, setNumberResults)}
+                                >Show Less</Button>
+                            </Grid>
+                        </Grid>
+                    </CardActions>
                 </Card>
-                <Button size="small" variant="contained"
-                    color="primary"
-                    //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
-                    onClick={() => props.showMore(props.search.searchResults, setSearchResults, "5c1864b85aa602347476c5e7", props.search.numberResults, setNumberResults)}
-                >Show more</Button>
-                <Button size="small" variant="contained"
-                    color="primary"
-                    onClick={() => props.showLess(props.search.numberResults, setNumberResults)}
-                >Show Less</Button>
+
             </Grid>
         </Grid>
     );

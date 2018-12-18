@@ -216,7 +216,7 @@ function mapDispatchToProps(dispatch) {
                     recentSearches: res.data.recentSearches,
                     totalSearches: res.data.totalSearches,
                 }));
-                reroute.push("/")
+                reroute.push("/dashboard")
             }).catch(err => {
                 alert("Please complete all of the inputs before creating your account")
                 console.error(err);

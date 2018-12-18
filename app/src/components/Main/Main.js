@@ -30,29 +30,34 @@ import {
     firstChart,
 } from "../Chart/Chart.js";
 
-const styles = () => ({
-
-})
+const styles =  {
+    mainJRIcon: {
+        "border-radius": "0 !important",
+        "width" : "60px !important",
+        height: "60px !important"
+    }
+}
 
 function Main(props) {
     // let state = store.getState()
-    // console.log(state)
+    console.log(props)
     const { classes } = props;
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
     firstChart.data.series = [props.user.savedChartData, props.user.appliedChartData]
     return (
         <div>            
-            <Grid container spacing="16">
+            <Grid container spacing={16}>
                 <Grid item xs={12}>
                 {/* <Slide direction="up" mountOnEnter unmountOnExit> */}
                     <Card>
                         <CardHeader
                             avatar={
-                                <Avatar src={JobRouter}/>
+                                <Avatar src={JobRouter} className={classes.mainJRIcon}/>
                             }
                             title={props.user.firstName + "'s Job-Search Dashboard"}
-                            titleTypographyProps={{variant:"h5"}}
+                            titleTypographyProps={{variant:"h4"}}
+                            color="secondary"
                         />
                         <CardContent>
                             Welcome home! This is the command center for you and your Job Search! Track your progress to keep up the pressure and land your dream job. If you have any suggestions for useful information that would help your on your journey, send us your idea in the contact us section. Happy Hunting!
@@ -60,7 +65,7 @@ function Main(props) {
                     </Card>
                     {/* </Slide> */}
                 </Grid></Grid>
-            <Grid container spacing="16">
+            <Grid container spacing={16}>
                 <Grid item xs={12} sm={4}>
                     <Card className={classes.card} color="success">
                         <CardHeader title="Searches" />
@@ -91,7 +96,7 @@ function Main(props) {
                     </Card>
                 </Grid>
             </Grid>
-            <Grid container spacing="16">
+            <Grid container spacing={16}>
                 <Grid item xs={12} sm={6}>
                     <Card className={classes.card}>
                         <CardHeader title="Recent Activity" />

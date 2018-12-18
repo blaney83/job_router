@@ -45,6 +45,7 @@ router.post("/signin", requireSignin, function (req, res) {
                 postingsApplied: userResp.postingsApplied,
                 recentSearches: userResp.recentSearches,
                 token: tokenizer(userResp),
+                totalSearches: userResp.totalSearches,
             }
             res.json(userResponse)
         })
@@ -84,6 +85,7 @@ router.post("/signup", function (req, res) {
                     postingsApplied: user.postingsApplied,
                     recentSearches: user.recentSearches,
                     token: tokenizer(user),
+                    totalSearches: user.totalSearches,
                 }
                 res.json(userResponse);
             });

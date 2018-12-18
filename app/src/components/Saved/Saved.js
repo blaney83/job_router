@@ -72,8 +72,8 @@ function Saved(props) {
     const [savedResults, setSavedResults] = useState(props.saved.savedResults);
     const [savedLoaded, setSavedLoaded] = useState(props.saved.savedLoaded);
     // const [numberResults, setNumberResults] = useState(props.search.numberResults);
-    if (savedResults === 0) {
-        props.getSaved("5c148efcb2d70e3ae0325019", setSavedResults, setSavedLoaded)
+    if (savedResults.length === 0) {
+        props.getSaved(props.user.userId, setSavedResults, setSavedLoaded)
     }
 
     function chooseIcon(obj) {
@@ -129,17 +129,17 @@ function Saved(props) {
                                                 <Grid container><Grid item xs={6}>
                                                     <Grid container direction="column"><Grid item xs={4} className={classes.smallMessages}>
                                                         <ListItemText
-                                                            secondary={obj.salaryRange ? <Typography variant="body" className={classes.goodResult} >{obj.salaryRange}</Typography> : <Typography className={classes.badResult} color="grey" variant="body">No Salary Info</Typography>}
+                                                            secondary={obj.salaryRange ? <Typography variant="body1" className={classes.goodResult} >{obj.salaryRange}</Typography> : <Typography className={classes.badResult} variant="body1"></Typography>}
                                                         />
                                                     </Grid>
                                                         <Grid item xs={4}>
                                                             <ListItemText
-                                                                secondary={obj.jobRating ? <Typography variant="body" className={classes.goodResult}>{obj.jobRating}</Typography> : <Typography></Typography>}
+                                                                secondary={obj.jobRating ? <Typography variant="body1" className={classes.goodResult}>{obj.jobRating}</Typography> : <Typography></Typography>}
                                                             />
                                                         </Grid>
                                                         <Grid item xs={4}>
                                                             <ListItemText
-                                                                secondary={obj.easilyApply ? <Typography variant="body" className={classes.goodResult}>Fast Apply!</Typography> : <Typography variant="body" className={classes.badResult} color="grey"></Typography>}
+                                                                secondary={obj.easilyApply ? <Typography variant="body1" className={classes.goodResult}>Fast Apply!</Typography> : <Typography variant="body1" className={classes.badResult}></Typography>}
                                                             />
                                                         </Grid>
                                                     </Grid>
@@ -149,13 +149,13 @@ function Saved(props) {
                                                             color="primary"
                                                             id={obj.jobId}
                                                             // replace the long string below with props.auth.user.userId "5c148efcb2d70e3ae0325019"
-                                                            onClick={(e) => props.deleteJob(e.target.id, "5c148efcb2d70e3ae0325019", savedResults, setSavedResults)}
+                                                            onClick={(e) => props.deleteJob(e.target.id, props.user.userId, savedResults, setSavedResults)}
                                                         >Delete</Button>
                                                         <Button size="small" variant="contained"
                                                             color={obj.hasApplied ? "primary" : "danger"}
                                                             id={obj.jobId}
                                                             // replace the long string below with props.auth.user.userId "5c148efcb2d70e3ae0325019"
-                                                            onClick={(e) => props.toggleApply(e.target.id, "5c148efcb2d70e3ae0325019", savedResults, setSavedResults)}
+                                                            onClick={(e) => props.toggleApply(e.target.id, props.user.userId, savedResults, setSavedResults)}
                                                         >{obj.hasApplied ? "Already Applied" : "Mark as Applied"}</Button>
                                                         <Button size="small" variant="contained"
                                                             color="primary"

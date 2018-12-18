@@ -3,6 +3,8 @@ const db = require("../models");
 module.exports = {
 
     findAll: function (req, res) {
+        console.log("we hittin")
+
         let userId = req.params.userId
         db.Saved.find({ "userId": userId })
             .then(dbModel => {

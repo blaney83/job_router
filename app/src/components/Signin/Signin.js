@@ -16,7 +16,7 @@ import Avatar from '@material-ui/core/Avatar';
 import JobRouter from "../../assets/img/JobRouter.ico"
 
 const styles = () => ({
-
+    mainJRIcon: {width: "70px !important", height: "70px !important", "border-radius": "0 !important"}
 })
 
 function SignUp(props) {
@@ -29,15 +29,20 @@ function SignUp(props) {
         <Card className={classes.card}>
             <CardHeader
                 avatar={
-                    <Avatar src={JobRouter} />
+                    <Avatar src={JobRouter} 
+                    className={classes.mainJRIcon}
+                    />
                 }
                 title="Welcome to Job Router"
                 subheader="Please sign in"
                 titleTypographyProps={{variant:"h3"}}
             />
             <CardContent>
+                <Grid container justify="space-evenly">
+                <Grid item xs={12} sm={6}>
                 <TextField
                     // id="standard-with-placeholder"
+                    fullWidth={true}
                     label="Email"
                     placeholder="example@example.com"
                     className={classes.textField}
@@ -47,9 +52,13 @@ function SignUp(props) {
                     autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                />
+                    />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
                 <TextField
                     // id="standard-with-placeholder"
+                    fullWidth={true}
+
                     label="Password"
                     placeholder="Secret123!@#"
                     className={classes.textField}
@@ -58,7 +67,9 @@ function SignUp(props) {
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                />
+                    />
+                </Grid>
+                    </Grid>
             </CardContent>
             <CardActions>
                 <Grid container direction="row" alignItems="center" justify="space-between">
@@ -70,7 +81,7 @@ function SignUp(props) {
                             Sign In!
                 </Button>
                     </Grid>
-                    <Grid item >or</Grid>
+                    {/* <Grid item >or</Grid> */}
                     <Grid item >
                         <Link to="/signup">
                             <Button

@@ -29,7 +29,7 @@ const styles = () => ({
 function PreSearch(props) {
     const { classes } = props;
     return (
-                    <Grid item className={classes.Item} alignItems="center">
+                    <Grid item className={classes.Item} >
                         <Typography variant="h4" color="inherit" className={classes.grow}>
                             Your saved jobs will show here!
                         </Typography>
