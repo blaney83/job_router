@@ -20,6 +20,7 @@ const jobSchema = new Schema({
     employerId : String,
     jobReqId : String,
     jobDescription : String,
+    userId : String,
 });
 
 const Job = mongoose.model("Job", jobSchema);

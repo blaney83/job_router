@@ -15,6 +15,8 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import { updateAuth } from "../../state/auth/actions";
+import {persistor} from "../../state"
+// import { purgeStoredState } from 'redux-persist'
 import { connect } from "react-redux";
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -266,7 +268,7 @@ class Sidebar extends React.Component {
                         </List>
                         <List className={classes.signOutStayDown}>
                             <ListItem button="true" selected={this.props.locationProps.location.pathname === "/" ? "true" : ""} key={"Home"}>
-                                <ListItemIcon onClick={this.props.signout}><Link to="/"><ExitIcon className={classes.sideIcons}/></Link></ListItemIcon>
+                                <ListItemIcon onClick={()=>this.props.signout(persistor)}><Link to="/"><ExitIcon className={classes.sideIcons}/></Link></ListItemIcon>
                                 <ListItemText primary="Sign Out" primaryTypographyProps={{className : classes.sideIconLabels}}/>
                             </ListItem>
                         </List>
@@ -281,36 +283,38 @@ class Sidebar extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        signout() {
-                dispatch(updateAuth({
-                    authenticated: false,
-                    token: "",
-                    error: "",
-                    user: {
-                        username: "",
-                        firstName: "",
-                        lastName: "",
-                        userCity: "",
-                        userStateCode: "",
-                        numberSaved: 0,
-                        numberApplied: 0,
-                        userId: "",
-                        recentSearches: "",
-                    }
-                }));
-                dispatch(searchJobs({
-                    searchCity: "",
-                    searchState: "",
-                    searchJob: "",
-                    searchResults: [],
-                }));
-                dispatch(updateNumberResults({
-                    numberResults: 15
-                }));
-                dispatch(getSaved({
-                    savedResults: 0,
-                    savedLoaded: false,
-                }));
+        signout(persistor) {
+                persistor.purge()
+                // dispatch(purgeStoredStat)
+                // dispatch(updateAuth({
+                //     authenticated: false,
+                //     token: "",
+                //     error: "",
+                //     user: {
+                //         username: "",
+                //         firstName: "",
+                //         lastName: "",
+                //         userCity: "",
+                //         userStateCode: "",
+                //         numberSaved: 0,
+                //         numberApplied: 0,
+                //         userId: "",
+                //         recentSearches: "",
+                //     }
+                // }));
+                // dispatch(searchJobs({
+                //     searchCity: "",
+                //     searchState: "",
+                //     searchJob: "",
+                //     searchResults: [],
+                // }));
+                // dispatch(updateNumberResults({
+                //     numberResults: 15
+                // }));
+                // dispatch(getSaved({
+                //     savedResults: 0,
+                //     savedLoaded: false,
+                // }));
         }
     }
 }

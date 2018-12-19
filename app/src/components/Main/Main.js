@@ -77,21 +77,21 @@ function Main(props) {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     <Card className={classes.card}>
-                        <CardHeader title="Saved Jobs" />
+                        <CardHeader title="Applied / Saved" />
 
                         <CardContent>
                             {/* <Typography variant="h4" >Number of Saved Jobs</Typography> */}
-                            <Typography variant="h3" >{props.user.numberSaved}</Typography>
+                            <Typography variant="h3" >{props.user.numberApplied} / {props.user.numberSaved}</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     <Card className={classes.card}>
-                        <CardHeader title="Applied Jobs" />
+                        <CardHeader title="Total Viewed" />
 
                         <CardContent>
                             {/* <Typography variant="h4" >Number of Applied Jobs</Typography> */}
-                            <Typography variant="h3" >{props.user.numberApplied}</Typography>
+                            <Typography variant="h3" >{props.user.postingsViewed.length}</Typography>
                         </CardContent>
                     </Card>
                 </Grid>

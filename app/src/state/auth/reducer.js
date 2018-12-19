@@ -1,5 +1,5 @@
 import { handleActions } from "redux-actions";
-import { updateAuth, changeSavedUserStats, changeUserSearchInfo, changeAppliedUserStats, updatePostingsViewed } from "./actions";
+import { updateAuth, changeSavedUserStats, changeUserSearchInfo, changeAppliedUserStats, updatePostingsViewed, updateCurrentFilters } from "./actions";
 
 const defaultState = {
     authenticated: false,
@@ -21,6 +21,9 @@ const defaultState = {
         postingsApplied: [],
         recentSearches: [],
         totalSearches: 0,
+        siteTag: [],
+        filterTag: [],
+        sortTag: [],
     }
 };
 
@@ -47,6 +50,9 @@ const authReducer = handleActions({
                 postingsApplied: action.payload.postingsApplied,
                 recentSearches: action.payload.recentSearches,
                 totalSearches: action.payload.totalSearches,
+                siteTag: [],
+                filterTag: [],
+                sortTag: [],
             }
         }
     },
@@ -88,6 +94,17 @@ const authReducer = handleActions({
             user: {
                 ...state.user,
                 postingsViewed: action.payload.postingsViewed
+            }
+        }
+    },
+    [updateCurrentFilters]: (state, action) => {
+        return {
+            ...state,
+            user: {
+                ...state.user,
+                siteTag: action.payload.siteTag,
+                filterTag: action.payload.filterTag,
+                sortTag: action.payload.sortTag,
             }
         }
     },

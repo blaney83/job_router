@@ -215,6 +215,9 @@ function mapDispatchToProps(dispatch) {
                     postingsApplied: res.data.postingsApplied,
                     recentSearches: res.data.recentSearches,
                     totalSearches: res.data.totalSearches,
+                    siteTag: [],
+                    filterTag: [],
+                    sortTag: [],
                 }));
                 reroute.push("/dashboard")
             }).catch(err => {

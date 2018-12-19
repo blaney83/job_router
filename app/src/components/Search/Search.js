@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { changeSavedUserStats, changeUserSearchInfo, updatePostingsViewed } from "../../state/auth/actions";
+import { changeSavedUserStats, changeUserSearchInfo, updatePostingsViewed, updateCurrentFilters } from "../../state/auth/actions";
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import { CardHeader } from "@material-ui/core";
@@ -91,20 +91,22 @@ const theme = createMuiTheme({
     },
 });
 
-
 function Search(props) {
     const { classes } = props;
     const [searchCity, setSearchCity] = useState(props.search.searchCity);
     const [searchState, setSearchState] = useState(props.search.searchState);
     const [searchJob, setSearchJob] = useState(props.search.searchJob);
     const [searchResults, setSearchResults] = useState(props.search.searchResults);
-    const [sortTag, setSortTag] = useState([]);
-    const [filterTag, setFilterTag] = useState([]);
-    const [siteTag, setSiteTag] = useState([]);
+    const [sortTag, setSortTag] = useState(props.user.sortTag);
+    const [filterTag, setFilterTag] = useState(props.user.filterTag);
+    const [siteTag, setSiteTag] = useState(props.user.siteTag);
+    // const [sortTag, setSortTag] = useState([]);
+    // const [filterTag, setFilterTag] = useState([]);
+    // const [siteTag, setSiteTag] = useState([]);
     // const [searchResults, setSearchResults] = useState([]);
     const [numberResults, setNumberResults] = useState(props.search.numberResults);
     console.log(props)
-
+    // console.log(this.state)
     function chooseIcon(obj) {
         switch (true) {
             case (obj.jobSite === "CareerBuilder"):
@@ -162,7 +164,7 @@ function Search(props) {
                                                         <Grid container><Grid item xs={6}>
                                                             <Grid container direction="column"><Grid item xs={4} className={classes.smallMessages}>
                                                                 <ListItemText
-                                                                    secondary={obj.salaryRange ? <Typography variant="body1" className={classes.goodResult} >{obj.salaryRange}</Typography> : <Typography className={classes.badResult} color="grey" variant="body">No Salary Info</Typography>}
+                                                                    secondary={obj.salaryRange ? <Typography variant="body1" className={classes.goodResult} >{obj.salaryRange}</Typography> : <Typography className={classes.badResult} variant="body1">No Salary Info</Typography>}
                                                                 />
                                                             </Grid>
                                                                 <Grid item xs={4}>
@@ -172,13 +174,12 @@ function Search(props) {
                                                                 </Grid>
                                                                 <Grid item xs={4}>
                                                                     <ListItemText
-                                                                        secondary={obj.easilyApply ? <Typography variant="body1" className={classes.goodResult}>Fast Apply!</Typography> : <Typography variant="body" className={classes.badResult} color="grey"></Typography>}
+                                                                        secondary={obj.easilyApply ? <Typography variant="body1" className={classes.goodResult}>Fast Apply!</Typography> : <Typography variant="body1" className={classes.badResult} ></Typography>}
                                                                     />
                                                                 </Grid>
                                                             </Grid>
                                                         </Grid>
                                                             <Grid item xs={6}>
-
                                                                 <Button size="small" variant="contained"
                                                                     color="primary"
                                                                     id={obj.jobId}
@@ -360,52 +361,51 @@ function Search(props) {
                                         </FormControl>
                                     </Grid>
                                     <Grid item xs={3}>
-
-                                    <FormControl className={classes.formControl}>
-                                        <InputLabel htmlFor="select-multiple-checkbox">Filter</InputLabel>
-                                        <Select
-                                            multiple
-                                            value={filterTag}
-                                            onChange={e => setFilterTag(e.target.value)}
-                                            input={<Input id="select-multiple-checkbox" />}
-                                            renderValue={selected => selected.join(', ')}
-                                        >
-                                            {filterTagOptions.map(tag => (
-                                                <MenuItem key={tag} value={tag}>
-                                                    <Checkbox checked={filterTag.indexOf(tag) > -1} />
-                                                    <ListItemText primary={tag} />
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel htmlFor="select-multiple-checkbox">Filter</InputLabel>
+                                            <Select
+                                                multiple
+                                                value={filterTag}
+                                                onChange={e => setFilterTag(e.target.value)}
+                                                input={<Input id="select-multiple-checkbox" />}
+                                                renderValue={selected => selected.join(', ')}
+                                            >
+                                                {filterTagOptions.map(tag => (
+                                                    <MenuItem key={tag} value={tag}>
+                                                        <Checkbox checked={filterTag.indexOf(tag) > -1} />
+                                                        <ListItemText primary={tag} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel htmlFor="select-multiple-checkbox">Sources</InputLabel>
+                                            <Select
+                                                multiple
+                                                value={siteTag}
+                                                onChange={e => setSiteTag(e.target.value)}
+                                                input={<Input id="select-multiple-checkbox" />}
+                                                renderValue={selected => selected.join(', ')}
+                                            >
+                                                {siteOptions.map(tag => (
+                                                    <MenuItem key={tag} value={tag}>
+                                                        <Checkbox checked={siteTag.indexOf(tag) > -1} />
+                                                        <ListItemText primary={tag} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Button size="small" variant="contained"
+                                            color="primary"
+                                            //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
+                                            onClick={() => props.handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, props.user.postingsViewed, props.user.postingsSaved, props.user.postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, props.user.userId, false, updateCurrentFilters)}
+                                        >Sort</Button>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={3}>
-                                    <FormControl className={classes.formControl}>
-                                        <InputLabel htmlFor="select-multiple-checkbox">Sources</InputLabel>
-                                        <Select
-                                            multiple
-                                            value={siteTag}
-                                            onChange={e => setSiteTag(e.target.value)}
-                                            input={<Input id="select-multiple-checkbox" />}
-                                            renderValue={selected => selected.join(', ')}
-                                        >
-                                            {siteOptions.map(tag => (
-                                                <MenuItem key={tag} value={tag}>
-                                                    <Checkbox checked={siteTag.indexOf(tag) > -1} />
-                                                    <ListItemText primary={tag} />
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={3}>
-                                <Button size="small" variant="contained"
-                                    color="primary"
-                                    //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
-                                    // onClick={() => props.searchJobs(searchCity, searchState, searchJob, setSearchResults, props.user.userId)}
-                                >Apply</Button>
-                            </Grid>
-                            </Grid>
                             </Grid>
                         </Grid>
                     </CardActions>
@@ -419,8 +419,8 @@ function Search(props) {
                             <Grid item >
                                 <Button size="small" variant="contained"
                                     color="primary"
-                                    //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
-                                    onClick={() => props.showMore(props.search.searchResults, setSearchResults, props.user.userId, props.search.numberResults, setNumberResults)}
+                                //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
+                                onClick={()=>(sortTag.length === 0 && filterTag.length === 0 && siteTag.length === 0) ? props.showMore(props.search.searchResults, setSearchResults, props.user.userId, props.search.numberResults, setNumberResults) : props.handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, props.user.postingsViewed, props.user.postingsSaved, props.user.postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, props.user.userId, true, updateCurrentFilters)}
                                 >Show more</Button></Grid>
                             <Grid item >
                                 <Button size="small" variant="contained"
@@ -452,6 +452,24 @@ function mapDispatchToProps(dispatch) {
                     searchJob: searchJob,
                     searchResults: res.data,
                 }));
+                let myArray = []
+                res.data.forEach(jobObj => {
+                    myArray.push(jobObj.jobId)
+                })
+                axios(
+                    {
+                        method: "put",
+                        url: "/v1/user/updateViewed",
+                        data: {
+                            userId: userId,
+                            viewed: myArray
+                        }
+                    }
+                ).then(resp => {
+                    dispatch(updatePostingsViewed({
+                        postingsViewed: resp.data
+                    }))
+                }).catch(err => { console.log(err) })
             }).catch(err => {
                 console.error(err);
             })
@@ -471,9 +489,8 @@ function mapDispatchToProps(dispatch) {
                     dispatch(changeUserSearchInfo({
                         recentSearches: resp.data.recentSearches,
                         totalSearches: resp.data.totalSearches,
-
                     }))
-                    console.log(resp)
+                    // console.log(resp)
                 })
         },
 
@@ -489,7 +506,6 @@ function mapDispatchToProps(dispatch) {
             }).catch(err => {
                 console.log(err.status)
                 console.log("Error")
-
             })
             axios(
                 // "/v1/user/updateSaved"
@@ -509,11 +525,11 @@ function mapDispatchToProps(dispatch) {
                     savedChartData: resp.data.savedChartData,
                     postingsSaved: resp.data.postingsSaved
                 }))
-                console.log(resp)
+                // console.log(resp)
             }).catch(err => { console.log(err) })
         },
-
         showMore(searchResults, setSearchResults, userId, numberResults, setNumberResults, ) {
+            console.log("wrong fn")
             console.log("these are the results", searchResults)
             let newResults = numberResults + 15
             dispatch(updateNumberResults({
@@ -526,7 +542,7 @@ function mapDispatchToProps(dispatch) {
             if (searchResults.length < newResults) {
                 axios.get("/v1/job/more/" + newResults, data).then(res => {
                     let newDataWoo = [...searchResults, ...res.data]
-                    setSearchResults(res.data)
+                    setSearchResults(newDataWoo)
                     dispatch(moreResults({
                         searchResults: newDataWoo,
                     }));
@@ -545,7 +561,7 @@ function mapDispatchToProps(dispatch) {
                         }
                     ).then(resp => {
                         dispatch(updatePostingsViewed({
-                            postingsViewed: resp.date
+                            postingsViewed: resp.data
                         }))
                     }).catch(err => { console.log(err) })
                 }).catch(err => {
@@ -560,11 +576,88 @@ function mapDispatchToProps(dispatch) {
             }))
             setNumberResults(newResults)
         },
-        handleSorts(sortTag, setSortTag, filterTag, setFilterTag) {
+        handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, postingsViewed, postingsSaved, postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, userId, showMore, updateCurrentFilters) {
+            console.log("sort more")
+            console.log(showMore)
+            // let numberResults = numberResults
+            if (!(sortTag.length === 0 && filterTag.length === 0 && siteTag.length === 0)) {
+                if (!showMore) {
+            console.log("sort more1")
 
+                    numberResults = 15
+                    dispatch(updateNumberResults({
+                        numberResults: numberResults
+                    }))
+                    setNumberResults(numberResults)
+                }
+                else {
+            console.log("sort more2")
+                    console.log(numberResults)
+                    numberResults = numberResults + 15
+                    console.log(numberResults)
+
+                    dispatch(updateNumberResults({
+                        numberResults: numberResults
+                    }))
+                    setNumberResults(numberResults)
+                }
+                dispatch(updateCurrentFilters({
+                    sortTag : sortTag,
+                    filterTag : filterTag,
+                    siteTag : siteTag,
+                }))
+                setSortTag(sortTag)
+                setFilterTag(filterTag)
+                setSiteTag(siteTag)
+                let data = {
+                    sortTag: sortTag,
+                    filterTag: filterTag,
+                    siteTag: siteTag,
+                    numberResults: numberResults,
+                    searchResults: searchResults,
+                    postingsViewed: postingsViewed,
+                    postingsApplied: postingsApplied,
+                    postingsSaved: postingsSaved,
+                    userId: userId
+                }
+                console.log("this")
+                axios.patch("/v1/job/sort/" + numberResults, data).then(resp => {
+                    console.log(resp)
+                    if (showMore && numberResults > 20) {
+                        let newDataWoo = [...searchResults, ...resp.data]
+                        setSearchResults(newDataWoo)
+                        dispatch(moreResults({
+                            searchResults: newDataWoo,
+                        }));
+                    } else {
+                        setSearchResults(resp.data)
+                        dispatch(moreResults({
+                            searchResults: resp.data,
+                        }));
+                    }
+                    let myArray = []
+                    resp.data.forEach(jobObj => {
+                        myArray.push(jobObj.jobId)
+                    })
+                    axios(
+                        {
+                            method: "put",
+                            url: "/v1/user/updateViewed",
+                            data: {
+                                userId: userId,
+                                viewed: myArray
+                            }
+                        }
+                    ).then(resp => {
+                        dispatch(updatePostingsViewed({
+                            postingsViewed: resp.data
+                        }))
+                    }).catch(err => { console.log(err) })
+                })
+            }
         }
     }
-    console.log(jobSearchMethods)
+    // console.log(jobSearchMethods)
     return jobSearchMethods
 }
 
