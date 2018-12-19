@@ -8,7 +8,10 @@ router.route("/:location/:search/:number?")
     .post(jobController.create)
 
 router.route("/more/:number?")
-    .get(jobController.findMore)
+    .patch(jobController.findMore)
+
+router.route("/sort/:number?")
+    .patch(jobController.sortSite)
 
 
 module.exports = router

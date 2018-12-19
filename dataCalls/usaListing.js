@@ -33,18 +33,18 @@ function useGetData(search, loc, numb) {
 
 
     let usaDataHolder = []
-    axios(reqSettings).then(resp => {
+    let myData = axios(reqSettings).then(resp => {
         let jobsArr = resp.data.SearchResult.SearchResultItems
         // console.log(resp.data)
         // console.log(jobsArr.length)
-        jobsArr.map((val, i) => {
+        let newArr = jobsArr.map((val, i) => {
             let jobObj = {
                 jobSite: "USA Jobs",
                 jobId: val.MatchedObjectId,
                 positionId: val.MatchedObjectDescriptor.PositionID,
                 easyApply: true,
                 jobField: val.MatchedObjectDescriptor.JobCategory[0].Name,
-                jobLocation: val.MatchedObjectDescriptor.PositionLocation.map(obj => obj.LocationName),
+                jobLocation: val.MatchedObjectDescriptor.PositionLocation <= 3 ? val.MatchedObjectDescriptor.PositionLocation.map(obj => obj.LocationName) : "Multiple",
                 companyImage: 'https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-35-512.png',
                 jobLink: val.MatchedObjectDescriptor.PositionURI,
                 easyApplyLink: val.MatchedObjectDescriptor.ApplyURI[0],
@@ -52,14 +52,19 @@ function useGetData(search, loc, numb) {
                 salaryRange: "Code: " + val.MatchedObjectDescriptor.JobGrade[0].Code,
                 jobCompany: val.MatchedObjectDescriptor.OrganizationName + ", " + val.MatchedObjectDescriptor.DepartmentName,
                 positionTitle: val.MatchedObjectDescriptor.PositionTitle,
-                jobDescription: val.MatchedObjectDescriptor.QualificationSummary
+                jobDescription: val.MatchedObjectDescriptor.QualificationSummary.substring(0, 160)
             }
+            // console.log(jobObj)
             usaDataHolder.push(jobObj)
+            return(jobObj)
         })
         // console.log(usaDataHolder)
-        return (usaDataHolder)
+        // return (usaDataHolder)
+        return(newArr)
     })
-    return([usaDataHolder])
+    // console.log(myData)
+    // return([usaDataHolder])
+    return(myData)
 }
 //example call
 // useGetData("software engineer", "Phoenix, az", 0)

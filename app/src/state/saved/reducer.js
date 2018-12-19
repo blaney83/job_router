@@ -5,7 +5,7 @@ const defaultState = {
     // searchCity: "",
     // searchState: "",
     // searchJob: "",
-    savedResults: 0,
+    savedResults: [],
     savedLoaded: false,
 };
 

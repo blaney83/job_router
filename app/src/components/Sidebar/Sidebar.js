@@ -15,6 +15,9 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import { updateAuth } from "../../state/auth/actions";
+import { persistor } from "../../state"
+
+// import { purgeStoredState } from 'redux-persist'
 import { connect } from "react-redux";
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -158,7 +161,7 @@ const styles = theme => ({
         color: "white !important"
     },
     mainIconJR: {
-        "border-radius" : "0 !important"
+        "border-radius": "0 !important"
     },
     signOutStayDown: {
         position: "absolute",
@@ -182,7 +185,7 @@ class Sidebar extends React.Component {
         this.setState({ open: false });
         this.setState({ mediaQ: true });
     };
-    
+
     render() {
         console.log(this.props)
         const { classes, theme } = this.props;
@@ -206,7 +209,7 @@ class Sidebar extends React.Component {
                         >
                             <MenuIcon />
                         </IconButton>
-                        <Avatar className={classes.mainIconJR} img={{color:"transparent"}} src={JobRouter} />
+                        <Avatar className={classes.mainIconJR} img={{ color: "transparent" }} src={JobRouter} />
                         <Typography align="center" className={classes.title} variant="h6" color="inherit" noWrap>
                             Job Router
                         </Typography>
@@ -248,26 +251,26 @@ class Sidebar extends React.Component {
                         <Divider />
                         <List>
                             <ListItem button="true" selected={this.props.locationProps.location.pathname === "/dashboard/home" ? "true" : ""} key={"Home"}>
-                                <ListItemIcon><Link to="/dashboard/home"><HomeIcon className={classes.sideIcons}/></Link></ListItemIcon>
-                                <ListItemText primary="Home" primaryTypographyProps={{className : classes.sideIconLabels}}/>
+                                <ListItemIcon><Link to="/dashboard/home"><HomeIcon className={classes.sideIcons} /></Link></ListItemIcon>
+                                <ListItemText primary="Home" primaryTypographyProps={{ className: classes.sideIconLabels }} />
                             </ListItem>
                             <ListItem button key={"Search Jobs"} selected={this.props.locationProps.location.pathname === "/dashboard/search" ? "true" : ""}>
-                                <ListItemIcon><Link to="/dashboard/search"><SearchIcon className={classes.sideIcons}/></Link></ListItemIcon>
-                                <ListItemText primary="Search Jobs" primaryTypographyProps={{className : classes.sideIconLabels}}/>
+                                <ListItemIcon><Link to="/dashboard/search"><SearchIcon className={classes.sideIcons} /></Link></ListItemIcon>
+                                <ListItemText primary="Search Jobs" primaryTypographyProps={{ className: classes.sideIconLabels }} />
                             </ListItem>
                             <ListItem button key={"Saved Jobs"} selected={this.props.locationProps.location.pathname === "/dashboard/saved" ? "true" : ""}>
-                                <ListItemIcon><Link to="/dashboard/saved"><SavedIcon className={classes.sideIcons}/></Link></ListItemIcon>
-                                <ListItemText primary="Saved Jobs" primaryTypographyProps={{className : classes.sideIconLabels}}/>
+                                <ListItemIcon><Link to="/dashboard/saved"><SavedIcon className={classes.sideIcons} /></Link></ListItemIcon>
+                                <ListItemText primary="Saved Jobs" primaryTypographyProps={{ className: classes.sideIconLabels }} />
                             </ListItem>
                             <ListItem button key={"Account"} selected={this.props.locationProps.location.pathname === "/dashboard/account" ? "true" : ""}>
-                                <ListItemIcon><Link to="/dashboard/account"><AccountIcon className={classes.sideIcons}/></Link></ListItemIcon>
-                                <ListItemText primary="Account" primaryTypographyProps={{className : classes.sideIconLabels}}/>
+                                <ListItemIcon><Link to="/dashboard/account"><AccountIcon className={classes.sideIcons} /></Link></ListItemIcon>
+                                <ListItemText primary="Account" primaryTypographyProps={{ className: classes.sideIconLabels }} />
                             </ListItem>
                         </List>
                         <List className={classes.signOutStayDown}>
                             <ListItem button="true" selected={this.props.locationProps.location.pathname === "/" ? "true" : ""} key={"Home"}>
-                                <ListItemIcon onClick={this.props.signout}><Link to="/"><ExitIcon className={classes.sideIcons}/></Link></ListItemIcon>
-                                <ListItemText primary="Sign Out" primaryTypographyProps={{className : classes.sideIconLabels}}/>
+                                <ListItemIcon onClick={() => this.props.signout(persistor)}><Link to="/"><ExitIcon className={classes.sideIcons} /></Link></ListItemIcon>
+                                <ListItemText primary="Sign Out" primaryTypographyProps={{ className: classes.sideIconLabels }} />
                             </ListItem>
                         </List>
                     </Drawer>
@@ -281,36 +284,47 @@ class Sidebar extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        signout() {
-                dispatch(updateAuth({
-                    authenticated: false,
-                    token: "",
-                    error: "",
-                    user: {
-                        username: "",
-                        firstName: "",
-                        lastName: "",
-                        userCity: "",
-                        userStateCode: "",
-                        numberSaved: 0,
-                        numberApplied: 0,
-                        userId: "",
-                        recentSearches: "",
-                    }
-                }));
-                dispatch(searchJobs({
-                    searchCity: "",
-                    searchState: "",
-                    searchJob: "",
-                    searchResults: [],
-                }));
-                dispatch(updateNumberResults({
-                    numberResults: 15
-                }));
-                dispatch(getSaved({
-                    savedResults: 0,
-                    savedLoaded: false,
-                }));
+        signout(persistor) {
+            persistor.purge()
+            // dispatch(purgeStoredStat)
+            dispatch(updateAuth({
+                authenticated: false,
+                token: "",
+                error: "",
+                user: {
+                    username: "",
+                    firstName: "",
+                    lastName: "",
+                    userCity: "",
+                    userStateCode: "",
+                    numberSaved: 0,
+                    numberApplied: 0,
+                    userId: "",
+                    recentSearches: [],
+                    savedChartData: [0, 0, 0, 0, 0, 0, 0],
+                    appliedChartData: [0, 0, 0, 0, 0, 0, 0],
+                    postingsViewed: [],
+                    postingsSaved: [],
+                    postingsApplied: [],
+                    totalSearches: 0,
+                    siteTag: 0,
+                    filterTag: 0,
+                    sortTag: 0,
+                }
+            }));
+            dispatch(searchJobs({
+                searchCity: "",
+                searchState: "",
+                searchJob: "",
+                searchResults: [],
+            }));
+            dispatch(updateNumberResults({
+                numberResults: 15
+            }));
+            dispatch(getSaved({
+                savedResults: [],
+                savedLoaded: false,
+            }));
         }
     }
 }

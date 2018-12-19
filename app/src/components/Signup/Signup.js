@@ -215,8 +215,11 @@ function mapDispatchToProps(dispatch) {
                     postingsApplied: res.data.postingsApplied,
                     recentSearches: res.data.recentSearches,
                     totalSearches: res.data.totalSearches,
+                    siteTag: [],
+                    filterTag: [],
+                    sortTag: [],
                 }));
-                reroute.push("/")
+                reroute.push("/dashboard")
             }).catch(err => {
                 alert("Please complete all of the inputs before creating your account")
                 console.error(err);

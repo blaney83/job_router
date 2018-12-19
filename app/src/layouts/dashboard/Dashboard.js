@@ -26,12 +26,6 @@ function Dashboard(props) {
     console.log("dashboard", props)
     const { classes } = props;
     const [email, setEmail] = useState("");
-    // const [password, setPassword] = useState("");
-    // const [username, setUsername] = useState("");
-    // const [firstName, setFirstName] = useState("");
-    // const [lastName, setLastName] = useState("");
-    // const [userCity, setUserCity] = useState("");
-    // const [userStateCode, setUserStateCode] = useState("");
     function miniRoutes() {
         console.log(props.location.pathname)
         switch (props.location.pathname) {
@@ -53,7 +47,7 @@ function Dashboard(props) {
         }
     }
     //IMPORTANT DONT DELETE, JUST TIRED OF LOGGING
-    // if (store.getState().auth.authenticated) {
+    if (props.user.authenticated && props.user.token !== "") {
     return (
         <div>
             <Sidebar locationProps={props}/>
@@ -71,9 +65,9 @@ function Dashboard(props) {
             </Grid>
         </div>
     )
-    // } else {
-    //     return (<Redirect to="/" />)
-    // }
+    } else {
+        return (<Redirect to="/" />)
+    }
 }
 Dashboard.propTypes = {
     classes: PropTypes.object.isRequired,
@@ -85,4 +79,8 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(Dashboard));
+function mapStateToProps(state) {
+    return { user: state.auth}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard));

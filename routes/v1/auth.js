@@ -45,6 +45,7 @@ router.post("/signin", requireSignin, function (req, res) {
                 postingsApplied: userResp.postingsApplied,
                 recentSearches: userResp.recentSearches,
                 token: tokenizer(userResp),
+                totalSearches: userResp.totalSearches,
             }
             res.json(userResponse)
         })
@@ -53,7 +54,7 @@ router.post("/signin", requireSignin, function (req, res) {
 router.post("/signup", function (req, res) {
     const { email, password, username, firstName, lastName, userCity, userStateCode } = req.body;
     if (!email || !password) {
-        console.log("this is broken")
+        // console.log("this is broken")
         res.status(422).send({ error: "You must provide an email and password" });
     }
 
@@ -84,6 +85,7 @@ router.post("/signup", function (req, res) {
                     postingsApplied: user.postingsApplied,
                     recentSearches: user.recentSearches,
                     token: tokenizer(user),
+                    totalSearches: user.totalSearches,
                 }
                 res.json(userResponse);
             });
