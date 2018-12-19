@@ -27,7 +27,11 @@ import Glassdoor from "../../assets/img/glassdoor.png"
 import Indeed from "../../assets/img/indeed.png"
 import USA from "../../assets/img/usa.png"
 import Zip from "../../assets/img/zip.png"
+import StarIcon from '@material-ui/icons/Star';
 import { CardHeader } from "@material-ui/core";
+import Snackbar from '@material-ui/core/Snackbar';
+import { set } from "mongoose";
+
 
 const styles = {
     card: {
@@ -62,6 +66,16 @@ const styles = {
     goodResult: {
         color: "green",
         fontSize: 16
+    },
+    CompanyName: {
+        color: "#c84a03 !important",
+        fontWeight: "bolder !important",
+        fontSize: ".9rem"
+    },
+    PositionName: {
+        // color: "#c84a03 !important",
+        // fontWeight: "bolder !important",
+        fontSize: "1rem"
     }
 };
 
@@ -71,10 +85,14 @@ function Saved(props) {
     const { classes } = props;
     const [savedResults, setSavedResults] = useState(props.saved.savedResults);
     const [savedLoaded, setSavedLoaded] = useState(props.saved.savedLoaded);
+    const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
     // const [numberResults, setNumberResults] = useState(props.search.numberResults);
-    if (savedResults.length === 0) {
+    if (props.saved.savedResults.length !== props.user.numberSaved) {
         props.getSaved(props.user.userId, setSavedResults, setSavedLoaded)
     }
+    console.log(props.saved.savedResults.length)
+    console.log(props.user.numberSaved)
 
     function chooseIcon(obj) {
         switch (true) {
@@ -119,25 +137,25 @@ function Saved(props) {
                                                 </ListItemAvatar>
                                             </Grid>
                                                 <Grid item xs={10} className={classes.specialBox}>
-                                                    <ListItemText
-                                                        primary={obj.positionTitle + "   " + obj.jobLocation + "   " + obj.jobCompany}
-                                                        secondary={obj.jobDescription}
-                                                    />
+                                                <Typography variant="body1"><span className={classes.PositionName}>{obj.positionTitle + "   " + obj.jobLocation}</span> <br></br> <span className={classes.CompanyName}>{obj.jobCompany}</span></Typography>
+                                                            <ListItemText
+                                                                secondary={obj.jobDescription}
+                                                            />
                                                 </Grid></Grid>
                                         </Grid>
                                             <Grid item xs={4}>
                                                 <Grid container><Grid item xs={6}>
-                                                    <Grid container direction="column"><Grid item xs={4} className={classes.smallMessages}>
+                                                    <Grid container direction="column" justify="space-between"><Grid item xs={12} className={classes.smallMessages}>
                                                         <ListItemText
                                                             secondary={obj.salaryRange ? <Typography variant="body1" className={classes.goodResult} >{obj.salaryRange}</Typography> : <Typography className={classes.badResult} variant="body1"></Typography>}
                                                         />
                                                     </Grid>
-                                                        <Grid item xs={4}>
+                                                        <Grid item xs={12}>
                                                             <ListItemText
-                                                                secondary={obj.jobRating ? <Typography variant="body1" className={classes.goodResult}>{obj.jobRating}</Typography> : <Typography></Typography>}
+                                                                secondary={obj.jobRating ? <Typography variant="body1" className={classes.goodResult}>{obj.jobRating}<StarIcon fontSize="small"></StarIcon></Typography> : <Typography></Typography>}
                                                             />
                                                         </Grid>
-                                                        <Grid item xs={4}>
+                                                        <Grid item xs={12}>
                                                             <ListItemText
                                                                 secondary={obj.easilyApply ? <Typography variant="body1" className={classes.goodResult}>Fast Apply!</Typography> : <Typography variant="body1" className={classes.badResult}></Typography>}
                                                             />
@@ -145,28 +163,68 @@ function Saved(props) {
                                                     </Grid>
                                                 </Grid>
                                                     <Grid item xs={6}>
+
                                                         <Button size="small" variant="contained"
                                                             color="primary"
                                                             id={obj.jobId}
-                                                            // replace the long string below with props.auth.user.userId "5c148efcb2d70e3ae0325019"
-                                                            onClick={(e) => props.deleteJob(e.target.id, props.user.userId, savedResults, setSavedResults)}
-                                                        >Delete</Button>
+                                                            href={obj.jobLink}
+                                                            target="_blank"
+                                                            fullWidth={true}
+
+                                                        // replace the long string below with props.auth.user.userId
+                                                        // onClick={(e) => props.saveJob(e.target.id, "5c148efcb2d70e3ae0325019")}
+                                                        >Visit Site
+                                                    <Avatar alt={obj.jobSite} src={chooseIcon(obj)} />
+                                                        </Button>
+
                                                         <Button size="small" variant="contained"
-                                                            color={obj.hasApplied ? "primary" : "danger"}
+                                                            color={obj.hasApplied ? "primary" : "secondary"}
                                                             id={obj.jobId}
+                                                            fullWidth={true}
+
                                                             // replace the long string below with props.auth.user.userId "5c148efcb2d70e3ae0325019"
                                                             onClick={(e) => props.toggleApply(e.target.id, props.user.userId, savedResults, setSavedResults)}
                                                         >{obj.hasApplied ? "Already Applied" : "Mark as Applied"}</Button>
                                                         <Button size="small" variant="contained"
                                                             color="primary"
                                                             id={obj.jobId}
-                                                            href={obj.jobLink}
-                                                            target="_blank"
-                                                        // replace the long string below with props.auth.user.userId
-                                                        // onClick={(e) => props.saveJob(e.target.id, "5c148efcb2d70e3ae0325019")}
-                                                        >Visit Site
-                                                    <Avatar alt={obj.jobSite} src={chooseIcon(obj)} />
-                                                        </Button>
+                                                            fullWidth={true}
+
+                                                            // replace the long string below with props.auth.user.userId "5c148efcb2d70e3ae0325019"
+                                                            onClick={(e) => props.deleteJob(e.target.id, props.user.userId, savedResults, setSavedResults, setOpen, setOpen2)}
+                                                        >Delete</Button>
+                                                                <Snackbar
+                                                                className={classes.GoodAlert}
+
+                                                                    anchorOrigin={{
+                                                                        vertical: 'top',
+                                                                        horizontal: 'center',
+                                                                    }}
+                                                                    open={open}
+                                                                    onClose={() => setOpen(false)}
+                                                                    autoHideDuration={1500}
+                                                                    // onClose={this.handleClose}
+                                                                    ContentProps={{
+                                                                        'aria-describedby': 'message-id',
+                                                                    }}
+                                                                    message={<span id="message-id">Job Deleted</span>}
+                                                                />
+                                                                <Snackbar
+                                                                className={classes.BadAlert}
+                                                                    anchorOrigin={{
+                                                                        vertical: 'top',
+                                                                        horizontal: 'center',
+                                                                    }}
+                                                                    open={open2}
+                                                                    onClose={() => setOpen2(false)}
+                                                                    autoHideDuration={1500}
+                                                                    // onClose={this.handleClose}
+                                                                    ContentProps={{
+                                                                        'aria-describedby': 'message-id',
+                                                                    }}
+                                                                    message={<span id="message-id">Job already removed</span>}
+                                                                    
+                                                                />
                                                     </Grid></Grid>
                                             </Grid></Grid>
                                     </ListItem>
@@ -219,7 +277,7 @@ function mapDispatchToProps(dispatch) {
             // }
         },
         //GOING TO BE REMOVE FROM SAVED FUNCTION
-        deleteJob(jobId, userId, savedResults, setSavedResults) {
+        deleteJob(jobId, userId, savedResults, setSavedResults, setOpen, setOpen2) {
             console.log(userId)
             axios.delete("/v1/saved/" + jobId + "/" + userId).then(res => {
                 console.log(res)
@@ -229,9 +287,9 @@ function mapDispatchToProps(dispatch) {
                         savedResults: updatedSaved,
                     }))
                     setSavedResults(updatedSaved)
-                    alert("Job removed!")
+                    setOpen(true)
                 } else if (res.status === 202) {
-                    alert("Job was already deleted!")
+                    setOpen2(true)
                 }
             }).catch(err => {
                 console.log(err.status)
@@ -239,17 +297,17 @@ function mapDispatchToProps(dispatch) {
             })
             axios(
                 // "/v1/user/updateSaved"
-            {
-                method: "put",
-                url: "/v1/user/updateSaved",
-                data: {
-                    added: false,
-                    userId: userId,
-                    jobId: jobId,
-                    savedId: jobId
+                {
+                    method: "put",
+                    url: "/v1/user/updateSaved",
+                    data: {
+                        added: false,
+                        userId: userId,
+                        jobId: jobId,
+                        savedId: jobId
+                    }
                 }
-            }
-            ).then(resp=>{
+            ).then(resp => {
                 console.log("hit")
                 dispatch(changeSavedUserStats({
                     numberSaved: resp.data.numberSaved,
@@ -257,7 +315,7 @@ function mapDispatchToProps(dispatch) {
                     postingsSaved: resp.data.postingsSaved
                 }))
                 console.log(resp)
-            }).catch(err=>{console.log(err)})
+            }).catch(err => { console.log(err) })
         },
         toggleApply(jobId, userId, savedResults, setSavedResults) {
             console.log(userId)
@@ -270,44 +328,44 @@ function mapDispatchToProps(dispatch) {
                         console.log("true ")
                         axios(
                             // "/v1/user/updateSaved"
-                        {
-                            method: "put",
-                            url: "/v1/user/updateApplied",
-                            data: {
-                                added: false,
-                                userId: userId,
-                                jobId: jobId,
+                            {
+                                method: "put",
+                                url: "/v1/user/updateApplied",
+                                data: {
+                                    added: false,
+                                    userId: userId,
+                                    jobId: jobId,
+                                }
                             }
-                        }
-                        ).then(resp=>{
+                        ).then(resp => {
                             dispatch(changeAppliedUserStats({
                                 numberApplied: resp.data.numberApplied,
                                 appliedChartData: resp.data.appliedChartData,
                                 postingsApplied: resp.data.postingsApplied
                             }))
                             console.log(resp)
-                        }).catch(err=>{console.log(err)})
+                        }).catch(err => { console.log(err) })
                     } else {
                         savedResults[newArray.indexOf(true)].hasApplied = true
                         axios(
                             // "/v1/user/updateSaved"
-                        {
-                            method: "put",
-                            url: "/v1/user/updateApplied",
-                            data: {
-                                added: true,
-                                userId: userId,
-                                jobId: jobId,
+                            {
+                                method: "put",
+                                url: "/v1/user/updateApplied",
+                                data: {
+                                    added: true,
+                                    userId: userId,
+                                    jobId: jobId,
+                                }
                             }
-                        }
-                        ).then(resp=>{
+                        ).then(resp => {
                             dispatch(changeAppliedUserStats({
                                 numberApplied: resp.data.numberApplied,
                                 appliedChartData: resp.data.appliedChartData,
                                 postingsApplied: resp.data.postingsApplied
                             }))
                             console.log(resp)
-                        }).catch(err=>{console.log(err)})                   
+                        }).catch(err => { console.log(err) })
                     }
                     setSavedResults(savedResults)
                 } else if (res.status === 202) {
@@ -317,7 +375,7 @@ function mapDispatchToProps(dispatch) {
                 console.log(err.status)
                 console.log("Error")
             })
-            
+
         }
     }
     return savedMethods

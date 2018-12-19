@@ -30,12 +30,24 @@ import {
     firstChart,
 } from "../Chart/Chart.js";
 
-const styles =  {
+const styles = {
     mainJRIcon: {
         "border-radius": "0 !important",
-        "width" : "60px !important",
+        "width": "60px !important",
         height: "60px !important"
-    }
+    },
+    redText: {
+        color: "red",
+        "font-weight": "bold"
+    },
+    orText: {
+        color: "orange",
+        "font-weight": "bold"
+    },
+    specialContent: {
+        "padding-top": "0 !important",
+        // "padding-bottom": "0 !important",
+    },
 }
 
 function Main(props) {
@@ -46,17 +58,17 @@ function Main(props) {
     // const [password, setPassword] = useState("");
     firstChart.data.series = [props.user.savedChartData, props.user.appliedChartData]
     return (
-        <div>            
+        <div>
             <Grid container spacing={16}>
                 <Grid item xs={12}>
-                {/* <Slide direction="up" mountOnEnter unmountOnExit> */}
+                    {/* <Slide direction="up" mountOnEnter unmountOnExit> */}
                     <Card>
                         <CardHeader
                             avatar={
-                                <Avatar src={JobRouter} className={classes.mainJRIcon}/>
+                                <Avatar src={JobRouter} className={classes.mainJRIcon} />
                             }
                             title={props.user.firstName + "'s Job-Search Dashboard"}
-                            titleTypographyProps={{variant:"h4"}}
+                            titleTypographyProps={{ variant: "h4" }}
                             color="secondary"
                         />
                         <CardContent>
@@ -79,7 +91,7 @@ function Main(props) {
                     <Card className={classes.card}>
                         <CardHeader title="Applied / Saved" />
 
-                        <CardContent>
+                        <CardContent className={classes.specialContent}>
                             {/* <Typography variant="h4" >Number of Saved Jobs</Typography> */}
                             <Typography variant="h3" >{props.user.numberApplied} / {props.user.numberSaved}</Typography>
                         </CardContent>
@@ -99,7 +111,9 @@ function Main(props) {
             <Grid container spacing={16}>
                 <Grid item xs={12} sm={6}>
                     <Card className={classes.card}>
-                        <CardHeader title="Recent Activity" />
+                        <CardHeader title="This Week's Activity" />
+                        {/* <CardContent> */}
+
                         <ChartistGraph
                             className="ct-chart"
                             data={firstChart.data}
@@ -109,6 +123,19 @@ function Main(props) {
                             listener={firstChart.animation}
                             plugins={firstChart.plugins.chartistPluginAxisTitle}
                         />
+                        <CardContent className={classes.specialContent}>
+                            <Typography variant="body1" align="center">
+                                <span className={classes.redText}>
+                                    Red: 
+                                </span>
+                                 Number of Saved Jobs<br />
+                                <span className={classes.orText}>
+                                    Orange: 
+                                </span>
+                                 Number of Applied Jobs
+                            </Typography>
+                        </CardContent>
+                        
                     </Card>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -117,7 +144,7 @@ function Main(props) {
                         <CardContent>
                             {/* <Typography variant="h4" >Recent Searches</Typography> */}
                             <List className={classes.root}>
-                                {props.user.recentSearches.map((searchObj, i)=> (
+                                {props.user.recentSearches.map((searchObj, i) => (
                                     <ListItem key={i} role={undefined} dense button
                                     // onClick={this.handleToggle(value)}
                                     >
@@ -126,10 +153,10 @@ function Main(props) {
                                             tabIndex={-1}
                                             disableRipple
                                         /> */}
-                                        <ListItemText primary={searchObj.searchJob +" jobs in " + searchObj.searchCity + ", " + searchObj.searchState} />
+                                        <ListItemText primary={searchObj.searchJob + " jobs in " + searchObj.searchCity + ", " + searchObj.searchState} />
                                         <ListItemSecondaryAction>
                                             <IconButton aria-label="Comments">
-                                                <ArrowForward/>
+                                                <ArrowForward />
                                             </IconButton>
                                         </ListItemSecondaryAction>
                                     </ListItem>

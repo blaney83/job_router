@@ -187,6 +187,9 @@ function glassUpSomeData(resp) {
         if(jobObj.positionTitle != null){
             jobObj.positionTitle = handleBadData(jobObj.positionTitle)
         }
+        if(jobObj.jobDescription === undefined){
+            jobObj.jobDescription = "Hey there! We are sorry that we don't have a description for this GlassDoor posting. We are currently working with them to make their API more accessible. To see more information, use the link to check out this post on their site! Thanks!"
+        }
         glassObjHolder.push(jobObj)
         // console.log(jobObj)
     })

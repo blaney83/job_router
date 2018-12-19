@@ -8,12 +8,18 @@ module.exports = {
         let searchP = req.params.search
         let locationP = req.params.location
         let dataPromiseArr = [
-            // dataCalls.cbData.careerDataGet(searchP, locationP, 3),
+            //cb at 3 pages works and returns 50
+            dataCalls.cbData.careerDataGet(searchP, locationP, 3),
+            //dice at 3 works and returns 60
             dataCalls.diData.diceDataGet(searchP, locationP, 3),
-            dataCalls.glData.glassGetData(searchP, locationP, 3),
-            // dataCalls.inData.indeedGetData(searchP, locationP, 3),
+            //glass at 3 works and returns 15, returns 15 at 4 too
+            dataCalls.glData.glassGetData(searchP, locationP, 4),
+            //indeed works at 3 and returns 32
+            dataCalls.inData.indeedGetData(searchP, locationP, 3),
+            //usa currently returns 4 (with search in arizona) as long as its called with another source
             // dataCalls.usData.usaGetData(searchP, locationP, 5),
-            // dataCalls.ziData.zipGetData(searchP, locationP, 3)
+            //zip currently works at 3 and returns 42
+            dataCalls.ziData.zipGetData(searchP, locationP, 3)
         ]
         Promise.all(dataPromiseArr).then(resp => {
             console.log("nice job ben")
@@ -21,23 +27,37 @@ module.exports = {
                 console.log("happened")
                 res.json([{ error: "bad search" }])
             } else {
-                let mySortingArray = resp.map((val) => val[0][0].jobSite)
+                // if(resp[0][0][0] === undefined)
+                // console.log(resp)
+                let filterCatch = resp.filter(val => val !== undefined)
+                let mySortingArray = filterCatch.map((val) => val[0][0] === undefined ? val[0].jobSite : val[0][0].jobSite)
                 console.log("my sorting array", mySortingArray)
                 let dbMassiveArray = []
-                resp.map((val, i) => val.map(val => val.map(val => {
+                resp.map((val, i) => {
+                    if(val[0][0] !== undefined){
+                    val.map(val => val.map(val => {
                     // console.log(val)
                     // console.log(val.userId)
                     val.userId = req.body.userId
                     // console.log(val)
                     // console.log(val.userId)
                     dbMassiveArray.push(val)
-                })))
+                }))}else{
+                    val.map(usaObj=>{
+                        usaObj.userId = req.body.userId
+                        dbMassiveArray.push(usaObj)
+                    })
+                }
+            })
+                console.log(dbMassiveArray.length)
+
                 db.Job.deleteMany({ userId: req.body.userId }).then(info => {
                     console.log("well this happened")
                     db.Job
                         .create(dbMassiveArray)
                         .then(dbModel => {
                             console.log("well this happened2")
+                            console.log(dbModel.length)
                             let firstReturn = shuffleShuffle(dbModel, 16, mySortingArray)
                             // console.log(firstReturn)
                             res.json(firstReturn)
@@ -51,22 +71,25 @@ module.exports = {
     },
 
     findMore: function (req, res) {
-        let mySortingArray = ["Dice", "GlassDoor"]
+        let mySortingArray = ["CareerBuilder", "Dice", "ZipRecruiter"]
         let magicNumber = parseInt(req.params.number)
+        console.log(req.body.userId)
         db.Job.find({ userId: req.body.userId })
             // .limit(magicNumber)
             .then(moreJobPostings => {
+                console.log(moreJobPostings)
                 let newResponse = shuffleShuffle(moreJobPostings, magicNumber, mySortingArray)
-                let senderResponse = newResponse.splice(magicNumber - 16, 15)
-                // for(let ntm = magicNumber-15; ntm < magicNumber; ntm ++){
-                //     moreDataForChu.push(moreJobPostings[ntm])
-                // }
-                res.json(senderResponse)
+                let senderResponse1 = newResponse.filter(obj=> obj !== undefined)
+                let senderResponse = senderResponse1.filter(obj=> obj !== null)
+                if (senderResponse.length > 20) {
+                    senderResponse = newResponse.splice(magicNumber - 16, 15)
+                }
+                res.status(200).json(senderResponse)
             })
     },
 
     sortSite: function (req, res) {
-        let mySortingArray = ["Dice", "GlassDoor"]
+        let mySortingArray = ["CareerBuilder", "Dice", "ZipRecruiter"]
         let myReferenceArray = mySortingArray
         let magicNumber = parseInt(req.params.number)
 
@@ -77,7 +100,8 @@ module.exports = {
                     mySortingArray = [...req.body.siteTag]
                 }
                 let newResponse = shuffleShuffle(moreJobPostings, magicNumber, mySortingArray, req.body.postingsViewed, req.body.postingsSaved, req.body.postingsApplied, req.body.filterTag, myReferenceArray, req.body.siteTag)
-                let senderResponse = newResponse.filter(obj=> obj !== undefined)
+                let senderResponse1 = newResponse.filter(obj=> obj !== undefined)
+                let senderResponse = senderResponse1.filter(obj=> obj !== null)
                 if (senderResponse.length > 20) {
                     senderResponse = newResponse.splice(magicNumber - 16, 15)
                 }

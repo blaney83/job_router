@@ -36,6 +36,9 @@ import StarIcon from '@material-ui/icons/Star';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 const styles = {
     card: {
@@ -69,7 +72,7 @@ const styles = {
     },
     goodResult: {
         color: "green",
-        fontSize: 16
+        fontSize: 14
     },
     textField: {
         "margin-bottom": "0 !important"
@@ -78,6 +81,22 @@ const styles = {
         minWidth: 120,
         maxWidth: 300,
     },
+    CompanyName: {
+        color: "#c84a03 !important",
+        fontWeight: "bolder !important",
+        fontSize: ".9rem"
+    },
+    PositionName: {
+        // color: "#c84a03 !important",
+        // fontWeight: "bolder !important",
+        fontSize: "1rem"
+    }
+    // BadAlert:{
+    //     "background-color" : "#f44336"
+    // },
+    // GoodAlert:{
+    //     "background-color" : "#909090"
+    // }
 };
 
 const theme = createMuiTheme({
@@ -89,22 +108,26 @@ const theme = createMuiTheme({
             main: '#d84315',
         },
     },
+
 });
 
 function Search(props) {
     const { classes } = props;
     const [searchCity, setSearchCity] = useState(props.search.searchCity);
+    const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
     const [searchState, setSearchState] = useState(props.search.searchState);
     const [searchJob, setSearchJob] = useState(props.search.searchJob);
     const [searchResults, setSearchResults] = useState(props.search.searchResults);
     const [sortTag, setSortTag] = useState(props.user.sortTag);
     const [filterTag, setFilterTag] = useState(props.user.filterTag);
     const [siteTag, setSiteTag] = useState(props.user.siteTag);
+    const [numberResults, setNumberResults] = useState(props.search.numberResults);
+
     // const [sortTag, setSortTag] = useState([]);
     // const [filterTag, setFilterTag] = useState([]);
     // const [siteTag, setSiteTag] = useState([]);
     // const [searchResults, setSearchResults] = useState([]);
-    const [numberResults, setNumberResults] = useState(props.search.numberResults);
     console.log(props)
     // console.log(this.state)
     function chooseIcon(obj) {
@@ -154,25 +177,27 @@ function Search(props) {
                                                         </ListItemAvatar>
                                                     </Grid>
                                                         <Grid item xs={10} className={classes.specialBox}>
+                             
+                                                        <Typography variant="body1"><span className={classes.PositionName}>{obj.positionTitle + "   " + obj.jobLocation}</span> <br></br> <span className={classes.CompanyName}>{obj.jobCompany}</span></Typography>
                                                             <ListItemText
-                                                                primary={obj.positionTitle + "   " + obj.jobLocation + "   " + obj.jobCompany}
                                                                 secondary={obj.jobDescription}
                                                             />
                                                         </Grid></Grid>
                                                 </Grid>
                                                     <Grid item xs={4}>
                                                         <Grid container><Grid item xs={6}>
-                                                            <Grid container direction="column"><Grid item xs={4} className={classes.smallMessages}>
+                                                            <Grid container direction="column" justify="space-between"><Grid item xs={12} className={classes.smallMessages}>
                                                                 <ListItemText
-                                                                    secondary={obj.salaryRange ? <Typography variant="body1" className={classes.goodResult} >{obj.salaryRange}</Typography> : <Typography className={classes.badResult} variant="body1">No Salary Info</Typography>}
+                                                                    secondary={obj.salaryRange ? <Typography variant="body1" className={classes.goodResult} >{obj.salaryRange}</Typography> : <Typography className={classes.badResult} variant="body1"></Typography>}
                                                                 />
                                                             </Grid>
-                                                                <Grid item xs={4}>
+                                                                <Grid item xs={12}>
                                                                     <ListItemText
-                                                                        secondary={obj.jobRating ? <Typography variant="body1" className={classes.goodResult}>{obj.jobRating}<StarIcon /></Typography> : <Typography></Typography>}
+                                                                        // inset={true}
+                                                                        secondary={obj.jobRating ? <Typography variant="body1" className={classes.goodResult}>{obj.jobRating}<StarIcon fontSize="small"></StarIcon></Typography> : <Typography></Typography>}
                                                                     />
                                                                 </Grid>
-                                                                <Grid item xs={4}>
+                                                                <Grid item xs={12}>
                                                                     <ListItemText
                                                                         secondary={obj.easilyApply ? <Typography variant="body1" className={classes.goodResult}>Fast Apply!</Typography> : <Typography variant="body1" className={classes.badResult} ></Typography>}
                                                                     />
@@ -183,12 +208,8 @@ function Search(props) {
                                                                 <Button size="small" variant="contained"
                                                                     color="primary"
                                                                     id={obj.jobId}
-                                                                    // replace the long string below with props.auth.user.userId
-                                                                    onClick={(e) => props.saveJob(e.target.id, props.user.userId)}
-                                                                >Save</Button>
-                                                                <Button size="small" variant="contained"
-                                                                    color="primary"
-                                                                    id={obj.jobId}
+                                                                    fullWidth={true}
+
                                                                     href={obj.jobLink}
                                                                     target="_blank"
                                                                 // replace the long string below with props.auth.user.userId
@@ -196,6 +217,45 @@ function Search(props) {
                                                                 >Visit Site
                                                     <Avatar alt={obj.jobSite} src={chooseIcon(obj)} />
                                                                 </Button>
+                                                                <Button size="small" variant="contained"
+                                                                    color="secondary"
+                                                                    fullWidth={true}
+                                                                    id={obj.jobId}
+                                                                    // replace the long string below with props.auth.user.userId
+                                                                    onClick={(e) => props.saveJob(e.target.id, props.user.userId, setOpen, setOpen2)}
+                                                                >Save</Button>
+                                                                <Snackbar
+                                                                className={classes.GoodAlert}
+
+                                                                    anchorOrigin={{
+                                                                        vertical: 'top',
+                                                                        horizontal: 'center',
+                                                                    }}
+                                                                    open={open}
+                                                                    onClose={() => setOpen(false)}
+                                                                    autoHideDuration={1500}
+                                                                    // onClose={this.handleClose}
+                                                                    ContentProps={{
+                                                                        'aria-describedby': 'message-id',
+                                                                    }}
+                                                                    message={<span id="message-id">Job Saved!</span>}
+                                                                />
+                                                                <Snackbar
+                                                                className={classes.BadAlert}
+                                                                    anchorOrigin={{
+                                                                        vertical: 'top',
+                                                                        horizontal: 'center',
+                                                                    }}
+                                                                    open={open2}
+                                                                    onClose={() => setOpen2(false)}
+                                                                    autoHideDuration={1500}
+                                                                    // onClose={this.handleClose}
+                                                                    ContentProps={{
+                                                                        'aria-describedby': 'message-id',
+                                                                    }}
+                                                                    message={<span id="message-id">Job already Saved!</span>}
+                                                                    
+                                                                />
                                                             </Grid></Grid>
                                                     </Grid></Grid>
                                             </ListItem>
@@ -249,6 +309,7 @@ function Search(props) {
                                     placeholder="Software Engineer"
                                     className={classes.textField}
                                     margin="normal"
+                                    fullWidth={true}
                                     value={searchJob}
                                     onChange={(e) => setSearchJob(e.target.value)}
                                 />
@@ -259,6 +320,7 @@ function Search(props) {
                                     placeholder="San Francisco"
                                     className={classes.textField}
                                     margin="normal"
+                                    fullWidth={true}
                                     value={searchCity}
                                     onChange={(e) => setSearchCity(e.target.value)}
                                 />
@@ -267,6 +329,8 @@ function Search(props) {
                                 <InputLabel htmlFor="age-simple">State</InputLabel>
                                 <Select
                                     value={searchState}
+                                    fullWidth={true}
+
                                     onChange={(e) => setSearchState(e.target.value)}
                                     inputProps={{
                                         name: 'age',
@@ -329,88 +393,93 @@ function Search(props) {
                                 </Select>
                             </Grid>
                         </Grid>
-                    </CardContent>
-                    <CardActions>
-                        <Grid container >
-                            <Grid item xs={2}>
+                        <Grid container alignItems="flex-start" justify="flex-start">
+                            <Grid item xs={12}>
                                 <Button size="small" variant="contained"
                                     color="primary"
                                     //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
                                     onClick={() => props.searchJobs(searchCity, searchState, searchJob, setSearchResults, props.user.userId)}
                                 >Search</Button>
                             </Grid>
-                            <Grid item xs={10}>
-                                <Grid container>
-                                    <Grid item xs={3}>
-                                        <FormControl className={classes.formControl}>
-                                            <InputLabel htmlFor="select-multiple-checkbox">Sort</InputLabel>
-                                            <Select
-                                                multiple
-                                                value={sortTag}
-                                                onChange={e => setSortTag(e.target.value)}
-                                                input={<Input id="select-multiple-checkbox" />}
-                                                renderValue={selected => selected.join(', ')}
-                                            >
-                                                {sortTagOptions.map(tag => (
-                                                    <MenuItem key={tag} value={tag}>
-                                                        <Checkbox checked={sortTag.indexOf(tag) > -1} />
-                                                        <ListItemText primary={tag} />
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <FormControl className={classes.formControl}>
-                                            <InputLabel htmlFor="select-multiple-checkbox">Filter</InputLabel>
-                                            <Select
-                                                multiple
-                                                value={filterTag}
-                                                onChange={e => setFilterTag(e.target.value)}
-                                                input={<Input id="select-multiple-checkbox" />}
-                                                renderValue={selected => selected.join(', ')}
-                                            >
-                                                {filterTagOptions.map(tag => (
-                                                    <MenuItem key={tag} value={tag}>
-                                                        <Checkbox checked={filterTag.indexOf(tag) > -1} />
-                                                        <ListItemText primary={tag} />
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <FormControl className={classes.formControl}>
-                                            <InputLabel htmlFor="select-multiple-checkbox">Sources</InputLabel>
-                                            <Select
-                                                multiple
-                                                value={siteTag}
-                                                onChange={e => setSiteTag(e.target.value)}
-                                                input={<Input id="select-multiple-checkbox" />}
-                                                renderValue={selected => selected.join(', ')}
-                                            >
-                                                {siteOptions.map(tag => (
-                                                    <MenuItem key={tag} value={tag}>
-                                                        <Checkbox checked={siteTag.indexOf(tag) > -1} />
-                                                        <ListItemText primary={tag} />
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <Button size="small" variant="contained"
-                                            color="primary"
-                                            //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
-                                            onClick={() => props.handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, props.user.postingsViewed, props.user.postingsSaved, props.user.postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, props.user.userId, false, updateCurrentFilters)}
-                                        >Sort</Button>
-                                    </Grid>
-                                </Grid>
+                        </Grid>
+                    </CardContent>
+                    <CardContent>
+                        <Grid container alignItems="flex-end" justify="space-around">
+                            <Grid item xs={12} sm={4}>
+                                <FormControl className={classes.formControl}>
+                                    <InputLabel htmlFor="select-multiple-checkbox">Sort</InputLabel>
+                                    <Select
+                                        fullWidth={true}
+                                        multiple
+                                        value={sortTag}
+                                        onChange={e => setSortTag(e.target.value)}
+                                        input={<Input id="select-multiple-checkbox" />}
+                                        renderValue={selected => selected.join(', ')}
+                                    >
+                                        {sortTagOptions.map(tag => (
+                                            <MenuItem key={tag} value={tag}>
+                                                <Checkbox checked={sortTag.indexOf(tag) > -1} />
+                                                <ListItemText primary={tag} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+
+                            <Grid item xs={12} sm={4}>
+                                <FormControl className={classes.formControl}>
+                                    <InputLabel htmlFor="select-multiple-checkbox">Filter</InputLabel>
+                                    <Select
+                                        fullWidth={true}
+
+                                        multiple
+                                        value={filterTag}
+                                        onChange={e => setFilterTag(e.target.value)}
+                                        input={<Input id="select-multiple-checkbox" />}
+                                        renderValue={selected => selected.join(', ')}
+                                    >
+                                        {filterTagOptions.map(tag => (
+                                            <MenuItem key={tag} value={tag}>
+                                                <Checkbox checked={filterTag.indexOf(tag) > -1} />
+                                                <ListItemText primary={tag} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12} sm={4} >
+                                <FormControl className={classes.formControl}>
+                                    <InputLabel htmlFor="select-multiple-checkbox">Sources</InputLabel>
+                                    <Select
+                                        fullWidth={true}
+                                        multiple
+                                        value={siteTag}
+                                        onChange={e => setSiteTag(e.target.value)}
+                                        input={<Input id="select-multiple-checkbox" />}
+                                        renderValue={selected => selected.join(', ')}
+                                    >
+                                        {siteOptions.map(tag => (
+                                            <MenuItem key={tag} value={tag}>
+                                                <Checkbox checked={siteTag.indexOf(tag) > -1} />
+                                                <ListItemText primary={tag} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </Grid>
                         </Grid>
-                    </CardActions>
+                        <Grid container alignItems="flex-end" justify="center">
+                            <Grid item xs={12}>
+                                <Button size="small" variant="contained"
+                                    color="primary"
+                                    //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
+                                    onClick={() => props.handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, props.user.postingsViewed, props.user.postingsSaved, props.user.postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, props.user.userId, false, updateCurrentFilters, props.postingsViewed)}
+                                >Sort</Button>
+                            </Grid>
+                        </Grid>
+                    </CardContent>
                 </Card>
-            </Grid>
+            </Grid >
             <Grid item xsm={12}>
                 <Card className={classes.card}>
                     {displayResults()}
@@ -419,9 +488,15 @@ function Search(props) {
                             <Grid item >
                                 <Button size="small" variant="contained"
                                     color="primary"
-                                //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
-                                onClick={()=>(sortTag.length === 0 && filterTag.length === 0 && siteTag.length === 0) ? props.showMore(props.search.searchResults, setSearchResults, props.user.userId, props.search.numberResults, setNumberResults) : props.handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, props.user.postingsViewed, props.user.postingsSaved, props.user.postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, props.user.userId, true, updateCurrentFilters)}
+                                    //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
+                                    onClick={() => (sortTag.length === 0 && filterTag.length === 0 && siteTag.length === 0) ? props.showMore(props.search.searchResults, setSearchResults, props.user.userId, props.search.numberResults, setNumberResults) : props.handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, props.user.postingsViewed, props.user.postingsSaved, props.user.postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, props.user.userId, true, updateCurrentFilters)}
                                 >Show more</Button></Grid>
+                            <Grid item >
+                                <Button size="small" variant="contained"
+                                    color="primary"
+                                    onClick={() => props.clearSearch(setSearchCity, setSearchState, setSearchJob, setSearchResults, setSortTag, setFilterTag, setSiteTag, setNumberResults, changeUserSearchInfo, updatePostingsViewed, updateCurrentFilters, searchJobs, updateNumberResults, props.postingsViewed)}
+                                >Clear Search</Button>
+                            </Grid>
                             <Grid item >
                                 <Button size="small" variant="contained"
                                     color="primary"
@@ -432,19 +507,20 @@ function Search(props) {
                     </CardActions>
                 </Card>
             </Grid>
-        </Grid>
+        </Grid >
     );
 }
 
 function mapDispatchToProps(dispatch) {
     const jobSearchMethods = {
-        searchJobs(searchCity, searchState, searchJob, setSearchResults, userId) {
+        searchJobs(searchCity, searchState, searchJob, setSearchResults, userId, postingsViewed) {
             setSearchResults([])
             let searchLocation = searchCity + ", " + searchState.toUpperCase()
             let data = {
                 userId: userId
             }
             axios.post("/v1/job/" + searchLocation + "/" + searchJob, data).then(res => {
+                console.log(res.data)
                 setSearchResults(res.data)
                 dispatch(searchJobs({
                     searchCity: searchCity,
@@ -467,7 +543,7 @@ function mapDispatchToProps(dispatch) {
                     }
                 ).then(resp => {
                     dispatch(updatePostingsViewed({
-                        postingsViewed: resp.data
+                        postingsViewed: (resp.data !== 0 || resp.data !== "" || resp.data !== []) ? resp.data : postingsViewed
                     }))
                 }).catch(err => { console.log(err) })
             }).catch(err => {
@@ -494,41 +570,45 @@ function mapDispatchToProps(dispatch) {
                 })
         },
 
-        saveJob(jobId, userId) {
+        saveJob(jobId, userId, setOpen, setOpen2) {
             console.log(userId)
             axios.post("/v1/saved/" + jobId + "/" + userId).then(res => {
                 console.log(res)
                 if (res.status === 200) {
-                    alert("Job saved!")
+                    // alert("Job saved!")
+                    setOpen(true)
+                    axios(
+                        // "/v1/user/updateSaved"
+                        {
+                            method: "put",
+                            url: "/v1/user/updateSaved",
+                            data: {
+                                added: true,
+                                userId: userId,
+                                jobId: jobId
+                            }
+                        }
+                    ).then(resp => {
+                        console.log("hit")
+                        dispatch(changeSavedUserStats({
+                            numberSaved: resp.data.numberSaved,
+                            savedChartData: resp.data.savedChartData,
+                            postingsSaved: resp.data.postingsSaved
+                        }))
+                        // console.log(resp)
+                    }).catch(err => { console.log(err) })
                 } else if (res.status === 202) {
                     alert("Job previously saved!")
+                    setOpen2(true)
+
                 }
             }).catch(err => {
                 console.log(err.status)
                 console.log("Error")
             })
-            axios(
-                // "/v1/user/updateSaved"
-                {
-                    method: "put",
-                    url: "/v1/user/updateSaved",
-                    data: {
-                        added: true,
-                        userId: userId,
-                        jobId: jobId
-                    }
-                }
-            ).then(resp => {
-                console.log("hit")
-                dispatch(changeSavedUserStats({
-                    numberSaved: resp.data.numberSaved,
-                    savedChartData: resp.data.savedChartData,
-                    postingsSaved: resp.data.postingsSaved
-                }))
-                // console.log(resp)
-            }).catch(err => { console.log(err) })
+
         },
-        showMore(searchResults, setSearchResults, userId, numberResults, setNumberResults, ) {
+        showMore(searchResults, setSearchResults, userId, numberResults, setNumberResults, postingsViewed) {
             console.log("wrong fn")
             console.log("these are the results", searchResults)
             let newResults = numberResults + 15
@@ -540,7 +620,7 @@ function mapDispatchToProps(dispatch) {
                 userId: userId
             }
             if (searchResults.length < newResults) {
-                axios.get("/v1/job/more/" + newResults, data).then(res => {
+                axios.patch("/v1/job/more/" + newResults, data).then(res => {
                     let newDataWoo = [...searchResults, ...res.data]
                     setSearchResults(newDataWoo)
                     dispatch(moreResults({
@@ -561,7 +641,7 @@ function mapDispatchToProps(dispatch) {
                         }
                     ).then(resp => {
                         dispatch(updatePostingsViewed({
-                            postingsViewed: resp.data
+                            postingsViewed: (resp.data !== 0 || resp.data !== "" || resp.data !== []) ? resp.data : postingsViewed
                         }))
                     }).catch(err => { console.log(err) })
                 }).catch(err => {
@@ -582,7 +662,7 @@ function mapDispatchToProps(dispatch) {
             // let numberResults = numberResults
             if (!(sortTag.length === 0 && filterTag.length === 0 && siteTag.length === 0)) {
                 if (!showMore) {
-            console.log("sort more1")
+                    console.log("sort more1")
 
                     numberResults = 15
                     dispatch(updateNumberResults({
@@ -591,7 +671,7 @@ function mapDispatchToProps(dispatch) {
                     setNumberResults(numberResults)
                 }
                 else {
-            console.log("sort more2")
+                    console.log("sort more2")
                     console.log(numberResults)
                     numberResults = numberResults + 15
                     console.log(numberResults)
@@ -602,9 +682,9 @@ function mapDispatchToProps(dispatch) {
                     setNumberResults(numberResults)
                 }
                 dispatch(updateCurrentFilters({
-                    sortTag : sortTag,
-                    filterTag : filterTag,
-                    siteTag : siteTag,
+                    sortTag: sortTag,
+                    filterTag: filterTag,
+                    siteTag: siteTag,
                 }))
                 setSortTag(sortTag)
                 setFilterTag(filterTag)
@@ -650,12 +730,36 @@ function mapDispatchToProps(dispatch) {
                         }
                     ).then(resp => {
                         dispatch(updatePostingsViewed({
-                            postingsViewed: resp.data
+                            postingsViewed: (resp.data !== 0 || resp.data !== "" || resp.data !== []) ? resp.data : postingsViewed
                         }))
                     }).catch(err => { console.log(err) })
                 })
             }
-        }
+        },
+        clearSearch(setSearchCity, setSearchState, setSearchJob, setSearchResults, setSortTag, setFilterTag, setSiteTag, setNumberResults, updateCurrentFilters, searchJobs, updateNumberResults) {
+            dispatch(updateCurrentFilters({
+                siteTag: [],
+                filterTag: [],
+                sortTag: []
+            }))
+            setSiteTag([])
+            setFilterTag([])
+            setSortTag([])
+            dispatch(searchJobs({
+                searchCity: "",
+                searchState: "",
+                searchJob: "",
+                searchResults: [],
+            }))
+            setSearchCity("")
+            setSearchState("")
+            setSearchJob("")
+            setSearchResults([])
+            dispatch(updateNumberResults({
+                numberResults: 15
+            }))
+            setNumberResults(15)
+        },
     }
     // console.log(jobSearchMethods)
     return jobSearchMethods

@@ -3,12 +3,12 @@ const db = require("../models");
 module.exports = {
 
     findAll: function (req, res) {
-        console.log("we hittin")
+        // console.log("we hittin")
 
         let userId = req.params.userId
         db.Saved.find({ "userId": userId })
             .then(dbModel => {
-                console.log(dbModel)
+                // console.log(dbModel)
                 res.send(dbModel)
             })
             .catch(e => e)
@@ -18,7 +18,7 @@ module.exports = {
         // console.log("we hittin")
         let idP = req.params.id
         let userId = req.params.userId
-        db.Saved.findOne({ "jobId": idP }).then(info => {
+        db.Saved.findOne({ "_id": userId }).then(info => {
             if (info === null) {
 
 
@@ -57,21 +57,21 @@ module.exports = {
     },
 
     update: function (req, res) {
-        console.log("this works")
+        // console.log("this works")
         let idP = req.params.id
         let userId = req.params.userId
         db.Saved.findOne({ "userId": userId, "jobId": idP })
             .then(resp => {
-                console.log(resp.hasApplied)
-                console.log(resp._id)
+                // console.log(resp.hasApplied)
+                // console.log(resp._id)
                 let newAppliedValue = true
                 if (resp.hasApplied == true) {
                     newAppliedValue = false
                 }
-                console.log(newAppliedValue)
+                // console.log(newAppliedValue)
                 db.Saved.updateOne({ _id: resp._id }, { hasApplied: newAppliedValue })
                     .then(resp => {
-                        console.log(resp)
+                        // console.log(resp)
                         if (resp.nModified > 0) {
                             if (newAppliedValue === false) {
                                 res.status(200).send("Successfully Unapplied")
@@ -92,7 +92,7 @@ module.exports = {
         let userId = req.params.userId
         db.Saved.deleteOne({ "jobId": idP, "userId": userId })
             .then(resp => {
-                console.log(resp)
+                // console.log(resp)
                 if (resp.n == 0) {
                     res.status(202).send("Could not find that saved job")
                 } else {
