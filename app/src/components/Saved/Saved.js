@@ -1,19 +1,19 @@
-import React, { useState, Component } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import store from "../../state";
+// import store from "../../state";
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
+// import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import { changeSavedUserStats, changeUserSearchInfo, changeAppliedUserStats } from "../../state/auth/actions";
-import { searchJobs, updateNumberResults } from "../../state/search/actions";
+import { changeSavedUserStats, changeAppliedUserStats } from "../../state/auth/actions";
+// import { searchJobs, updateNumberResults } from "../../state/search/actions";
 import { getSaved } from "../../state/saved/actions"
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -30,7 +30,7 @@ import Zip from "../../assets/img/zip.png"
 import StarIcon from '@material-ui/icons/Star';
 import { CardHeader } from "@material-ui/core";
 import Snackbar from '@material-ui/core/Snackbar';
-import { set } from "mongoose";
+// import { set } from "mongoose";
 
 
 const styles = {

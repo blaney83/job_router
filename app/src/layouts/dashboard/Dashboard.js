@@ -3,8 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import store from "../../state";
-import Paper from '@material-ui/core/Paper';
+// import store from "../../state";
+// import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import Sidebar from "../../components/Sidebar/Sidebar"
 import Main from "../../components/Main/Main"
