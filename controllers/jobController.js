@@ -8,17 +8,17 @@ module.exports = {
         let locationP = req.params.location
         let dataPromiseArr = [
             //cb at 3 pages works and returns 50
-            dataCalls.cbData.careerDataGet(searchP, locationP, 5),
+            dataCalls.cbData.careerDataGet(searchP, locationP, 7),
             //dice at 3 works and returns 60
-            dataCalls.diData.diceDataGet(searchP, locationP, 5),
+            dataCalls.diData.diceDataGet(searchP, locationP, 7),
             //glass at 3 works and returns 15, returns 15 at 4 too
-            dataCalls.glData.glassGetData(searchP, locationP, 5),
+            dataCalls.glData.glassGetData(searchP, locationP, 7),
             //indeed works at 3 and returns 32
-            dataCalls.inData.indeedGetData(searchP, locationP, 5),
+            dataCalls.inData.indeedGetData(searchP, locationP, 7),
             //usa currently returns 4 (with search in arizona) as long as its called with another source
             // dataCalls.usData.usaGetData(searchP, locationP, 5),
             //zip currently works at 3 and returns 42
-            dataCalls.ziData.zipGetData(searchP, locationP, 5)
+            dataCalls.ziData.zipGetData(searchP, locationP, 7)
         ]
         Promise.all(dataPromiseArr)
             .catch(err => {
@@ -33,17 +33,17 @@ module.exports = {
                     // let mySortingArray = filterCatch2.map((val) => val[0][0] === undefined ? val[0].jobSite : val[0][0].jobSite)
                     let dbMassiveArray = []
                     resp.map((val, i) => {
-                        if (val[0][0] !== undefined) {
+                        // if (val[0][0] !== undefined) {
                             val.map(val => val.map(val => {
                                 val.userId = req.body.userId
                                 dbMassiveArray.push(val)
                             }))
-                        } else {
-                            val.map(usaObj => {
-                                usaObj.userId = req.body.userId
-                                dbMassiveArray.push(usaObj)
-                            })
-                        }
+                        // } else {
+                        //     val.map(usaObj => {
+                        //         usaObj.userId = req.body.userId
+                        //         dbMassiveArray.push(usaObj)
+                        //     })
+                        // }
                     })
 
                     db.Job.deleteMany({ userId: req.body.userId }).then(info => {
