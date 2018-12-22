@@ -20,7 +20,7 @@ async function diceGetData(search, loc, numb) {
             if (carI == 1) {
                 builtURL = "https://www.dice.com/jobs?q=" + sP3 + "&l=" + lP31
             }
-            dicePromiseHolder[carI - 1] = axios(builtURL).catch(err => err)
+            dicePromiseHolder[carI - 1] = axios(builtURL).catch(err => console.log("di"))
         }
         let darnArray = []
         await Promise.all(dicePromiseHolder)

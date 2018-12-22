@@ -72,27 +72,30 @@ async function glassGetData(search, loc, numb) {
         let glassPromiseHolder = []
         for (var carI = 1; carI < numb; carI++) {
             let builtURL = "https://www.glassdoor.com/Job/" + lP2 + "-" + sP2 + "-jobs-SRCH_IL.0,7_IC11" + locCode + "_" + searCode + "_IP" + carI + ".htm"
-            glassPromiseHolder[carI - 1] = axios(builtURL).catch(err=>console.log("err"))
+            glassPromiseHolder[carI - 1] = axios(builtURL).catch(err => console.log("gl"))
         }
         let glassDataArray = []
         await Promise.all(glassPromiseHolder)
-        .catch(err=>glassPromiseHolder)
-        .then(unfilteredResp => {
-            let respArr = unfilteredResp.filter(data=>data!==undefined)
-            let parseDataPromiseArr = []
-            respArr.forEach((val, i) => {
-                parseDataPromiseArr[i] = new Promise (function(resolve, reject){
-                    resolve(glassUpSomeData(val))
+            .catch(err => glassPromiseHolder)
+            .then(unfilteredResp => {
+                let respArr = unfilteredResp.filter(data => data !== undefined)
+                let parseDataPromiseArr = []
+                respArr.forEach((val, i) => {
+                    parseDataPromiseArr[i] = new Promise(function (resolve, reject) {
+                        resolve(glassUpSomeData(val))
+                    })
+                })
+                Promise.all(parseDataPromiseArr).then(resp => {
+                    resp.map(val => {
+                        //broken promises are currently returning [] may need to make this more comprehensive in the future
+                        if(val.length !== 0){
+                            glassDataArray.push(val)
+                        }
+                    })
                 })
             })
-            Promise.all(parseDataPromiseArr).then(resp=>{
-                resp.map(val=>{
-                    glassDataArray.push(val)
-                })
-            })
-        })
-        return(glassDataArray)
-    } catch{ e => e}
+        return (glassDataArray)
+    } catch{ e => e }
 }
 
 function glassUpSomeData(resp) {
@@ -109,7 +112,7 @@ function glassUpSomeData(resp) {
             jobSite: "GlassDoor",
             jobId: jobArr[1],
             empId: jobArr[3],
-            easyApply: (jobArr[13]=== "true"?true:false),
+            easyApply: (jobArr[13] === "true" ? true : false),
             jobField: jobArr[15],
             jobLocation: jobArr[17],
             companyImage: jobArr[43],
@@ -156,7 +159,7 @@ function glassUpSomeData(resp) {
             jobObj.employerId = jobArr[109];
             jobObj.jobReqId = jobArr[103];
             jobObj.jobDescription = jobArr[112];
-        }else{
+        } else {
             jobObj.salaryRange = null;
             jobObj.minSalary = null;
             jobObj.medSalary = null;
@@ -164,23 +167,23 @@ function glassUpSomeData(resp) {
             jobObj.jobCompany = jobArr[53];
             jobObj.positionTitle = jobArr[78];
         }
-        if(jobObj.jobCompany != null && jobObj.jobCompany.includes(" Logo")){
+        if (jobObj.jobCompany != null && jobObj.jobCompany.includes(" Logo")) {
             let cutComp = jobObj.jobCompany.split(" Logo")
             jobObj.jobCompany = cutComp[0]
         }
-        if(jobObj.jobCompany != null && jobObj.jobCompany.includes("&amp;")){
+        if (jobObj.jobCompany != null && jobObj.jobCompany.includes("&amp;")) {
             jobObj.jobCompany = jobObj.jobCompany.replace("&amp;", "&")
         }
-        if(jobObj.salaryRange != null){
+        if (jobObj.salaryRange != null) {
             jobObj.salaryRange = handleBadData(jobObj.salaryRange)
         }
-        if(jobObj.jobRating != null){
+        if (jobObj.jobRating != null) {
             jobObj.jobRating = handleBadData(jobObj.jobRating)
         }
-        if(jobObj.positionTitle != null){
+        if (jobObj.positionTitle != null) {
             jobObj.positionTitle = handleBadData(jobObj.positionTitle)
         }
-        if(jobObj.jobDescription === undefined){
+        if (jobObj.jobDescription === undefined) {
             jobObj.jobDescription = "Hey there! We are sorry that we don't have a description for this GlassDoor posting. We are currently working with them to make their API more accessible. To see more information, use the link to check out this post on their site! Thanks!"
         }
         glassObjHolder.push(jobObj)

@@ -16,24 +16,27 @@ async function indeedGetData(search, loc, numb) {
         let urlHolder = []
         for (var carI = 1; carI < numb; carI++) {
             let builtURL = "https://www.indeed.com/jobs?q=" + sP3 + "&l=" + lP3 + "&start=" + (carI - 1) + "0"
-            indeedPromiseHolder[carI - 1] = axios(builtURL)
+            indeedPromiseHolder[carI - 1] = axios(builtURL).catch(err => console.log("in"))
             urlHolder[carI - 1] = builtURL
         }
         let indeedDataArray = []
-        await Promise.all(indeedPromiseHolder).then(resp => {
-            let dataPromiseHolder = []
-            resp.forEach((val, i) => {
-                dataPromiseHolder[i] = new Promise(function (resolve, reject) {
-                    resolve(indeedSomeData(val, urlHolder[i]))
+        await Promise.all(indeedPromiseHolder)
+            .catch(err => indeedPromiseHolder)
+            .then(respUnfiltered => {
+                let resp = respUnfiltered.filter(data => data !== undefined)
+                let dataPromiseHolder = []
+                resp.forEach((val, i) => {
+                    dataPromiseHolder[i] = new Promise(function (resolve, reject) {
+                        resolve(indeedSomeData(val, urlHolder[i]))
+                    })
+                })
+                Promise.all(dataPromiseHolder).then(resp => {
+                    resp.map(val => {
+                        indeedDataArray.push(val)
+                    })
                 })
             })
-            Promise.all(dataPromiseHolder).then(resp => {
-                resp.map(val=>{
-                    indeedDataArray.push(val)
-                })
-            })
-        })
-        return(indeedDataArray)
+        return (indeedDataArray)
     } catch{ e => e }
 }
 
@@ -71,11 +74,13 @@ function indeedSomeData(resp, builtURL) {
             secPosArr = [regEx(booNahNah[0])]
         } else {
             let zyt = posArr[0].split('title="')
-            let xtw = zyt[2].split('"\n')
-            let garbArb = xtw[0].split('/salaries/')
-            if (garbArb.length > 1) {
-                let secGarbArb = garbArb[1].split("-Salaries")
-                secPosArr = [regEx(secGarbArb[0])]
+            if (zyt.length > 2) {
+                let xtw = zyt[2].split('"\n')
+                let garbArb = xtw[0].split('/salaries/')
+                if (garbArb.length > 1) {
+                    let secGarbArb = garbArb[1].split("-Salaries")
+                    secPosArr = [regEx(secGarbArb[0])]
+                }
             }
         }
         let descArr = jobArr.split('summary>\n')
@@ -110,7 +115,7 @@ function indeedSomeData(resp, builtURL) {
         }
         finishedDataArray.push(jobObj)
     })
-    return(finishedDataArray)
+    return (finishedDataArray)
 }
 
 function regEx(str) {

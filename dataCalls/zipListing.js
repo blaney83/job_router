@@ -12,10 +12,13 @@ async function zipGetData(search, loc, numb) {
         let zipPromiseHolder = []
         for (var carI = 1; carI < numb; carI++) {
             let builtURL = "https://www.ziprecruiter.com/candidate/search?search=" + sP2 + "&location=" + lP3 + "&page=" + carI + "&radius=25"
-            zipPromiseHolder[carI - 1] = axios(builtURL)
+            zipPromiseHolder[carI - 1] = axios(builtURL).catch(err=>console.log("zip"))
         }
         let zipDataArray = []
-        await Promise.all(zipPromiseHolder).then(resp => {
+        await Promise.all(zipPromiseHolder)
+        .catch(err=>zipPromiseHolder)
+        .then(resp1 => {
+            let resp = resp1.filter(data=>data!==undefined)
             resp.map(val => {
                 zipDataArray.push(zipSomeData(val))
             })
