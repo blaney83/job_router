@@ -25,6 +25,8 @@ const db = require("./config/connection");
 db(process.env.MONGODB_URI || "mongodb://localhost/test");
 
 // Start the API server
-app.listen(PORT, function () {
+const server = app.listen(PORT, function () {
     console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
 });
+
+server.timeout = 90000
