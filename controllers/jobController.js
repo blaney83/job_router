@@ -8,17 +8,17 @@ module.exports = {
         let locationP = req.params.location
         let dataPromiseArr = [
             //cb at 3 pages works and returns 50
-            dataCalls.cbData.careerDataGet(searchP, locationP, 10),
+            dataCalls.cbData.careerDataGet(searchP, locationP, 7),
             //dice at 3 works and returns 60
-            dataCalls.diData.diceDataGet(searchP, locationP, 10),
+            dataCalls.diData.diceDataGet(searchP, locationP, 7),
             //glass at 3 works and returns 15, returns 15 at 4 too
-            dataCalls.glData.glassGetData(searchP, locationP, 10),
+            dataCalls.glData.glassGetData(searchP, locationP, 7),
             //indeed works at 3 and returns 32
-            dataCalls.inData.indeedGetData(searchP, locationP, 10),
+            dataCalls.inData.indeedGetData(searchP, locationP, 7),
             //usa currently returns 4 (with search in arizona) as long as its called with another source
             // dataCalls.usData.usaGetData(searchP, locationP, 5),
             //zip currently works at 3 and returns 42
-            dataCalls.ziData.zipGetData(searchP, locationP, 10)
+            dataCalls.ziData.zipGetData(searchP, locationP, 7)
         ]
         Promise.all(dataPromiseArr)
             .catch(err => {
