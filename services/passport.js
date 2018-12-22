@@ -30,7 +30,6 @@ const localLogin = new LocalStrategy(localOptions, function (
                 if (!isMatch) {
                     return done(null, false);
                 }
-
                 // Call done with correct email and password
                 return done(null, user);
             });

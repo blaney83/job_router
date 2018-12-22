@@ -37,8 +37,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import Snackbar from '@material-ui/core/Snackbar';
-// import IconButton from '@material-ui/core/IconButton';
-// import CloseIcon from '@material-ui/icons/Close';
 
 const styles = {
     card: {
@@ -87,16 +85,8 @@ const styles = {
         fontSize: ".9rem"
     },
     PositionName: {
-        // color: "#c84a03 !important",
-        // fontWeight: "bolder !important",
         fontSize: "1rem"
     }
-    // BadAlert:{
-    //     "background-color" : "#f44336"
-    // },
-    // GoodAlert:{
-    //     "background-color" : "#909090"
-    // }
 };
 
 const theme = createMuiTheme({
@@ -124,12 +114,6 @@ function Search(props) {
     const [siteTag, setSiteTag] = useState(props.user.siteTag);
     const [numberResults, setNumberResults] = useState(props.search.numberResults);
 
-    // const [sortTag, setSortTag] = useState([]);
-    // const [filterTag, setFilterTag] = useState([]);
-    // const [siteTag, setSiteTag] = useState([]);
-    // const [searchResults, setSearchResults] = useState([]);
-    console.log(props)
-    // console.log(this.state)
     function chooseIcon(obj) {
         switch (true) {
             case (obj.jobSite === "CareerBuilder"):
@@ -150,17 +134,12 @@ function Search(props) {
     }
 
     function displayResults() {
-        console.log(props)
-        console.log(props.search.searchResults.length)
         switch (true) {
             case (props.search.searchResults.length === 0):
-                console.log("pre")
                 return (<PreSearch props={props} />)
             case (props.search.searchResults.length === 1):
-                console.log("fired")
                 return (<BadSearch props={props} />)
             case (props.search.searchResults.length > 10):
-                console.log("fired")
                 return (
                     <List>
                         {
@@ -177,7 +156,6 @@ function Search(props) {
                                                         </ListItemAvatar>
                                                     </Grid>
                                                         <Grid item xs={10} className={classes.specialBox}>
-                             
                                                         <Typography variant="body1"><span className={classes.PositionName}>{obj.positionTitle + "   " + obj.jobLocation}</span> <br></br> <span className={classes.CompanyName}>{obj.jobCompany}</span></Typography>
                                                             <ListItemText
                                                                 secondary={obj.jobDescription}
@@ -193,7 +171,6 @@ function Search(props) {
                                                             </Grid>
                                                                 <Grid item xs={12}>
                                                                     <ListItemText
-                                                                        // inset={true}
                                                                         secondary={obj.jobRating ? <Typography variant="body1" className={classes.goodResult}>{obj.jobRating}<StarIcon fontSize="small"></StarIcon></Typography> : <Typography></Typography>}
                                                                     />
                                                                 </Grid>
@@ -209,11 +186,8 @@ function Search(props) {
                                                                     color="primary"
                                                                     id={obj.jobId}
                                                                     fullWidth={true}
-
                                                                     href={obj.jobLink}
                                                                     target="_blank"
-                                                                // replace the long string below with props.auth.user.userId
-                                                                // onClick={(e) => props.saveJob(e.target.id, "5c148efcb2d70e3ae0325019")}
                                                                 >Visit Site
                                                     <Avatar alt={obj.jobSite} src={chooseIcon(obj)} />
                                                                 </Button>
@@ -221,12 +195,10 @@ function Search(props) {
                                                                     color="secondary"
                                                                     fullWidth={true}
                                                                     id={obj.jobId}
-                                                                    // replace the long string below with props.auth.user.userId
                                                                     onClick={(e) => props.saveJob(e.target.id, props.user.userId, setOpen, setOpen2)}
                                                                 >Save</Button>
                                                                 <Snackbar
                                                                 className={classes.GoodAlert}
-
                                                                     anchorOrigin={{
                                                                         vertical: 'top',
                                                                         horizontal: 'center',
@@ -254,20 +226,20 @@ function Search(props) {
                                                                         'aria-describedby': 'message-id',
                                                                     }}
                                                                     message={<span id="message-id">Job already Saved!</span>}
-                                                                    
                                                                 />
                                                             </Grid></Grid>
                                                     </Grid></Grid>
                                             </ListItem>
                                         </Paper>
                                     )
+                                }else{
+                                    //something if number results is less than i
                                 }
                             })
                         }
                     </List>
                 )
             default:
-                // props.history.push("/dashboard/home")
                 return
         }
     }
@@ -330,7 +302,6 @@ function Search(props) {
                                 <Select
                                     value={searchState}
                                     fullWidth={true}
-
                                     onChange={(e) => setSearchState(e.target.value)}
                                     inputProps={{
                                         name: 'age',
@@ -397,7 +368,6 @@ function Search(props) {
                             <Grid item xs={12}>
                                 <Button size="small" variant="contained"
                                     color="primary"
-                                    //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
                                     onClick={() => props.searchJobs(searchCity, searchState, searchJob, setSearchResults, props.user.userId)}
                                 >Search</Button>
                             </Grid>
@@ -425,13 +395,11 @@ function Search(props) {
                                     </Select>
                                 </FormControl>
                             </Grid>
-
                             <Grid item xs={12} sm={4}>
                                 <FormControl className={classes.formControl}>
                                     <InputLabel htmlFor="select-multiple-checkbox">Filter</InputLabel>
                                     <Select
                                         fullWidth={true}
-
                                         multiple
                                         value={filterTag}
                                         onChange={e => setFilterTag(e.target.value)}
@@ -472,7 +440,6 @@ function Search(props) {
                             <Grid item xs={12}>
                                 <Button size="small" variant="contained"
                                     color="primary"
-                                    //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
                                     onClick={() => props.handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, props.user.postingsViewed, props.user.postingsSaved, props.user.postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, props.user.userId, false, updateCurrentFilters, props.postingsViewed)}
                                 >Sort</Button>
                             </Grid>
@@ -488,7 +455,6 @@ function Search(props) {
                             <Grid item >
                                 <Button size="small" variant="contained"
                                     color="primary"
-                                    //nnnnnnnnnnnnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedddddddddddddd to swap out this user id for props.user.userId
                                     onClick={() => (sortTag.length === 0 && filterTag.length === 0 && siteTag.length === 0) ? props.showMore(props.search.searchResults, setSearchResults, props.user.userId, props.search.numberResults, setNumberResults) : props.handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, props.user.postingsViewed, props.user.postingsSaved, props.user.postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, props.user.userId, true, updateCurrentFilters)}
                                 >Show more</Button></Grid>
                             <Grid item >
@@ -520,7 +486,6 @@ function mapDispatchToProps(dispatch) {
                 userId: userId
             }
             axios.post("/v1/job/" + searchLocation + "/" + searchJob, data).then(res => {
-                console.log(res.data)
                 setSearchResults(res.data)
                 dispatch(searchJobs({
                     searchCity: searchCity,
@@ -561,21 +526,16 @@ function mapDispatchToProps(dispatch) {
                         userId: userId
                     }
                 }).then(resp => {
-                    console.log("searched the search")
                     dispatch(changeUserSearchInfo({
                         recentSearches: resp.data.recentSearches,
                         totalSearches: resp.data.totalSearches,
                     }))
-                    // console.log(resp)
                 })
         },
 
         saveJob(jobId, userId, setOpen, setOpen2) {
-            console.log(userId)
             axios.post("/v1/saved/" + jobId + "/" + userId).then(res => {
-                console.log(res)
                 if (res.status === 200) {
-                    // alert("Job saved!")
                     setOpen(true)
                     axios(
                         // "/v1/user/updateSaved"
@@ -589,28 +549,22 @@ function mapDispatchToProps(dispatch) {
                             }
                         }
                     ).then(resp => {
-                        console.log("hit")
                         dispatch(changeSavedUserStats({
                             numberSaved: resp.data.numberSaved,
                             savedChartData: resp.data.savedChartData,
                             postingsSaved: resp.data.postingsSaved
                         }))
-                        // console.log(resp)
                     }).catch(err => { console.log(err) })
                 } else if (res.status === 202) {
                     alert("Job previously saved!")
                     setOpen2(true)
-
                 }
             }).catch(err => {
-                console.log(err.status)
                 console.log("Error")
             })
 
         },
         showMore(searchResults, setSearchResults, userId, numberResults, setNumberResults, postingsViewed) {
-            console.log("wrong fn")
-            console.log("these are the results", searchResults)
             let newResults = numberResults + 15
             dispatch(updateNumberResults({
                 numberResults: newResults
@@ -657,13 +611,8 @@ function mapDispatchToProps(dispatch) {
             setNumberResults(newResults)
         },
         handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, postingsViewed, postingsSaved, postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, userId, showMore, updateCurrentFilters) {
-            console.log("sort more")
-            console.log(showMore)
-            // let numberResults = numberResults
             if (!(sortTag.length === 0 && filterTag.length === 0 && siteTag.length === 0)) {
                 if (!showMore) {
-                    console.log("sort more1")
-
                     numberResults = 15
                     dispatch(updateNumberResults({
                         numberResults: numberResults
@@ -671,11 +620,7 @@ function mapDispatchToProps(dispatch) {
                     setNumberResults(numberResults)
                 }
                 else {
-                    console.log("sort more2")
-                    console.log(numberResults)
                     numberResults = numberResults + 15
-                    console.log(numberResults)
-
                     dispatch(updateNumberResults({
                         numberResults: numberResults
                     }))
@@ -700,9 +645,7 @@ function mapDispatchToProps(dispatch) {
                     postingsSaved: postingsSaved,
                     userId: userId
                 }
-                console.log("this")
                 axios.patch("/v1/job/sort/" + numberResults, data).then(resp => {
-                    console.log(resp)
                     if (showMore && numberResults > 20) {
                         let newDataWoo = [...searchResults, ...resp.data]
                         setSearchResults(newDataWoo)
@@ -761,7 +704,6 @@ function mapDispatchToProps(dispatch) {
             setNumberResults(15)
         },
     }
-    // console.log(jobSearchMethods)
     return jobSearchMethods
 }
 

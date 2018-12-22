@@ -19,7 +19,6 @@ async function diceGetData(search, loc, numb) {
             let builtURL = "https://www.dice.com/jobs/q-" + sP2 + "-" + lP3 + "-radius-30-startPage-" + carI + "-jobs"
             if (carI == 1) {
                 builtURL = "https://www.dice.com/jobs?q=" + sP3 + "&l=" + lP31
-                // builtURL = "https://www.dice.com/jobs/q-" + sP2 + "-" + lP3 + "-radius-30-startPage-jobs"
             }
             dicePromiseHolder[carI - 1] = axios(builtURL).catch(err => err)
         }
@@ -36,8 +35,6 @@ async function diceGetData(search, loc, numb) {
         return (darnArray)
     } catch{ e => e }
 }
-
-
 //then
 function diceUpSomeData(resp) {
     let begArr = resp.data.split('<div id="serp">')
@@ -102,10 +99,7 @@ function diceRegEx(str) {
 }
 
 module.exports = {
-    // diceFunction: diceFunction,
     diceDataGet: diceGetData,
     diceRegEx: diceRegEx,
     diceUpSomeData: diceUpSomeData
 }
-//example call
-// diceGetData("Software Engineer", "Phoenix, AZ", 5)

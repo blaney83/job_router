@@ -23,7 +23,6 @@ const styles = () => ({
 })
 
 function SignUp(props) {
-    console.log(props.router.history)
     const { classes } = props;
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -45,7 +44,6 @@ function SignUp(props) {
             />
             <CardContent>
                 <TextField
-                    // id="standard-with-placeholder"
                     label="Email"
                     placeholder="example@example.com"
                     className={classes.textField}
@@ -57,7 +55,6 @@ function SignUp(props) {
                     onChange={(e) => setEmail(e.target.value)}
                 />
                 <TextField
-                    // id="standard-with-placeholder"
                     label="Password"
                     placeholder="Secret123!@#"
                     className={classes.textField}
@@ -68,7 +65,6 @@ function SignUp(props) {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <TextField
-                    // id="standard-with-placeholder"
                     label="Username"
                     placeholder="JohnDoe123"
                     className={classes.textField}
@@ -77,7 +73,6 @@ function SignUp(props) {
                     onChange={(e) => setUsername(e.target.value)}
                 />
                 <TextField
-                    // id="standard-with-placeholder"
                     label="First Name"
                     placeholder="John"
                     className={classes.textField}
@@ -86,7 +81,6 @@ function SignUp(props) {
                     onChange={(e) => setFirstName(e.target.value)}
                 />
                 <TextField
-                    // id="standard-with-placeholder"
                     label="Last Name"
                     placeholder="Doe"
                     className={classes.textField}
@@ -95,7 +89,6 @@ function SignUp(props) {
                     onChange={(e) => setLastName(e.target.value)}
                 />
                 <TextField
-                    // id="standard-with-placeholder"
                     label="City"
                     placeholder="Phoenix"
                     className={classes.textField}
@@ -177,7 +170,6 @@ function SignUp(props) {
                             Create Account
                         </Button>
                     </Grid>
-                    <Grid item >or</Grid>
                     <Grid item >
                         <Link to="/">
                             <Button variant="contained">Sign In</Button>
@@ -197,7 +189,6 @@ function mapDispatchToProps(dispatch) {
     return {
         signup(email, password, username, firstName, lastName, userCity, userStateCode, reroute) {
             axios.post("/v1/auth/signup", { email, password, username, firstName, lastName, userCity, userStateCode }).then(res => {
-                console.log(res.data)
                 dispatch(updateAuth({
                     token: res.data.token,
                     username: res.data.username,
@@ -222,7 +213,6 @@ function mapDispatchToProps(dispatch) {
                 reroute.push("/dashboard")
             }).catch(err => {
                 alert("Please complete all of the inputs before creating your account")
-                console.error(err);
             })
         }
     }

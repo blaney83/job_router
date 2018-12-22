@@ -29,7 +29,6 @@ const defaultState = {
 
 const authReducer = handleActions({
     [updateAuth]: (state, action) => {
-        console.log(action)
         return {
             ...state,
             authenticated: true,

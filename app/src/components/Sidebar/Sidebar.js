@@ -13,11 +13,8 @@ import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-// import Grid from '@material-ui/core/Grid';
 import { updateAuth } from "../../state/auth/actions";
 import { persistor } from "../../state"
-
-// import { purgeStoredState } from 'redux-persist'
 import { connect } from "react-redux";
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -36,7 +33,6 @@ import JobRouter from "../../assets/img/JobRouterWhite.png"
 import { searchJobs, updateNumberResults } from "../../state/search/actions";
 import { getSaved } from "../../state/saved/actions"
 import "./style.css"
-// import JobRouter from "../../assets/img/JobRouter"
 
 const drawerWidth = 240;
 
@@ -187,9 +183,7 @@ class Sidebar extends React.Component {
     };
 
     render() {
-        console.log(this.props)
         const { classes, theme } = this.props;
-
         return (
             <div className={classes.root}>
                 <CssBaseline />
@@ -275,7 +269,6 @@ class Sidebar extends React.Component {
                         </List>
                     </Drawer>
                 </Hidden>
-
                 {/* rest of code */}
             </div>
         );
@@ -286,7 +279,6 @@ function mapDispatchToProps(dispatch) {
     return {
         signout(persistor) {
             persistor.purge()
-            // dispatch(purgeStoredStat)
             dispatch(updateAuth({
                 authenticated: false,
                 token: "",

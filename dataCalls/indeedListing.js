@@ -16,14 +16,11 @@ async function indeedGetData(search, loc, numb) {
         let urlHolder = []
         for (var carI = 1; carI < numb; carI++) {
             let builtURL = "https://www.indeed.com/jobs?q=" + sP3 + "&l=" + lP3 + "&start=" + (carI - 1) + "0"
-            // console.log(builtURL)
             indeedPromiseHolder[carI - 1] = axios(builtURL)
             urlHolder[carI - 1] = builtURL
         }
-        // console.log(indeedPromiseHolder)
         let indeedDataArray = []
         await Promise.all(indeedPromiseHolder).then(resp => {
-            // console.log("resolved")
             let dataPromiseHolder = []
             resp.forEach((val, i) => {
                 dataPromiseHolder[i] = new Promise(function (resolve, reject) {
@@ -31,8 +28,6 @@ async function indeedGetData(search, loc, numb) {
                 })
             })
             Promise.all(dataPromiseHolder).then(resp => {
-                // console.log(resp.length)
-                // console.log(resp[0].length)
                 resp.map(val=>{
                     indeedDataArray.push(val)
                 })
@@ -43,14 +38,12 @@ async function indeedGetData(search, loc, numb) {
 }
 
 function indeedSomeData(resp, builtURL) {
-    // console.log("resolved")
     let secArr = resp.data.split('<td id="resultsCol">')
     let firArr = secArr[1].split('<div class="result-link-bar-container">')
     let myInd = firArr.length - 1
     firArr.splice(myInd, 1)
     let finishedDataArray = []
     firArr.map((jobArr, i) => {
-        // console.log(jobArr.length)
         let ageArr = jobArr.split('JobAge\'] = "')
         let secAgeArr = [null]
         if (ageArr.length > 1) {
@@ -115,7 +108,6 @@ function indeedSomeData(resp, builtURL) {
             salaryRange: secSalArr[0],
             jobDescription: secDescArr[0]
         }
-        // console.log(jobObj)
         finishedDataArray.push(jobObj)
     })
     return(finishedDataArray)
@@ -133,9 +125,6 @@ function regEx(str) {
     let s8 = s7.replace(/\'/g, "'")
     return (s8)
 }
-
-//example call
-// indeedGetData("software engineer", "phoenix, az", 4)
 
 module.exports = {
     indeedGetData: indeedGetData,

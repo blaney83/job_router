@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
-import axios from "axios";
-import { updateAuth } from "../../state/auth/actions";
+import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -21,7 +19,6 @@ const styles = () => ({
 })
 
 function Account(props) {
-    console.log(props)
     const { classes } = props;
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
@@ -35,7 +32,6 @@ function Account(props) {
         <Card className={classes.card}>
             <CardHeader
                 title="Update Your Account"
-            // subheader="If you already have an account, choose the sign in option below"
             />
             <CardContent>
                 {/* <TextField
@@ -59,7 +55,6 @@ function Account(props) {
                     onChange={(e) => setPassword(e.target.value)}
                 /> */}
                 <TextField
-                    // id="standard-with-placeholder"
                     label="Username"
                     placeholder="JohnDoe123"
                     className={classes.textField}
@@ -68,7 +63,6 @@ function Account(props) {
                     onChange={(e) => setUsername(e.target.value)}
                 />
                 <TextField
-                    // id="standard-with-placeholder"
                     label="First Name"
                     placeholder="John"
                     className={classes.textField}
@@ -77,7 +71,6 @@ function Account(props) {
                     onChange={(e) => setFirstName(e.target.value)}
                 />
                 <TextField
-                    // id="standard-with-placeholder"
                     label="Last Name"
                     placeholder="Doe"
                     className={classes.textField}
@@ -86,7 +79,6 @@ function Account(props) {
                     onChange={(e) => setLastName(e.target.value)}
                 />
                 <TextField
-                    // id="standard-with-placeholder"
                     label="City"
                     placeholder="Phoenix"
                     className={classes.textField}

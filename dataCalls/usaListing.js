@@ -7,7 +7,6 @@ function useGetData(search, loc, numb) {
     let sP4 = sP3.map(strArr => strArr.join(""))
     let sP5 = sP4.join("%20")
     let lP1 = loc.split(", ")
-    // console.log(lP1)
     let lP2 = lP1[0].split(" ")
     let lP25 = lP2.map(str=>str.split())
     let lP3 = lP25.map(strArr=>strArr.map((letter, ind)=> ind ==0 ? letter.toUpperCase(): letter))
@@ -15,7 +14,6 @@ function useGetData(search, loc, numb) {
     let lP5 = lP4.join("%20")
     let lP6 = lP1[1].toUpperCase()
     let lP7 = lP5 + ",%20" + lP6
-
     let reqSettings = {
         "async": true,
         "crossDomain": true,
@@ -28,15 +26,12 @@ function useGetData(search, loc, numb) {
             "cache-control": "no-cache",
             "Postman-Token": "39643141-d8d9-4444-af02-1f6a799409a6",
         },
-        // "data": "{\n\t\"media_name\": \"hello world\",\n\t\"creator\" : \"creator\",\n\t\"theory\" : \"We are all worthy of happiness.\"\n}"
     }
 
 
     let usaDataHolder = []
     let myData = axios(reqSettings).then(resp => {
         let jobsArr = resp.data.SearchResult.SearchResultItems
-        // console.log(resp.data)
-        // console.log(jobsArr.length)
         let newArr = jobsArr.map((val, i) => {
             let jobObj = {
                 jobSite: "USA Jobs",
@@ -54,20 +49,13 @@ function useGetData(search, loc, numb) {
                 positionTitle: val.MatchedObjectDescriptor.PositionTitle,
                 jobDescription: val.MatchedObjectDescriptor.QualificationSummary.substring(0, 160)
             }
-            // console.log(jobObj)
             usaDataHolder.push(jobObj)
             return(jobObj)
         })
-        // console.log(usaDataHolder)
-        // return (usaDataHolder)
         return(newArr)
     })
-    // console.log(myData)
-    // return([usaDataHolder])
     return(myData)
 }
-//example call
-// useGetData("software engineer", "Phoenix, az", 0)
 
 module.exports = {
     usaGetData: useGetData

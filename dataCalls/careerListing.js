@@ -20,7 +20,6 @@ async function careerDataGet(search, loc, numb) {
             let builtURL = "https://www.careerbuilder.com/jobs-" + searchParams + "-in-" + locationParams + "?page_number=" + carI;
             careerPromiseHolder[carI-1] = axios(builtURL)
         }
-        // console.log(careerPromiseHolder)
         let careerDataArray = []
         await Promise.all(careerPromiseHolder).then(respArr => {
             respArr.map(info=>{
@@ -81,7 +80,6 @@ function funkUpSomeData(resp) {
             salaryRange: null,
             jobDescription: regEx(thirDescSplit[0])
         }
-        // console.log(i)
         dataHolder.push(jobObj)
     })
     return(dataHolder)
@@ -106,6 +104,3 @@ module.exports = {
     regEx: regEx,
     funkUpSomeData: funkUpSomeData
 }
-
-//example call
-// careerDataGet("software engineering", "Phoenix AZ", 5)

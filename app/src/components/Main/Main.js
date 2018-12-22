@@ -8,19 +8,14 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-// import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
-// import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import ChartistGraph from "react-chartist";
 import CardHeader from '@material-ui/core/CardHeader';
-// import Button from '@material-ui/core/Button';
-// import Slide from '@material-ui/core/Slide';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import JobRouter from "../../assets/img/JobRouter.ico"
 import ArrowForward from '@material-ui/icons/ArrowForward';
-
 import {
     firstChart,
 } from "../Chart/Chart.js";
@@ -41,13 +36,10 @@ const styles = {
     },
     specialContent: {
         "padding-top": "0 !important",
-        // "padding-bottom": "0 !important",
     },
 }
 
 function Main(props) {
-    // let state = store.getState()
-    console.log(props)
     const { classes } = props;
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
@@ -56,7 +48,6 @@ function Main(props) {
         <div>
             <Grid container spacing={16}>
                 <Grid item xs={12}>
-                    {/* <Slide direction="up" mountOnEnter unmountOnExit> */}
                     <Card>
                         <CardHeader
                             avatar={
@@ -70,14 +61,12 @@ function Main(props) {
                             Welcome home! This is the command center for you and your Job Search! Track your progress to keep up the pressure and land your dream job. If you have any suggestions for useful information that would help your on your journey, send us your idea in the contact us section. Happy Hunting!
                 </CardContent>
                     </Card>
-                    {/* </Slide> */}
                 </Grid></Grid>
             <Grid container spacing={16}>
                 <Grid item xs={12} sm={4}>
                     <Card className={classes.card} color="success">
                         <CardHeader title="Searches" />
                         <CardContent>
-                            {/* <Typography variant="h4" >Number of Searches</Typography> */}
                             <Typography variant="h3" >{props.user.totalSearches}</Typography>
                         </CardContent>
                     </Card>
@@ -85,9 +74,7 @@ function Main(props) {
                 <Grid item xs={12} sm={4}>
                     <Card className={classes.card}>
                         <CardHeader title="Applied / Saved" />
-
                         <CardContent className={classes.specialContent}>
-                            {/* <Typography variant="h4" >Number of Saved Jobs</Typography> */}
                             <Typography variant="h3" >{props.user.numberApplied} / {props.user.numberSaved}</Typography>
                         </CardContent>
                     </Card>
@@ -95,9 +82,7 @@ function Main(props) {
                 <Grid item xs={12} sm={4}>
                     <Card className={classes.card}>
                         <CardHeader title="Total Viewed" />
-
                         <CardContent>
-                            {/* <Typography variant="h4" >Number of Applied Jobs</Typography> */}
                             <Typography variant="h3" >{props.user.postingsViewed.length}</Typography>
                         </CardContent>
                     </Card>
@@ -107,8 +92,6 @@ function Main(props) {
                 <Grid item xs={12} sm={6}>
                     <Card className={classes.card}>
                         <CardHeader title="This Week's Activity" />
-                        {/* <CardContent> */}
-
                         <ChartistGraph
                             className="ct-chart"
                             data={firstChart.data}
@@ -121,33 +104,24 @@ function Main(props) {
                         <CardContent className={classes.specialContent}>
                             <Typography variant="body1" align="center">
                                 <span className={classes.redText}>
-                                    Red: 
+                                    Red:
                                 </span>
-                                 Number of Saved Jobs<br />
+                                Number of Saved Jobs<br />
                                 <span className={classes.orText}>
-                                    Orange: 
+                                    Orange:
                                 </span>
-                                 Number of Applied Jobs
+                                Number of Applied Jobs
                             </Typography>
                         </CardContent>
-                        
                     </Card>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Card className={classes.card}>
                         <CardHeader title="Recent Searches" />
                         <CardContent>
-                            {/* <Typography variant="h4" >Recent Searches</Typography> */}
                             <List className={classes.root}>
                                 {props.user.recentSearches.map((searchObj, i) => (
-                                    <ListItem key={i} role={undefined} dense button
-                                    // onClick={this.handleToggle(value)}
-                                    >
-                                        {/* <Checkbox
-                                            checked={this.state.checked.indexOf(value) !== -1}
-                                            tabIndex={-1}
-                                            disableRipple
-                                        /> */}
+                                    <ListItem key={i} role={undefined} dense button>
                                         <ListItemText primary={searchObj.searchJob + " jobs in " + searchObj.searchCity + ", " + searchObj.searchState} />
                                         <ListItemSecondaryAction>
                                             <IconButton aria-label="Comments">

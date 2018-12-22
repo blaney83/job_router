@@ -14,22 +14,18 @@ var firstChart = {
     options: {
         low: 0
     },
-
     animation: {
         // Let's put a sequence number aside so we can use it in the event callbacks
         seq: 0,
         delays: 80,
         durations: 500,
-
         // Once the chart is fully created we reset the sequence
         created: function () {
             firstChart.animation.seq = 0;
         },
-
         // On each drawn element by Chartist we use the Chartist.Svg API to trigger SMIL animations
         draw: function (data) {
             firstChart.animation.seq++;
-
             if (data.type === 'line') {
                 // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
                 data.element.animate({
@@ -98,7 +94,6 @@ var firstChart = {
                     to: data[data.axis.units.pos + '1'],
                     easing: Chartist.Svg.Easing.easeOutQuart
                 };
-
                 var pos2Animation = {
                     begin: firstChart.animation.seq * firstChart.animation.delays,
                     dur: firstChart.animation.durations,
@@ -106,7 +101,6 @@ var firstChart = {
                     to: data[data.axis.units.pos + '2'],
                     easing: Chartist.Svg.Easing.easeOutQuart
                 };
-
                 var animations = {};
                 animations[data.axis.units.pos + '1'] = pos1Animation;
                 animations[data.axis.units.pos + '2'] = pos2Animation;
@@ -117,7 +111,6 @@ var firstChart = {
                     to: 1,
                     easing: Chartist.Svg.Easing.easeOutQuart
                 };
-
                 data.element.animate(animations);
             }
         }

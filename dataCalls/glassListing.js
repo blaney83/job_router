@@ -72,15 +72,12 @@ async function glassGetData(search, loc, numb) {
         let glassPromiseHolder = []
         for (var carI = 1; carI < numb; carI++) {
             let builtURL = "https://www.glassdoor.com/Job/" + lP2 + "-" + sP2 + "-jobs-SRCH_IL.0,7_IC11" + locCode + "_" + searCode + "_IP" + carI + ".htm"
-            // console.log(builtURL)
             glassPromiseHolder[carI - 1] = axios(builtURL)
         }
-        // console.log(glassPromiseHolder)
         let glassDataArray = []
         await Promise.all(glassPromiseHolder).then(respArr => {
             let parseDataPromiseArr = []
             respArr.forEach((val, i) => {
-                // console.log(val.status)
                 parseDataPromiseArr[i] = new Promise (function(resolve, reject){
                     resolve(glassUpSomeData(val))
                 })
@@ -105,7 +102,6 @@ function glassUpSomeData(resp) {
     let looperArr = splitSplit.map(jd => jd.split("\'"))
     let glassObjHolder = []
     looperArr.map((jobArr, i) => {
-        // console.log(jobArr.length)
         let jobObj = {
             jobSite: "GlassDoor",
             jobId: jobArr[1],
@@ -115,12 +111,6 @@ function glassUpSomeData(resp) {
             jobLocation: jobArr[17],
             companyImage: jobArr[43],
             jobRating: jobArr[58],
-            // salaryRange: jobArr[102],
-            // minSalary: jobArr[109],
-            // medSalary: jobArr[111],
-            // maxSalary: jobArr[113],
-            // jobCompany: jobArr[115],
-            // positionTitle: jobArr[119],
         }
         if (jobArr.length === 135 || jobArr.length === 127) {
             jobObj.salaryRange = jobArr[102];
@@ -191,9 +181,7 @@ function glassUpSomeData(resp) {
             jobObj.jobDescription = "Hey there! We are sorry that we don't have a description for this GlassDoor posting. We are currently working with them to make their API more accessible. To see more information, use the link to check out this post on their site! Thanks!"
         }
         glassObjHolder.push(jobObj)
-        // console.log(jobObj)
     })
-    // console.log(glassObjHolder)
     return (glassObjHolder)
 }
 
@@ -202,8 +190,6 @@ function handleBadData(str) {
     let str2 = str1[0].split(" ")
     return (str2[1])
 }
-//example call
-// glassGetData("python developer", "seattle, wa", 4)
 
 module.exports = {
     glassGetData: glassGetData,

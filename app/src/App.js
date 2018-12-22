@@ -19,7 +19,6 @@ const theme = createMuiTheme({
 });
 // febd6c
 function App(props) {
-  console.log(store.getState().auth.authenticated)
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>

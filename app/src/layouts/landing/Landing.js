@@ -15,7 +15,6 @@ const styles = () => ({
 })
 
 function LandingLayout(props) {
-    console.log(props)
     const { classes } = props;
     return (
         <Grid container className={classes.root} alignItems="center">

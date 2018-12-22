@@ -81,7 +81,7 @@ function SearchAppBar(props) {
                     </IconButton>
                     <Typography className={classes.title} variant="h6" color="inherit" noWrap>
                         Material-UI
-          </Typography>
+                    </Typography>
                     <div className={classes.grow} />
                     <div className={classes.search}>
                         <div className={classes.searchIcon}>

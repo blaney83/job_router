@@ -4,7 +4,6 @@ const dataCalls = require("../dataCalls")
 module.exports = {
 
     create: function (req, res) {
-        console.log("we hittin")
         let searchP = req.params.search
         let locationP = req.params.location
         let dataPromiseArr = [
@@ -22,26 +21,17 @@ module.exports = {
             dataCalls.ziData.zipGetData(searchP, locationP, 3)
         ]
         Promise.all(dataPromiseArr).then(resp => {
-            console.log("nice job ben")
             if (resp.indexOf(undefined) >= 0) {
-                console.log("happened")
                 res.json([{ error: "bad search" }])
             } else {
-                // if(resp[0][0][0] === undefined)
-                // console.log(resp)
                 let filterCatch = resp.filter(val => val !== undefined)
                 let filterCatch2 = filterCatch.map(val=> val.filter(val => val !== undefined))
                 let mySortingArray = filterCatch2.map((val) => val[0][0] === undefined ? val[0].jobSite : val[0][0].jobSite)
-                console.log("my sorting array", mySortingArray)
                 let dbMassiveArray = []
                 resp.map((val, i) => {
                     if(val[0][0] !== undefined){
                     val.map(val => val.map(val => {
-                    // console.log(val)
-                    // console.log(val.userId)
                     val.userId = req.body.userId
-                    // console.log(val)
-                    // console.log(val.userId)
                     dbMassiveArray.push(val)
                 }))}else{
                     val.map(usaObj=>{
@@ -50,17 +40,12 @@ module.exports = {
                     })
                 }
             })
-                console.log(dbMassiveArray.length)
 
                 db.Job.deleteMany({ userId: req.body.userId }).then(info => {
-                    console.log("well this happened")
                     db.Job
                         .create(dbMassiveArray)
                         .then(dbModel => {
-                            console.log("well this happened2")
-                            console.log(dbModel.length)
                             let firstReturn = shuffleShuffle(dbModel, 16, mySortingArray)
-                            // console.log(firstReturn)
                             res.json(firstReturn)
                         })
                         .catch(err => res.status(422).json(err));
@@ -74,11 +59,9 @@ module.exports = {
     findMore: function (req, res) {
         let mySortingArray = ["CareerBuilder", "Dice", "ZipRecruiter"]
         let magicNumber = parseInt(req.params.number)
-        console.log(req.body.userId)
         db.Job.find({ userId: req.body.userId })
             // .limit(magicNumber)
             .then(moreJobPostings => {
-                console.log(moreJobPostings)
                 let newResponse = shuffleShuffle(moreJobPostings, magicNumber, mySortingArray)
                 let senderResponse1 = newResponse.filter(obj=> obj !== undefined)
                 let senderResponse = senderResponse1.filter(obj=> obj !== null)
@@ -93,7 +76,6 @@ module.exports = {
         let mySortingArray = ["CareerBuilder", "Dice", "ZipRecruiter"]
         let myReferenceArray = mySortingArray
         let magicNumber = parseInt(req.params.number)
-
         db.Job.find({ userId: req.body.userId })
             // .limit(magicNumber)
             .then(moreJobPostings => {
@@ -166,7 +148,6 @@ function shuffleShuffle(arrOfObj, limit, mySortingArray, postingsViewed, posting
             }
         }
     }
-    // console.log(firstRespondersLoL)
     return (firstRespondersLoL)
 }
 function shuffleBasic(mySortingArray, limit, allUserSearchData) {

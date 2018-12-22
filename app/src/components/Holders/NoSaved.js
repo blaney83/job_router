@@ -1,7 +1,6 @@
 import React from "react";
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-// import Paper from '@material-ui/core/Paper';
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -20,9 +19,6 @@ const styles = () => ({
         flexGrow: 0,
         height: "25%",
         "padding": "10%",
-        // "padding-bottom": "10%",
-        // "padding-left": "10%",
-        // "padding-right": "10%",
     },
 })
 

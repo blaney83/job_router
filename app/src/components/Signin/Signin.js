@@ -20,7 +20,6 @@ const styles = () => ({
 })
 
 function SignUp(props) {
-    console.log(props)
     const { classes } = props;
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -41,7 +40,6 @@ function SignUp(props) {
                 <Grid container justify="space-evenly">
                 <Grid item xs={12} sm={6}>
                 <TextField
-                    // id="standard-with-placeholder"
                     fullWidth={true}
                     label="Email"
                     placeholder="example@example.com"
@@ -56,9 +54,7 @@ function SignUp(props) {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                 <TextField
-                    // id="standard-with-placeholder"
                     fullWidth={true}
-
                     label="Password"
                     placeholder="Secret123!@#"
                     className={classes.textField}
@@ -81,7 +77,6 @@ function SignUp(props) {
                             Sign In!
                 </Button>
                     </Grid>
-                    {/* <Grid item >or</Grid> */}
                     <Grid item >
                         <Link to="/signup">
                             <Button
@@ -105,7 +100,6 @@ function mapDispatchToProps(dispatch) {
     return {
         signin(email, password, reroute) {
             axios.post("/v1/auth/signin", { email, password }).then(res => {
-                console.log(res.data)
                 dispatch(updateAuth({
                     token: res.data.token,
                     username: res.data.username,

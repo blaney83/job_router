@@ -12,10 +12,8 @@ async function zipGetData(search, loc, numb) {
         let zipPromiseHolder = []
         for (var carI = 1; carI < numb; carI++) {
             let builtURL = "https://www.ziprecruiter.com/candidate/search?search=" + sP2 + "&location=" + lP3 + "&page=" + carI + "&radius=25"
-            // console.log(builtURL)
             zipPromiseHolder[carI - 1] = axios(builtURL)
         }
-        // console.log(zipPromiseHolder)
         let zipDataArray = []
         await Promise.all(zipPromiseHolder).then(resp => {
             resp.map(val => {
@@ -72,7 +70,6 @@ function zipSomeData(resp) {
             salaryRange: thirPaySplit[0],
             jobDescription: secDescSplit[0]
         }
-
         if (val.includes("Quick Apply")) {
             let quickArr = val.split('data-href="')
             let quickLink = quickArr[1].split('" d')
@@ -81,7 +78,6 @@ function zipSomeData(resp) {
         } else {
             jobObj.easyApply = false;
         }
-        // console.log(jobObj)
         zipDataHolder.push(jobObj)
     })
     return (zipDataHolder)
@@ -97,8 +93,6 @@ function regEx(str) {
     let s7 = s6.replace(/&#x27;/g, "'")
     return (s7)
 }
-//example call
-// zipGetData("Software engineer", "new York, Ny", 3)
 
 module.exports = {
     zipGetData: zipGetData,

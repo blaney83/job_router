@@ -3,8 +3,6 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-// import store from "../../state";
-// import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import Sidebar from "../../components/Sidebar/Sidebar"
 import Main from "../../components/Main/Main"
@@ -23,23 +21,16 @@ const styles = () => ({
 })
 
 function Dashboard(props) {
-    console.log("dashboard", props)
     const { classes } = props;
-    const [email, setEmail] = useState("");
     function miniRoutes() {
-        console.log(props.location.pathname)
         switch (props.location.pathname) {
             case ("/dashboard/home"):
-                console.log("fired")
                 return (<Main routeProps={props} />)
             case ("/dashboard/search"):
-                console.log("fired")
                 return (<Search routeProps={props} />)
             case ("/dashboard/saved"):
-                console.log("fired")
                 return (<Saved routeProps={props} />)
             case ("/dashboard/account"):
-                console.log("fired")
                 return (<Account routeProps={props} />)
             default:
                 props.history.push("/dashboard/home")
@@ -52,7 +43,6 @@ function Dashboard(props) {
         <div>
             <Sidebar locationProps={props}/>
             <Grid container className={classes.root}
-                // alignItems="center"
                 id="immaSpecialGrid"
             >
                 <Grid item xs={12}>
