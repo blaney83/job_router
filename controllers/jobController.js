@@ -30,7 +30,8 @@ module.exports = {
                 // if(resp[0][0][0] === undefined)
                 // console.log(resp)
                 let filterCatch = resp.filter(val => val !== undefined)
-                let mySortingArray = filterCatch.map((val) => val[0][0] === undefined ? val[0].jobSite : val[0][0].jobSite)
+                let filterCatch2 = filterCatch.map(val=> val.filter(val => val !== undefined))
+                let mySortingArray = filterCatch2.map((val) => val[0][0] === undefined ? val[0].jobSite : val[0][0].jobSite)
                 console.log("my sorting array", mySortingArray)
                 let dbMassiveArray = []
                 resp.map((val, i) => {
