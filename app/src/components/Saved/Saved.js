@@ -68,7 +68,10 @@ const styles = {
     },
     PositionName: {
         fontSize: "1rem"
-    }
+    },
+    header1: {
+        backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291); !important",
+    },
 };
 
 
@@ -120,10 +123,10 @@ function Saved(props) {
                                                 </ListItemAvatar>
                                             </Grid>
                                                 <Grid item xs={10} className={classes.specialBox}>
-                                                <Typography variant="body1"><span className={classes.PositionName}>{obj.positionTitle + "   " + obj.jobLocation}</span> <br></br> <span className={classes.CompanyName}>{obj.jobCompany}</span></Typography>
-                                                            <ListItemText
-                                                                secondary={obj.jobDescription}
-                                                            />
+                                                    <Typography variant="body1"><span className={classes.PositionName}>{obj.positionTitle + "   " + obj.jobLocation}</span> <br></br> <span className={classes.CompanyName}>{obj.jobCompany}</span></Typography>
+                                                    <ListItemText
+                                                        secondary={obj.jobDescription}
+                                                    />
                                                 </Grid></Grid>
                                         </Grid>
                                             <Grid item xs={4}>
@@ -167,35 +170,35 @@ function Saved(props) {
                                                             fullWidth={true}
                                                             onClick={(e) => props.deleteJob(e.target.id, props.user.userId, savedResults, setSavedResults, setOpen, setOpen2)}
                                                         >Delete</Button>
-                                                                <Snackbar
-                                                                className={classes.GoodAlert}
-                                                                    anchorOrigin={{
-                                                                        vertical: 'top',
-                                                                        horizontal: 'center',
-                                                                    }}
-                                                                    open={open}
-                                                                    onClose={() => setOpen(false)}
-                                                                    autoHideDuration={1500}
-                                                                    ContentProps={{
-                                                                        'aria-describedby': 'message-id',
-                                                                    }}
-                                                                    message={<span id="message-id">Job Deleted</span>}
-                                                                />
-                                                                <Snackbar
-                                                                className={classes.BadAlert}
-                                                                    anchorOrigin={{
-                                                                        vertical: 'top',
-                                                                        horizontal: 'center',
-                                                                    }}
-                                                                    open={open2}
-                                                                    onClose={() => setOpen2(false)}
-                                                                    autoHideDuration={1500}
-                                                                    ContentProps={{
-                                                                        'aria-describedby': 'message-id',
-                                                                    }}
-                                                                    message={<span id="message-id">Job already removed</span>}
-                                                                    
-                                                                />
+                                                        <Snackbar
+                                                            className={classes.GoodAlert}
+                                                            anchorOrigin={{
+                                                                vertical: 'top',
+                                                                horizontal: 'center',
+                                                            }}
+                                                            open={open}
+                                                            onClose={() => setOpen(false)}
+                                                            autoHideDuration={1500}
+                                                            ContentProps={{
+                                                                'aria-describedby': 'message-id',
+                                                            }}
+                                                            message={<span id="message-id">Job Deleted</span>}
+                                                        />
+                                                        <Snackbar
+                                                            className={classes.BadAlert}
+                                                            anchorOrigin={{
+                                                                vertical: 'top',
+                                                                horizontal: 'center',
+                                                            }}
+                                                            open={open2}
+                                                            onClose={() => setOpen2(false)}
+                                                            autoHideDuration={1500}
+                                                            ContentProps={{
+                                                                'aria-describedby': 'message-id',
+                                                            }}
+                                                            message={<span id="message-id">Job already removed</span>}
+
+                                                        />
                                                     </Grid></Grid>
                                             </Grid></Grid>
                                     </ListItem>
@@ -213,7 +216,9 @@ function Saved(props) {
         <Grid container direction="column">
             <Grid item xsm={12}>
                 <Card className={classes.card1}>
-                    <CardHeader title="Your Saved Jobs"></CardHeader>
+                    <CardHeader title="Your Saved Jobs"
+                        className={classes.header1}
+                    />
                     <CardContent>
                         <Typography variant="body1">View your saved jobs below! Use the links to Navigate to the listings and apply! Then come back to mark them as applied and keep track of your employment journey. Use the sort feature to choose which results you see first or use the filter feature to hide jobs you've already applied to! Once you delete a job from your saved jobs, it will no longer be linked to your account, so only delete jobs you aren't interested in applying to.</Typography>
                     </CardContent>

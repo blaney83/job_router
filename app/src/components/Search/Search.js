@@ -86,7 +86,10 @@ const styles = {
     },
     PositionName: {
         fontSize: "1rem"
-    }
+    },
+    header1: {
+        backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291); !important",
+    },
 };
 
 const theme = createMuiTheme({
@@ -269,6 +272,7 @@ function Search(props) {
                 <Card className={classes.card1}>
                     <CardHeader title="Search for Jobs"
                         titleTypographyProps={{ variant: "h4" }}
+                            className={classes.header1}
                     ></CardHeader>
                     <CardContent>
                         <Typography variant="body1">Start your job search here! Enter the position you are interested in and the city and state you want to work in and hit the search button. We'll do the rest. We bring your the most relevant results for your job search from the 6 leading job-board sites! Use the filter options to control which jobs you see and the sort options to futher customize your results. Please excuse any incomplete data, we are always working to improve our site.</Typography>

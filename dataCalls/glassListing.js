@@ -72,10 +72,13 @@ async function glassGetData(search, loc, numb) {
         let glassPromiseHolder = []
         for (var carI = 1; carI < numb; carI++) {
             let builtURL = "https://www.glassdoor.com/Job/" + lP2 + "-" + sP2 + "-jobs-SRCH_IL.0,7_IC11" + locCode + "_" + searCode + "_IP" + carI + ".htm"
-            glassPromiseHolder[carI - 1] = axios(builtURL)
+            glassPromiseHolder[carI - 1] = axios(builtURL).catch(err=>console.log("err"))
         }
         let glassDataArray = []
-        await Promise.all(glassPromiseHolder).then(respArr => {
+        await Promise.all(glassPromiseHolder)
+        .catch(err=>glassPromiseHolder)
+        .then(unfilteredResp => {
+            let respArr = unfilteredResp.filter(data=>data!==undefined)
             let parseDataPromiseArr = []
             respArr.forEach((val, i) => {
                 parseDataPromiseArr[i] = new Promise (function(resolve, reject){

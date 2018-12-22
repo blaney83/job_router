@@ -23,7 +23,10 @@ async function diceGetData(search, loc, numb) {
             dicePromiseHolder[carI - 1] = axios(builtURL).catch(err => err)
         }
         let darnArray = []
-        await Promise.all(dicePromiseHolder).then(respArr => {
+        await Promise.all(dicePromiseHolder)
+        .catch(err=>dicePromiseHolder)
+        .then(response => {
+            let respArr = response.filter(data=>data!==undefined)
             respArr.map(resp => {
                 if (resp.status != undefined) {
                     darnArray.push(diceUpSomeData(resp))

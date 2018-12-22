@@ -15,7 +15,9 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = () => ({
-
+    header1: {
+        backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291); !important",
+    },
 })
 
 function Account(props) {
@@ -32,6 +34,7 @@ function Account(props) {
         <Card className={classes.card}>
             <CardHeader
                 title="Update Your Account"
+                className={classes.header1}
             />
             <CardContent>
                 {/* <TextField

@@ -18,16 +18,21 @@ async function careerDataGet(search, loc, numb) {
         for (var carI = 1; carI < numb; carI++) {
             // let builtURL = "https://www.careerbuilder.com/jobs-software-engineer-in-phoenix,az" ?page_number=1
             let builtURL = "https://www.careerbuilder.com/jobs-" + searchParams + "-in-" + locationParams + "?page_number=" + carI;
-            careerPromiseHolder[carI-1] = axios(builtURL)
+            careerPromiseHolder[carI - 1] = axios(builtURL).catch(err => console.log(err))
         }
         let careerDataArray = []
-        await Promise.all(careerPromiseHolder).then(respArr => {
-            respArr.map(info=>{
-                careerDataArray.push(funkUpSomeData(info))
+        await Promise.all(careerPromiseHolder)
+            .catch(err => {
+                return (careerPromiseHolder)
             })
-        })
-        return(careerDataArray)
-    } catch{e=>e}
+            .then(respArr => {
+                let cleanResponses = respArr.filter(resp => resp !== undefined)
+                cleanResponses.map(info => {
+                    careerDataArray.push(funkUpSomeData(info))
+                })
+            })
+        return (careerDataArray)
+    } catch{ e => e }
 }
 //then
 function funkUpSomeData(resp) {
@@ -80,9 +85,10 @@ function funkUpSomeData(resp) {
             salaryRange: null,
             jobDescription: regEx(thirDescSplit[0])
         }
+        // console.log(jobObj)
         dataHolder.push(jobObj)
     })
-    return(dataHolder)
+    return (dataHolder)
 }
 
 function regEx(str) {

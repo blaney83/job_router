@@ -35,7 +35,31 @@ const styles = {
         "font-weight": "bold"
     },
     specialContent: {
-        "padding-top": "0 !important",
+        // "padding-top": "0 !important",
+    },
+    header1: {
+        // backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291); !important",
+        backgroundColor: "#d85808 !important",
+    },
+    header2: {
+        // backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291); !important",
+        backgroundColor: "#d75b0a !important",
+    },
+    header3: {
+        // backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291); !important",
+        backgroundColor: "#dc721a !important",
+    },
+    header4: {
+        // backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291); !important",
+        backgroundColor: "#fcad4a !important",
+    },
+    header5: {
+        // backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291); !important",
+        backgroundColor: "#f0811e !important",
+    },
+    header6: {
+        // backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291); !important",
+        backgroundColor: "#ffcf69 !important",
     },
 }
 
@@ -55,7 +79,7 @@ function Main(props) {
                             }
                             title={props.user.firstName + "'s Job-Search Dashboard"}
                             titleTypographyProps={{ variant: "h4" }}
-                            color="secondary"
+                            className={classes.header1}
                         />
                         <CardContent>
                             Welcome home! This is the command center for you and your Job Search! Track your progress to keep up the pressure and land your dream job. If you have any suggestions for useful information that would help your on your journey, send us your idea in the contact us section. Happy Hunting!
@@ -65,7 +89,9 @@ function Main(props) {
             <Grid container spacing={16}>
                 <Grid item xs={12} sm={4}>
                     <Card className={classes.card} color="success">
-                        <CardHeader title="Searches" />
+                        <CardHeader title="Searches"
+                            className={classes.header2}
+                        />
                         <CardContent>
                             <Typography variant="h3" >{props.user.totalSearches}</Typography>
                         </CardContent>
@@ -73,7 +99,9 @@ function Main(props) {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     <Card className={classes.card}>
-                        <CardHeader title="Applied / Saved" />
+                        <CardHeader title="Applied / Saved" 
+                            className={classes.header3}                        
+                        />
                         <CardContent className={classes.specialContent}>
                             <Typography variant="h3" >{props.user.numberApplied} / {props.user.numberSaved}</Typography>
                         </CardContent>
@@ -81,7 +109,9 @@ function Main(props) {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     <Card className={classes.card}>
-                        <CardHeader title="Total Viewed" />
+                        <CardHeader title="Total Viewed" 
+                            className={classes.header4}                        
+                        />
                         <CardContent>
                             <Typography variant="h3" >{props.user.postingsViewed.length}</Typography>
                         </CardContent>
@@ -91,7 +121,9 @@ function Main(props) {
             <Grid container spacing={16}>
                 <Grid item xs={12} sm={6}>
                     <Card className={classes.card}>
-                        <CardHeader title="This Week's Activity" />
+                        <CardHeader title="This Week's Activity" 
+                            className={classes.header5}
+                        />
                         <ChartistGraph
                             className="ct-chart"
                             data={firstChart.data}
@@ -117,7 +149,9 @@ function Main(props) {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Card className={classes.card}>
-                        <CardHeader title="Recent Searches" />
+                        <CardHeader title="Recent Searches" 
+                            className={classes.header6}
+                        />
                         <CardContent>
                             <List className={classes.root}>
                                 {props.user.recentSearches.map((searchObj, i) => (

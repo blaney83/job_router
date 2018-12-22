@@ -8,19 +8,25 @@ module.exports = {
         let locationP = req.params.location
         let dataPromiseArr = [
             //cb at 3 pages works and returns 50
-            dataCalls.cbData.careerDataGet(searchP, locationP, 3),
+            // dataCalls.cbData.careerDataGet(searchP, locationP, 30),
             //dice at 3 works and returns 60
-            dataCalls.diData.diceDataGet(searchP, locationP, 3),
+            dataCalls.diData.diceDataGet(searchP, locationP, 30),
             //glass at 3 works and returns 15, returns 15 at 4 too
             // dataCalls.glData.glassGetData(searchP, locationP, 4),
             //indeed works at 3 and returns 32
-            dataCalls.inData.indeedGetData(searchP, locationP, 3),
+            // dataCalls.inData.indeedGetData(searchP, locationP, 3),
             //usa currently returns 4 (with search in arizona) as long as its called with another source
             // dataCalls.usData.usaGetData(searchP, locationP, 5),
             //zip currently works at 3 and returns 42
-            dataCalls.ziData.zipGetData(searchP, locationP, 3)
+            // dataCalls.ziData.zipGetData(searchP, locationP, 3)
         ]
-        Promise.all(dataPromiseArr).then(resp => {
+        Promise.all(dataPromiseArr)
+        .catch(err=>{
+            console.log(err)
+            return(dataPromiseArr)
+        })
+        .then(resp => {
+            console.log(resp)
             if (resp.indexOf(undefined) >= 0) {
                 res.json([{ error: "bad search" }])
             } else {
