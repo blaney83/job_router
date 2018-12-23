@@ -33,6 +33,16 @@ const styles = () => ({
     badMessage: {
         color: "red"
     },
+    liveAccountInfo: {
+        backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291)",
+        color: "black",
+        padding: ".5rem",
+        borderRadius: "4px",
+        marginTop: ".3rem"
+    },
+    boldSpans: {
+        fontWeight: "bold"
+    }
 })
 
 function Account(props) {
@@ -59,20 +69,20 @@ function Account(props) {
             />
             <CardContent>
                 <Typography variant="h5" className={messageClass}>{changeMessage}<br /></Typography>
-                <Grid container justify="space-between">
-                    <Grid item xs={6}>
-                        Current Username: {origUsername} <br />
-                        Current First Name: {origFirstName}<br />
-                        Current Last Name: {origLastName}<br />
-                        Current City: {origUserCity} <br />
-                        Current State: {origUserStateCode}
+                <Grid container justify="space-between" className={classes.liveAccountInfo}>
+                    <Grid item xs={6} >
+                        <span className={classes.boldSpans}>Current Username:</span> {origUsername} <br />
+                        <span className={classes.boldSpans}>Current First Name:</span> {origFirstName}<br />
+                        <span className={classes.boldSpans}>Current Last Name:</span> {origLastName}<br />
+                        <span className={classes.boldSpans}>Current City:</span> {origUserCity} <br />
+                        <span className={classes.boldSpans}>Current State:</span> {origUserStateCode}
                     </Grid>
                     <Grid item xs={6}>
-                        New Username: {username} <br />
-                        New First Name: {firstName}<br />
-                        New Last Name: {lastName}<br />
-                        New City: {userCity} <br />
-                        New State: {userStateCode}
+                        <span className={classes.boldSpans}>New Username:</span> {username} <br />
+                        <span className={classes.boldSpans}>New First Name:</span> {firstName}<br />
+                        <span className={classes.boldSpans}>New Last Name:</span> {lastName}<br />
+                        <span className={classes.boldSpans}>New City:</span> {userCity} <br />
+                        <span className={classes.boldSpans}>New State:</span> {userStateCode}
                     </Grid>
                 </Grid>
             </CardContent>
