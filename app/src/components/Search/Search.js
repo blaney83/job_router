@@ -33,6 +33,10 @@ import Indeed from "../../assets/img/indeed.png"
 import USA from "../../assets/img/usa.png"
 import Zip from "../../assets/img/zip.png"
 import StarIcon from '@material-ui/icons/Star';
+import NewPost from '@material-ui/icons/FiberNew';
+import Saved from '@material-ui/icons/Save';
+import Applied from '@material-ui/icons/ThumbUp';
+import Viewed from '@material-ui/icons/AccessTime';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -91,6 +95,16 @@ const styles = {
     header1: {
         backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291); !important",
     },
+    staticStatusHolder: {
+        position: "absolute",
+        bottom: "10px"
+    },
+    savedAlreadyColor: {
+        color: "#b99900"
+    },
+    appliedAlreadyColor: {
+        color: "green"
+    }
 };
 
 const theme = createMuiTheme({
@@ -137,6 +151,39 @@ function Search(props) {
         }
     }
 
+    function checkPost(jobId) {
+        if (props.user.postingsApplied.indexOf(jobId) >= 0) {
+            return (<Applied className={classes.appliedAlreadyColor}/>)
+        } else if (props.user.postingsSaved.indexOf(jobId) >= 0) {
+            return (<Saved className={classes.savedAlreadyColor}/>)
+        } else if (props.user.postingsViewed.indexOf(jobId) >= 0) {
+            return (<Viewed color="primary"/>)
+        } else {
+            return (<NewPost color="secondary"/>)
+        }
+    }
+
+    function savedButton(jobId, setOpen, setOpen2) {
+        if (props.user.postingsSaved.indexOf(jobId) === -1) {
+            return (<Button size="small" variant="contained"
+            color="secondary"
+            fullWidth={true}
+            id={jobId}
+            // id={obj.jobId}
+            onClick={(e) => props.saveJob(e.target.id, props.user.userId, setOpen, setOpen2)}
+        >Save</Button>)
+        }else{
+            return (<Button size="small" variant="contained"
+            color="primary"
+            fullWidth={true}
+            id={jobId}
+            disabled={true}
+            // id={obj.jobId}
+            // onClick={(e) => props.saveJob(e.target.id, props.user.userId, setOpen, setOpen2)}
+        >Saved</Button>)
+        }
+    }
+
     function displayResults() {
         switch (true) {
             case (props.search.searchResults.length === 0):
@@ -152,15 +199,23 @@ function Search(props) {
                                 if (numberResults >= i) {
                                     return (
                                         <Paper key={i}>
-                                            <ListItem alignItems="flex-start" key={obj._id}>
+                                            <ListItem key={obj._id}>
                                                 <Grid container><Grid item xs={8}>
-                                                    <Grid container><Grid item xs={2}>
-                                                        <ListItemAvatar>
-                                                            <Avatar alt={obj.companyName} src={obj.companyImage} />
-                                                        </ListItemAvatar>
+                                                    <Grid container alignItems="stretch"><Grid item xs={2}>
+                                                        <Grid container direction="column" alignItems="center" justify="space-between"><Grid item xs={6}>
+                                                            <ListItemAvatar>
+                                                                <Avatar alt={obj.companyName} src={obj.companyImage} />
+                                                            </ListItemAvatar>
+                                                        </Grid><Grid item xs={6} className={classes.staticStatusHolder}>
+                                                                <ListItemAvatar>
+
+                                                                    {checkPost(obj.jobId)}
+                                                                    {/* <Avatar alt="posting status" src={checkPost(obj.jobId)} /> */}
+                                                                </ListItemAvatar>
+                                                            </Grid></Grid>
                                                     </Grid>
                                                         <Grid item xs={10} className={classes.specialBox}>
-                                                        <Typography variant="body1"><span className={classes.PositionName}>{obj.positionTitle + "   " + obj.jobLocation}</span> <br></br> <span className={classes.CompanyName}>{obj.jobCompany}</span></Typography>
+                                                            <Typography variant="body1"><span className={classes.PositionName}>{obj.positionTitle + "   " + obj.jobLocation}</span> <br></br> <span className={classes.CompanyName}>{obj.jobCompany}</span></Typography>
                                                             <ListItemText
                                                                 secondary={obj.jobDescription}
                                                             />
@@ -195,14 +250,15 @@ function Search(props) {
                                                                 >Visit Site
                                                     <Avatar alt={obj.jobSite} src={chooseIcon(obj)} />
                                                                 </Button>
-                                                                <Button size="small" variant="contained"
+                                                                {savedButton(obj.jobId, setOpen, setOpen2)}
+                                                                {/* <Button size="small" variant="contained"
                                                                     color="secondary"
                                                                     fullWidth={true}
                                                                     id={obj.jobId}
                                                                     onClick={(e) => props.saveJob(e.target.id, props.user.userId, setOpen, setOpen2)}
-                                                                >Save</Button>
+                                                                >Save</Button> */}
                                                                 <Snackbar
-                                                                className={classes.GoodAlert}
+                                                                    className={classes.GoodAlert}
                                                                     anchorOrigin={{
                                                                         vertical: 'top',
                                                                         horizontal: 'center',
@@ -217,7 +273,7 @@ function Search(props) {
                                                                     message={<span id="message-id">Job Saved!</span>}
                                                                 />
                                                                 <Snackbar
-                                                                className={classes.BadAlert}
+                                                                    className={classes.BadAlert}
                                                                     anchorOrigin={{
                                                                         vertical: 'top',
                                                                         horizontal: 'center',
@@ -236,7 +292,7 @@ function Search(props) {
                                             </ListItem>
                                         </Paper>
                                     )
-                                }else{
+                                } else {
                                     //something if number results is less than i
                                 }
                             })
@@ -273,7 +329,7 @@ function Search(props) {
                 <Card className={classes.card1}>
                     <CardHeader title="Search for Jobs"
                         titleTypographyProps={{ variant: "h4" }}
-                            className={classes.header1}
+                        className={classes.header1}
                     ></CardHeader>
                     <CardContent>
                         <Typography variant="body1">Start your job search here! Enter the position you are interested in and the city and state you want to work in and hit the search button. We'll do the rest. We bring your the most relevant results for your job search from the 6 leading job-board sites! Use the filter options to control which jobs you see and the sort options to futher customize your results. Please excuse any incomplete data, we are always working to improve our site.</Typography>
