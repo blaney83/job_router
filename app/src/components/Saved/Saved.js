@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -82,11 +82,19 @@ function Saved(props) {
     const [savedResults, setSavedResults] = useState(props.saved.savedResults);
     const [savedLoaded, setSavedLoaded] = useState(props.saved.savedLoaded);
     const [savedFilterBoolean, setSavedFilterBoolean] = useState(false);
+    const [toggleDataGets, setToggleDataGets] = useState(2)
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
-    if (props.saved.savedResults.length !== props.user.numberSaved) {
-        props.getSaved(props.user.userId, setSavedResults, setSavedLoaded)
-    }
+    // if (savedFilterBoolean && props.saved.savedResults.length !== props.user.numberSaved) {
+    //     props.getSaved(props.user.userId, setSavedResults, setSavedLoaded, setSavedFilterBoolean)
+    // }
+
+    useEffect(() => {
+        if(toggleDataGets%2 === 0){
+        props.getSaved(props.user.userId, setSavedResults, setSavedLoaded, setSavedFilterBoolean)
+        setToggleDataGets(toggleDataGets + 1)
+        }
+    })
 
     function chooseIcon(obj) {
         switch (true) {
@@ -117,7 +125,7 @@ function Saved(props) {
                         {savedResults.map((obj, i) => {
                             return (
                                 <Paper key={obj._id}>
-                                    <ListItem alignItems="flex-start" key={obj._id}>
+                                    <ListItem key={obj._id}>
                                         <Grid container><Grid item xs={8}>
                                             <Grid container><Grid item xs={2}>
                                                 <ListItemAvatar>
@@ -199,7 +207,6 @@ function Saved(props) {
                                                                 'aria-describedby': 'message-id',
                                                             }}
                                                             message={<span id="message-id">Job already removed</span>}
-
                                                         />
                                                     </Grid></Grid>
                                             </Grid></Grid>
@@ -247,30 +254,45 @@ function mapDispatchToProps(dispatch) {
     const savedMethods = {
         getSaved(userId, setSavedResults, savedFilterBoolean, setSavedFilterBoolean) {
             axios.get("/v1/saved/" + userId).then(res => {
-                console.log("this fired")
-                dispatch(getSaved({
-                    savedResults: res.data,
-                }));
-                if (res.data === undefined) {
-                    setSavedResults([])
+                if (!savedFilterBoolean) {
+                    return
                 } else {
-                    setSavedResults(res.data)
+                    dispatch(getSaved({
+                        savedResults: res.data,
+                    }));
+                    if (res.data === undefined) {
+                        setSavedResults([])
+                    } else {
+                        setSavedResults(res.data)
+                    }
                 }
-                if(savedFilterBoolean){
-                    setSavedFilterBoolean(false)
-                }
+                // if(savedFilterBoolean){
+                //     setSavedFilterBoolean(false)
+                // }
             }).catch(err => {
                 console.error(err);
             })
             // }
         },
         hideApplied(savedResults, setSavedResults, savedFilterBoolean, setSavedFilterBoolean, getSaved, userId) {
-            if(!savedFilterBoolean){
-                let filteredResults = savedResults.filter(jobObj=>!jobObj.hasApplied)
+            if (!savedFilterBoolean) {
+                let filteredResults = savedResults.filter(jobObj => !jobObj.hasApplied)
                 setSavedResults(filteredResults)
                 setSavedFilterBoolean(true)
-            }else{
-                getSaved(userId, setSavedResults, savedFilterBoolean, setSavedFilterBoolean)
+            } else {
+                axios.get("/v1/saved/" + userId).then(res => {
+                    // dispatch(getSaved({
+                    //     savedResults: res.data,
+                    // }));
+                    if (res.data === undefined) {
+                        setSavedResults([])
+                    } else {
+                        setSavedResults(res.data)
+                    }
+                }).catch(err => {
+                    console.error(err);
+                })
+                setSavedFilterBoolean(false)
             }
             // }
         },
