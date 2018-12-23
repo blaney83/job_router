@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -129,9 +129,9 @@ const theme = createMuiTheme({
 
 function Search(props) {
     const { classes } = props;
-    const [searchCity, setSearchCity] = useState(props.search.searchCity);
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
+    const [searchCity, setSearchCity] = useState(props.search.searchCity);
     const [searchState, setSearchState] = useState(props.search.searchState);
     const [searchJob, setSearchJob] = useState(props.search.searchJob);
     const [searchResults, setSearchResults] = useState(props.search.searchResults);
@@ -139,6 +139,18 @@ function Search(props) {
     const [filterTag, setFilterTag] = useState(props.user.filterTag);
     const [siteTag, setSiteTag] = useState(props.user.siteTag);
     const [numberResults, setNumberResults] = useState(props.search.numberResults);
+
+    useEffect(()=>{
+        if(props.routeProps.history.location.state !== undefined){
+            props.clearSearch(setSearchCity, setSearchState, setSearchJob, setSearchResults, setSortTag, setFilterTag, setSiteTag, setNumberResults, updateCurrentFilters, searchJobs, updateNumberResults, props)
+            console.log(props.routeProps.history.location.state)
+            setSearchCity(props.routeProps.history.location.state.prevCity)
+            setSearchState(props.routeProps.history.location.state.prevState)
+            setSearchJob(props.routeProps.history.location.state.prevJob)
+            props.searchJobs(props.routeProps.history.location.state.prevCity, props.routeProps.history.location.state.prevState, props.routeProps.history.location.state.prevJob, setSearchResults, props.user.userId)
+            props.routeProps.history.replace("/dashboard/search")
+        }
+    })
 
     function chooseIcon(obj) {
         switch (true) {

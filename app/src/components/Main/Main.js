@@ -65,8 +65,7 @@ const styles = {
 
 function Main(props) {
     const { classes } = props;
-    // const [email, setEmail] = useState("");
-    // const [password, setPassword] = useState("");
+    console.log(props)
     firstChart.data.series = [props.user.savedChartData, props.user.appliedChartData]
 
     function fixUserName(name) {
@@ -74,7 +73,7 @@ function Main(props) {
         let newNameArr = fixerArr.map((letter, i) => i === 0 ? letter.toUpperCase() : letter)
         return (newNameArr.join(""))
     }
-    function checkRecentSearches(searchesArray) {
+    function checkRecentSearches(searchesArray, props) {
         // props.user.recentSearches.map((searchObj, i) => (
         if (searchesArray.length > 0) {
             return (searchesArray.map((searchObj, i) => (
@@ -84,7 +83,9 @@ function Main(props) {
                     {/* //  /> */}
                     <ListItemSecondaryAction>
                         <IconButton aria-label="Comments">
-                            <ArrowForward />
+                            <ArrowForward 
+                            onClick={()=>props.routeProps.history.push("/dashboard/search", {prevSearch : true, prevJob: searchObj.searchJob, prevCity: searchObj.searchCity, prevState: searchObj.searchState})}
+                            />
                         </IconButton>
                     </ListItemSecondaryAction>
                 </ListItem>
@@ -180,7 +181,7 @@ function Main(props) {
                         />
                         <CardContent>
                             <List className={classes.root}>
-                                {checkRecentSearches(props.user.recentSearches)}
+                                {checkRecentSearches(props.user.recentSearches, props)}
                             </List>
                         </CardContent>
                     </Card>
