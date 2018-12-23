@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import { changeSavedUserStats, changeAppliedUserStats } from "../../state/auth/actions";
 import { getSaved } from "../../state/saved/actions"
 import Button from '@material-ui/core/Button';
@@ -80,6 +81,7 @@ function Saved(props) {
     const { classes } = props;
     const [savedResults, setSavedResults] = useState(props.saved.savedResults);
     const [savedLoaded, setSavedLoaded] = useState(props.saved.savedLoaded);
+    const [savedFilterBoolean, setSavedFilterBoolean] = useState(false);
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
     if (props.saved.savedResults.length !== props.user.numberSaved) {
@@ -222,6 +224,14 @@ function Saved(props) {
                     <CardContent>
                         <Typography variant="body1">View your saved jobs below! Use the links to Navigate to the listings and apply! Then come back to mark them as applied and keep track of your employment journey. Use the sort feature to choose which results you see first or use the filter feature to hide jobs you've already applied to! Once you delete a job from your saved jobs, it will no longer be linked to your account, so only delete jobs you aren't interested in applying to.</Typography>
                     </CardContent>
+                    <CardActions>
+                        <Button size="small" variant="contained"
+                            color={!savedFilterBoolean ? "secondary" : "primary"}
+                            id="hideSaved"
+                            fullWidth={true}
+                            onClick={(e) => props.hideApplied(savedResults, setSavedResults, savedFilterBoolean, setSavedFilterBoolean, props.getSaved, props.user.userId)}
+                        >{!savedFilterBoolean ? "Hide Applied" : "Show Applied"}</Button>
+                    </CardActions>
                 </Card>
             </Grid>
             <Grid item xsm={12}>
@@ -235,8 +245,9 @@ function Saved(props) {
 
 function mapDispatchToProps(dispatch) {
     const savedMethods = {
-        getSaved(userId, setSavedResults) {
+        getSaved(userId, setSavedResults, savedFilterBoolean, setSavedFilterBoolean) {
             axios.get("/v1/saved/" + userId).then(res => {
+                console.log("this fired")
                 dispatch(getSaved({
                     savedResults: res.data,
                 }));
@@ -245,9 +256,22 @@ function mapDispatchToProps(dispatch) {
                 } else {
                     setSavedResults(res.data)
                 }
+                if(savedFilterBoolean){
+                    setSavedFilterBoolean(false)
+                }
             }).catch(err => {
                 console.error(err);
             })
+            // }
+        },
+        hideApplied(savedResults, setSavedResults, savedFilterBoolean, setSavedFilterBoolean, getSaved, userId) {
+            if(!savedFilterBoolean){
+                let filteredResults = savedResults.filter(jobObj=>!jobObj.hasApplied)
+                setSavedResults(filteredResults)
+                setSavedFilterBoolean(true)
+            }else{
+                getSaved(userId, setSavedResults, savedFilterBoolean, setSavedFilterBoolean)
+            }
             // }
         },
         //GOING TO BE REMOVE FROM SAVED FUNCTION
