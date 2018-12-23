@@ -12,6 +12,7 @@ router.route("/more/:number?")
 
 router.route("/sort/:number?")
     .patch(jobController.sortSite)
+    .get(jobController.resetSort)
 
 
 module.exports = router

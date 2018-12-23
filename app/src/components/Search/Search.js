@@ -41,6 +41,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import Snackbar from '@material-ui/core/Snackbar';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import CircularProgress from '@material-ui/core/CircularProgress';
 axios.defaults.timeout = 180000
 
 const styles = {
@@ -112,7 +114,7 @@ const styles = {
     },
     appliedAlreadyColor: {
         color: "green"
-    }
+    },
 };
 
 const theme = createMuiTheme({
@@ -139,15 +141,16 @@ function Search(props) {
     const [filterTag, setFilterTag] = useState(props.user.filterTag);
     const [siteTag, setSiteTag] = useState(props.user.siteTag);
     const [numberResults, setNumberResults] = useState(props.search.numberResults);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSorting, setIsSorting] = useState(false);
 
-    useEffect(()=>{
-        if(props.routeProps.history.location.state !== undefined){
+    useEffect(() => {
+        if (props.routeProps.history.location.state !== undefined) {
             props.clearSearch(setSearchCity, setSearchState, setSearchJob, setSearchResults, setSortTag, setFilterTag, setSiteTag, setNumberResults, updateCurrentFilters, searchJobs, updateNumberResults, props)
-            console.log(props.routeProps.history.location.state)
             setSearchCity(props.routeProps.history.location.state.prevCity)
             setSearchState(props.routeProps.history.location.state.prevState)
             setSearchJob(props.routeProps.history.location.state.prevJob)
-            props.searchJobs(props.routeProps.history.location.state.prevCity, props.routeProps.history.location.state.prevState, props.routeProps.history.location.state.prevJob, setSearchResults, props.user.userId)
+            props.searchJobs(props.routeProps.history.location.state.prevCity, props.routeProps.history.location.state.prevState, props.routeProps.history.location.state.prevJob, setSearchResults, props.user.userId, null, setIsLoading)
             props.routeProps.history.replace("/dashboard/search")
         }
     })
@@ -172,15 +175,15 @@ function Search(props) {
     }
 
     function checkPost(jobId) {
-        if(jobId!== undefined){
+        if (jobId !== undefined) {
             if (props.user.postingsApplied.indexOf(jobId) >= 0) {
-                return (<Applied className={classes.appliedAlreadyColor}/>)
+                return (<Applied className={classes.appliedAlreadyColor} />)
             } else if (props.user.postingsSaved.indexOf(jobId) >= 0) {
-                return (<Saved className={classes.savedAlreadyColor}/>)
+                return (<Saved className={classes.savedAlreadyColor} />)
             } else if (props.user.postingsViewed.indexOf(jobId) >= 0) {
-                return (<Viewed color="primary"/>)
+                return (<Viewed color="primary" />)
             } else {
-                return (<NewPost color="secondary"/>)
+                return (<NewPost color="secondary" />)
             }
         }
     }
@@ -188,26 +191,28 @@ function Search(props) {
     function savedButton(jobId, setOpen, setOpen2) {
         if (props.user.postingsSaved.indexOf(jobId) === -1) {
             return (<Button size="small" variant="contained"
-            color="secondary"
-            fullWidth={true}
-            id={jobId}
-            // id={obj.jobId}
-            onClick={(e) => props.saveJob(e.currentTarget.id, props.user.userId, setOpen, setOpen2)}
-        >Save</Button>)
-        }else{
+                color="secondary"
+                fullWidth={true}
+                id={jobId}
+                // id={obj.jobId}
+                onClick={(e) => props.saveJob(e.currentTarget.id, props.user.userId, setOpen, setOpen2)}
+            >Save</Button>)
+        } else {
             return (<Button size="small" variant="contained"
-            color="primary"
-            fullWidth={true}
-            id={jobId}
-            disabled={true}
+                color="primary"
+                fullWidth={true}
+                id={jobId}
+                disabled={true}
             // id={obj.jobId}
             // onClick={(e) => props.saveJob(e.target.id, props.user.userId, setOpen, setOpen2)}
-        >Saved</Button>)
+            >Saved</Button>)
         }
     }
 
     function displayResults() {
         switch (true) {
+            case (isLoading):
+                return (<LinearProgress color="secondary" />)
             case (props.search.searchResults.length === 0):
                 return (<PreSearch props={props} />)
             case (props.search.searchResults.length === 1):
@@ -230,9 +235,8 @@ function Search(props) {
                                                             </ListItemAvatar>
                                                         </Grid><Grid item xs={6} className={classes.staticStatusHolder}>
                                                                 {/* <ListItemAvatar> */}
-
-                                                                    {checkPost(obj.jobId)}
-                                                                    {/* <Avatar alt="posting status" src={checkPost(obj.jobId)} /> */}
+                                                                {checkPost(obj.jobId)}
+                                                                {/* <Avatar alt="posting status" src={checkPost(obj.jobId)} /> */}
                                                                 {/* </ListItemAvatar> */}
                                                             </Grid></Grid>
                                                     </Grid>
@@ -453,7 +457,7 @@ function Search(props) {
                             <Grid item xs={12}>
                                 <Button size="small" variant="contained"
                                     color="primary"
-                                    onClick={() => props.searchJobs(searchCity, searchState, searchJob, setSearchResults, props.user.userId)}
+                                    onClick={() => props.searchJobs(searchCity, searchState, searchJob, setSearchResults, props.user.userId, null, setIsLoading)}
                                 >Search</Button>
                             </Grid>
                         </Grid>
@@ -522,11 +526,22 @@ function Search(props) {
                             </Grid>
                         </Grid>
                         <Grid container alignItems="flex-end" justify="center">
-                            <Grid item xs={12}>
+                            <Grid item xs={4}>
                                 <Button size="small" variant="contained"
                                     color="primary"
-                                    onClick={() => props.handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, props.user.postingsViewed, props.user.postingsSaved, props.user.postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, props.user.userId, false, updateCurrentFilters, props.postingsViewed)}
+                                    // deleted 20th argument, was props.postingsViewed.... which doesnt make sense but making note for future errors
+                                    onClick={() => props.handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, props.user.postingsViewed, props.user.postingsSaved, props.user.postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, props.user.userId, false, updateCurrentFilters, setIsSorting)}
                                 >Sort</Button>
+                            </Grid>
+                            <Grid item xs={4}>
+                                {isSorting ? <CircularProgress className={classes.progress} color="secondary" /> : <div></div>}
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Button size="small" variant="contained"
+                                    color="primary"
+                                    // deleted 20th argument, was props.postingsViewed.... which doesnt make sense but making note for future errors
+                                    onClick={() => props.clearFilters(setSearchResults, setSortTag, setFilterTag, setSiteTag, updateCurrentFilters, setIsSorting, props.user.userId)}
+                                >Clear Filters</Button>
                             </Grid>
                         </Grid>
                     </CardContent>
@@ -540,12 +555,12 @@ function Search(props) {
                             <Grid item >
                                 <Button size="small" variant="contained"
                                     color="primary"
-                                    onClick={() => (sortTag.length === 0 && filterTag.length === 0 && siteTag.length === 0) ? props.showMore(props.search.searchResults, setSearchResults, props.user.userId, props.search.numberResults, setNumberResults) : props.handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, props.user.postingsViewed, props.user.postingsSaved, props.user.postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, props.user.userId, true, updateCurrentFilters)}
+                                    onClick={() => (sortTag.length === 0 && filterTag.length === 0 && siteTag.length === 0) ? props.showMore(props.search.searchResults, setSearchResults, props.user.userId, props.search.numberResults, setNumberResults) : props.handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, props.user.postingsViewed, props.user.postingsSaved, props.user.postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, props.user.userId, true, updateCurrentFilters, setIsSorting)}
                                 >Show more</Button></Grid>
                             <Grid item >
                                 <Button size="small" variant="contained"
                                     color="primary"
-                                                        // clearSearch(setSearchCity, setSearchState, setSearchJob, setSearchResults, setSortTag, setFilterTag, setSiteTag, setNumberResults, updateCurrentFilters, searchJobs, updateNumberResults, props) {
+                                    // clearSearch(setSearchCity, setSearchState, setSearchJob, setSearchResults, setSortTag, setFilterTag, setSiteTag, setNumberResults, updateCurrentFilters, searchJobs, updateNumberResults, props) {
                                     onClick={() => props.clearSearch(setSearchCity, setSearchState, setSearchJob, setSearchResults, setSortTag, setFilterTag, setSiteTag, setNumberResults, updateCurrentFilters, searchJobs, updateNumberResults, props)}
                                 >Clear Search</Button>
                             </Grid>
@@ -565,7 +580,8 @@ function Search(props) {
 
 function mapDispatchToProps(dispatch) {
     const jobSearchMethods = {
-        searchJobs(searchCity, searchState, searchJob, setSearchResults, userId, postingsViewed) {
+        searchJobs(searchCity, searchState, searchJob, setSearchResults, userId, postingsViewed, setIsLoading) {
+            setIsLoading(true)
             setSearchResults([])
             let searchLocation = searchCity + ", " + searchState.toUpperCase()
             let data = {
@@ -596,6 +612,7 @@ function mapDispatchToProps(dispatch) {
                     dispatch(updatePostingsViewed({
                         postingsViewed: (resp.data !== 0 || resp.data !== "" || resp.data !== []) ? resp.data : postingsViewed
                     }))
+                    setIsLoading(false)
                 }).catch(err => { console.log(err) })
             }).catch(err => {
                 console.error(err);
@@ -696,7 +713,8 @@ function mapDispatchToProps(dispatch) {
             }))
             setNumberResults(newResults)
         },
-        handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, postingsViewed, postingsSaved, postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, userId, showMore, updateCurrentFilters) {
+        handleSorts(sortTag, setSortTag, filterTag, setFilterTag, siteTag, setSiteTag, numberResults, setNumberResults, searchResults, setSearchResults, postingsViewed, postingsSaved, postingsApplied, updatePostingsViewed, changeUserSearchInfo, changeSavedUserStats, userId, showMore, updateCurrentFilters, setIsSorting) {
+            setIsSorting(true)
             if (!(sortTag.length === 0 && filterTag.length === 0 && siteTag.length === 0)) {
                 if (!showMore) {
                     numberResults = 15
@@ -738,11 +756,13 @@ function mapDispatchToProps(dispatch) {
                         dispatch(moreResults({
                             searchResults: newDataWoo,
                         }));
+                        setIsSorting(false)
                     } else {
                         setSearchResults(resp.data)
                         dispatch(moreResults({
                             searchResults: resp.data,
                         }));
+                        setIsSorting(false)
                     }
                     let myArray = []
                     resp.data.forEach(jobObj => {
@@ -763,10 +783,18 @@ function mapDispatchToProps(dispatch) {
                         }))
                     }).catch(err => { console.log(err) })
                 })
+            } else {
+                //no filters set                
+                axios.get("/v1/job/sort/" + userId).then(resp => {
+                    setSearchResults(resp.data)
+                    dispatch(moreResults({
+                        searchResults: resp.data,
+                    }));
+                    setIsSorting(false)
+                }).catch(err => console.log(err))
             }
         },
         clearSearch(setSearchCity, setSearchState, setSearchJob, setSearchResults, setSortTag, setFilterTag, setSiteTag, setNumberResults, updateCurrentFilters, searchJobs, updateNumberResults, props) {
-            console.log(props)
             dispatch(updateCurrentFilters({
                 siteTag: [],
                 filterTag: [],
@@ -789,8 +817,25 @@ function mapDispatchToProps(dispatch) {
                 numberResults: 15
             }))
             setNumberResults(15)
-            console.log(props)
         },
+        clearFilters(setSearchResults, setSortTag, setFilterTag, setSiteTag, updateCurrentFilters, setIsSorting, userId){
+            setIsSorting(true)
+            dispatch(updateCurrentFilters({
+                siteTag: [],
+                filterTag: [],
+                sortTag: []
+            }))
+            setSiteTag([])
+            setFilterTag([])
+            setSortTag([])
+            axios.get("/v1/job/sort/" + userId).then(resp => {
+                setSearchResults(resp.data)
+                dispatch(moreResults({
+                    searchResults: resp.data,
+                }));
+                setIsSorting(false)
+            }).catch(err => console.log(err))
+        }
     }
     return jobSearchMethods
 }

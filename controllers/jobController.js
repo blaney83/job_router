@@ -100,6 +100,20 @@ module.exports = {
                 res.status(200).json(senderResponse)
 
             })
+    },
+
+    resetSort: function(req, res){
+        db.Job
+        .find({userId : req.params.number})
+        .then(dbModel => {
+            console.log(dbModel.length)
+            let filterArr = dbModel.filter(obj=>obj.jobSite === "ZipRecruiter")
+            console.log(filterArr.length)
+            let mySortingArray = ["CareerBuilder", "Dice", "Indeed", "GlassDoor", "ZipRecruiter"]
+            let firstReturn = shuffleShuffle(dbModel, 16, mySortingArray)
+            res.json(firstReturn)
+        })
+        .catch(err => res.status(422).json(err));
     }
 }
 
