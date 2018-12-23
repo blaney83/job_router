@@ -35,6 +35,7 @@ function Account(props) {
             <CardHeader
                 title="Update Your Account"
                 className={classes.header1}
+                titleTypographyProps={{ variant: "h4" }}
             />
             <CardContent>
                 {/* <TextField

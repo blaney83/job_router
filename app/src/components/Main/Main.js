@@ -68,6 +68,32 @@ function Main(props) {
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
     firstChart.data.series = [props.user.savedChartData, props.user.appliedChartData]
+
+    function fixUserName(name) {
+        let fixerArr = name.split("")
+        let newNameArr = fixerArr.map((letter, i) => i === 0 ? letter.toUpperCase() : letter)
+        return (newNameArr.join(""))
+    }
+    function checkRecentSearches(searchesArray) {
+        // props.user.recentSearches.map((searchObj, i) => (
+        if (searchesArray.length > 0) {
+            return (searchesArray.map((searchObj, i) => (
+                <ListItem key={i} role={undefined} dense button>
+                    {/* <ListItemText primaryTypographyProps={{variant: "body1"}} primary= */}
+                    {searchObj.searchJob + " jobs in " + searchObj.searchCity + ", " + searchObj.searchState}
+                    {/* //  /> */}
+                    <ListItemSecondaryAction>
+                        <IconButton aria-label="Comments">
+                            <ArrowForward />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+            )))
+        } else {
+            return (<Typography variant="h6">Your recent searches will be displayed here!</Typography>)
+        }
+    }
+
     return (
         <div>
             <Grid container spacing={16}>
@@ -77,7 +103,7 @@ function Main(props) {
                             avatar={
                                 <Avatar src={JobRouter} className={classes.mainJRIcon} />
                             }
-                            title={props.user.firstName + "'s Job-Search Dashboard"}
+                            title={fixUserName(props.user.firstName) + "'s Job-Search Dashboard"}
                             titleTypographyProps={{ variant: "h4" }}
                             className={classes.header1}
                         />
@@ -99,8 +125,8 @@ function Main(props) {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     <Card className={classes.card}>
-                        <CardHeader title="Applied / Saved" 
-                            className={classes.header3}                        
+                        <CardHeader title="Applied / Saved"
+                            className={classes.header3}
                         />
                         <CardContent className={classes.specialContent}>
                             <Typography variant="h3" >{props.user.numberApplied} / {props.user.numberSaved}</Typography>
@@ -109,8 +135,8 @@ function Main(props) {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     <Card className={classes.card}>
-                        <CardHeader title="Total Viewed" 
-                            className={classes.header4}                        
+                        <CardHeader title="Total Viewed"
+                            className={classes.header4}
                         />
                         <CardContent>
                             <Typography variant="h3" >{props.user.postingsViewed.length}</Typography>
@@ -121,7 +147,7 @@ function Main(props) {
             <Grid container spacing={16}>
                 <Grid item xs={12} sm={6}>
                     <Card className={classes.card}>
-                        <CardHeader title="This Week's Activity" 
+                        <CardHeader title="This Week's Activity"
                             className={classes.header5}
                         />
                         <ChartistGraph
@@ -149,21 +175,12 @@ function Main(props) {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Card className={classes.card}>
-                        <CardHeader title="Recent Searches" 
+                        <CardHeader title="Recent Searches"
                             className={classes.header6}
                         />
                         <CardContent>
                             <List className={classes.root}>
-                                {props.user.recentSearches.map((searchObj, i) => (
-                                    <ListItem key={i} role={undefined} dense button>
-                                        <ListItemText primary={searchObj.searchJob + " jobs in " + searchObj.searchCity + ", " + searchObj.searchState} />
-                                        <ListItemSecondaryAction>
-                                            <IconButton aria-label="Comments">
-                                                <ArrowForward />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                ))}
+                                {checkRecentSearches(props.user.recentSearches)}
                             </List>
                         </CardContent>
                     </Card>

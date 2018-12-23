@@ -90,10 +90,18 @@ const styles = {
         fontSize: ".9rem"
     },
     PositionName: {
-        fontSize: "1rem"
+        fontSize: "1.2rem",
+        fontWeight: "bold"
+    },
+    PositionLoc: {
+        fontSize: ".9rem",
+        fontWeight: "bold",
+        color: "darkGrey",
+        fontStyle: "italic"
     },
     header1: {
         backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291); !important",
+        // fontWeight: "bolder !important"
     },
     staticStatusHolder: {
         position: "absolute",
@@ -152,14 +160,16 @@ function Search(props) {
     }
 
     function checkPost(jobId) {
-        if (props.user.postingsApplied.indexOf(jobId) >= 0) {
-            return (<Applied className={classes.appliedAlreadyColor}/>)
-        } else if (props.user.postingsSaved.indexOf(jobId) >= 0) {
-            return (<Saved className={classes.savedAlreadyColor}/>)
-        } else if (props.user.postingsViewed.indexOf(jobId) >= 0) {
-            return (<Viewed color="primary"/>)
-        } else {
-            return (<NewPost color="secondary"/>)
+        if(jobId!== undefined){
+            if (props.user.postingsApplied.indexOf(jobId) >= 0) {
+                return (<Applied className={classes.appliedAlreadyColor}/>)
+            } else if (props.user.postingsSaved.indexOf(jobId) >= 0) {
+                return (<Saved className={classes.savedAlreadyColor}/>)
+            } else if (props.user.postingsViewed.indexOf(jobId) >= 0) {
+                return (<Viewed color="primary"/>)
+            } else {
+                return (<NewPost color="secondary"/>)
+            }
         }
     }
 
@@ -170,7 +180,7 @@ function Search(props) {
             fullWidth={true}
             id={jobId}
             // id={obj.jobId}
-            onClick={(e) => props.saveJob(e.target.id, props.user.userId, setOpen, setOpen2)}
+            onClick={(e) => props.saveJob(e.currentTarget.id, props.user.userId, setOpen, setOpen2)}
         >Save</Button>)
         }else{
             return (<Button size="small" variant="contained"
@@ -207,15 +217,15 @@ function Search(props) {
                                                                 <Avatar alt={obj.companyName} src={obj.companyImage} />
                                                             </ListItemAvatar>
                                                         </Grid><Grid item xs={6} className={classes.staticStatusHolder}>
-                                                                <ListItemAvatar>
+                                                                {/* <ListItemAvatar> */}
 
                                                                     {checkPost(obj.jobId)}
                                                                     {/* <Avatar alt="posting status" src={checkPost(obj.jobId)} /> */}
-                                                                </ListItemAvatar>
+                                                                {/* </ListItemAvatar> */}
                                                             </Grid></Grid>
                                                     </Grid>
                                                         <Grid item xs={10} className={classes.specialBox}>
-                                                            <Typography variant="body1"><span className={classes.PositionName}>{obj.positionTitle + "   " + obj.jobLocation}</span> <br></br> <span className={classes.CompanyName}>{obj.jobCompany}</span></Typography>
+                                                            <Typography variant="body1"><span className={classes.PositionName}>{obj.positionTitle}</span><span className={classes.PositionLoc}>{"   " + obj.jobLocation}</span> <br></br> <span className={classes.CompanyName}>{obj.jobCompany}</span></Typography>
                                                             <ListItemText
                                                                 secondary={obj.jobDescription}
                                                             />
@@ -332,7 +342,9 @@ function Search(props) {
                         className={classes.header1}
                     ></CardHeader>
                     <CardContent>
-                        <Typography variant="body1">Start your job search here! Enter the position you are interested in and the city and state you want to work in and hit the search button. We'll do the rest. We bring your the most relevant results for your job search from the 6 leading job-board sites! Use the filter options to control which jobs you see and the sort options to futher customize your results. Please excuse any incomplete data, we are always working to improve our site.</Typography>
+                        {/* <Typography variant="body1"> */}
+                        Start your job search here! Enter the position you are interested in and the city and state you want to work in and hit the search button. We'll do the rest. We bring your the most relevant results for your job search from the 6 leading job-board sites! Use the filter options to control which jobs you see and the sort options to futher customize your results. Please excuse any incomplete data, we are always working to improve our site.
+                        {/* </Typography> */}
                     </CardContent>
                     <CardContent>
                         <Grid container alignItems="flex-end" justify="center">
@@ -521,7 +533,8 @@ function Search(props) {
                             <Grid item >
                                 <Button size="small" variant="contained"
                                     color="primary"
-                                    onClick={() => props.clearSearch(setSearchCity, setSearchState, setSearchJob, setSearchResults, setSortTag, setFilterTag, setSiteTag, setNumberResults, changeUserSearchInfo, updatePostingsViewed, updateCurrentFilters, searchJobs, updateNumberResults, props.postingsViewed)}
+                                                        // clearSearch(setSearchCity, setSearchState, setSearchJob, setSearchResults, setSortTag, setFilterTag, setSiteTag, setNumberResults, updateCurrentFilters, searchJobs, updateNumberResults, props) {
+                                    onClick={() => props.clearSearch(setSearchCity, setSearchState, setSearchJob, setSearchResults, setSortTag, setFilterTag, setSiteTag, setNumberResults, updateCurrentFilters, searchJobs, updateNumberResults, props)}
                                 >Clear Search</Button>
                             </Grid>
                             <Grid item >
@@ -740,7 +753,8 @@ function mapDispatchToProps(dispatch) {
                 })
             }
         },
-        clearSearch(setSearchCity, setSearchState, setSearchJob, setSearchResults, setSortTag, setFilterTag, setSiteTag, setNumberResults, updateCurrentFilters, searchJobs, updateNumberResults) {
+        clearSearch(setSearchCity, setSearchState, setSearchJob, setSearchResults, setSortTag, setFilterTag, setSiteTag, setNumberResults, updateCurrentFilters, searchJobs, updateNumberResults, props) {
+            console.log(props)
             dispatch(updateCurrentFilters({
                 siteTag: [],
                 filterTag: [],
@@ -763,6 +777,7 @@ function mapDispatchToProps(dispatch) {
                 numberResults: 15
             }))
             setNumberResults(15)
+            console.log(props)
         },
     }
     return jobSearchMethods

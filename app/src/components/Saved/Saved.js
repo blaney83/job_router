@@ -68,7 +68,14 @@ const styles = {
         fontSize: ".9rem"
     },
     PositionName: {
-        fontSize: "1rem"
+        fontSize: "1.2rem",
+        fontWeight: "bold"
+    },
+    PositionLoc: {
+        fontSize: ".9rem",
+        fontWeight: "bold",
+        color: "darkGrey",
+        fontStyle: "italic"
     },
     header1: {
         backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291); !important",
@@ -133,7 +140,7 @@ function Saved(props) {
                                                 </ListItemAvatar>
                                             </Grid>
                                                 <Grid item xs={10} className={classes.specialBox}>
-                                                    <Typography variant="body1"><span className={classes.PositionName}>{obj.positionTitle + "   " + obj.jobLocation}</span> <br></br> <span className={classes.CompanyName}>{obj.jobCompany}</span></Typography>
+                                                    <Typography variant="body1"><span className={classes.PositionName}>{obj.positionTitle}</span><span className={classes.PositionLoc}>{"   " + obj.jobLocation}</span> <br></br> <span className={classes.CompanyName}>{obj.jobCompany}</span></Typography>
                                                     <ListItemText
                                                         secondary={obj.jobDescription}
                                                     />
@@ -172,13 +179,13 @@ function Saved(props) {
                                                             color={obj.hasApplied ? "primary" : "secondary"}
                                                             id={obj.jobId}
                                                             fullWidth={true}
-                                                            onClick={(e) => props.toggleApply(e.target.id, props.user.userId, savedResults, setSavedResults)}
+                                                            onClick={(e) => props.toggleApply(e.currentTarget.id, props.user.userId, savedResults, setSavedResults)}
                                                         >{obj.hasApplied ? "Already Applied" : "Mark as Applied"}</Button>
                                                         <Button size="small" variant="contained"
                                                             color="primary"
                                                             id={obj.jobId}
                                                             fullWidth={true}
-                                                            onClick={(e) => props.deleteJob(e.target.id, props.user.userId, savedResults, setSavedResults, setOpen, setOpen2)}
+                                                            onClick={(e) => props.deleteJob(e.currentTarget.id, props.user.userId, savedResults, setSavedResults, setOpen, setOpen2)}
                                                         >Delete</Button>
                                                         <Snackbar
                                                             className={classes.GoodAlert}
@@ -226,10 +233,13 @@ function Saved(props) {
             <Grid item xsm={12}>
                 <Card className={classes.card1}>
                     <CardHeader title="Your Saved Jobs"
+                        titleTypographyProps={{ variant: "h4" }}
                         className={classes.header1}
                     />
                     <CardContent>
-                        <Typography variant="body1">View your saved jobs below! Use the links to Navigate to the listings and apply! Then come back to mark them as applied and keep track of your employment journey. Use the sort feature to choose which results you see first or use the filter feature to hide jobs you've already applied to! Once you delete a job from your saved jobs, it will no longer be linked to your account, so only delete jobs you aren't interested in applying to.</Typography>
+                        {/* <Typography variant="body1"> */}
+                        View your saved jobs below! Use the links to Navigate to the listings and apply! Then come back to mark them as applied and keep track of your employment journey. Use the sort feature to choose which results you see first or use the filter feature to hide jobs you've already applied to! Once you delete a job from your saved jobs, it will no longer be linked to your account, so only delete jobs you aren't interested in applying to.
+                        {/* </Typography> */}
                     </CardContent>
                     <CardActions>
                         <Button size="small" variant="contained"
@@ -333,6 +343,7 @@ function mapDispatchToProps(dispatch) {
             }).catch(err => { console.log(err) })
         },
         toggleApply(jobId, userId, savedResults, setSavedResults) {
+            console.log(jobId)
             axios.put("/v1/saved/" + jobId + "/" + userId).then(res => {
                 if (res.status === 200) {
                     let newArray = savedResults.map(obj => obj.jobId === jobId ? true : obj)

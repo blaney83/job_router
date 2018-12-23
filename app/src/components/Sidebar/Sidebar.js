@@ -244,22 +244,38 @@ class Sidebar extends React.Component {
                         </div>
                         <Divider />
                         <List>
-                            <ListItem button="true" selected={this.props.locationProps.location.pathname === "/dashboard/home" ? "true" : ""} key={"Home"}>
-                                <ListItemIcon><Link to="/dashboard/home"><HomeIcon className={classes.sideIcons} /></Link></ListItemIcon>
-                                <ListItemText primary="Home" primaryTypographyProps={{ className: classes.sideIconLabels }} />
-                            </ListItem>
-                            <ListItem button key={"Search Jobs"} selected={this.props.locationProps.location.pathname === "/dashboard/search" ? "true" : ""}>
-                                <ListItemIcon><Link to="/dashboard/search"><SearchIcon className={classes.sideIcons} /></Link></ListItemIcon>
-                                <ListItemText primary="Search Jobs" primaryTypographyProps={{ className: classes.sideIconLabels }} />
-                            </ListItem>
-                            <ListItem button key={"Saved Jobs"} selected={this.props.locationProps.location.pathname === "/dashboard/saved" ? "true" : ""}>
-                                <ListItemIcon><Link to="/dashboard/saved"><SavedIcon className={classes.sideIcons} /></Link></ListItemIcon>
-                                <ListItemText primary="Saved Jobs" primaryTypographyProps={{ className: classes.sideIconLabels }} />
-                            </ListItem>
-                            <ListItem button key={"Account"} selected={this.props.locationProps.location.pathname === "/dashboard/account" ? "true" : ""}>
-                                <ListItemIcon><Link to="/dashboard/account"><AccountIcon className={classes.sideIcons} /></Link></ListItemIcon>
-                                <ListItemText primary="Account" primaryTypographyProps={{ className: classes.sideIconLabels }} />
-                            </ListItem>
+                            <Link to="/dashboard/home">
+                                <ListItem button="true" selected={this.props.locationProps.location.pathname === "/dashboard/home" ? "true" : ""} key={"Home"}>
+                                    <ListItemIcon>
+                                        <HomeIcon className={classes.sideIcons} />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Home" primaryTypographyProps={{ className: classes.sideIconLabels }} />
+                                </ListItem>
+                            </Link>
+                            <Link to="/dashboard/search">
+                                <ListItem button key={"Search Jobs"} selected={this.props.locationProps.location.pathname === "/dashboard/search" ? "true" : ""}>
+                                    <ListItemIcon>
+                                        <SearchIcon className={classes.sideIcons} />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Search Jobs" primaryTypographyProps={{ className: classes.sideIconLabels }} />
+                                </ListItem>
+                            </Link>
+                            <Link to="/dashboard/saved">
+                                <ListItem button key={"Saved Jobs"} selected={this.props.locationProps.location.pathname === "/dashboard/saved" ? "true" : ""}>
+                                    <ListItemIcon>
+                                        <SavedIcon className={classes.sideIcons} />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Saved Jobs" primaryTypographyProps={{ className: classes.sideIconLabels }} />
+                                </ListItem>
+                            </Link>
+                            <Link to="/dashboard/account">
+                                <ListItem button key={"Account"} selected={this.props.locationProps.location.pathname === "/dashboard/account" ? "true" : ""}>
+                                    <ListItemIcon>
+                                        <AccountIcon className={classes.sideIcons} />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Account" primaryTypographyProps={{ className: classes.sideIconLabels }} />
+                                </ListItem>
+                            </Link>
                         </List>
                         <List className={classes.signOutStayDown}>
                             <ListItem button="true" selected={this.props.locationProps.location.pathname === "/" ? "true" : ""} key={"Home"}>
