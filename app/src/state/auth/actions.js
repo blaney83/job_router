@@ -12,3 +12,6 @@ export const updatePostingsViewed = createAction("UPDATE_POSTINGS_VIEWED");
 
 export const updateCurrentFilters = createAction("UPDATE_CURRENT_FILTERS");
 
+export const changeAccountInfo = createAction("CHANGE_ACCOUNT_INFO");
+
+

@@ -1,5 +1,5 @@
 import { handleActions } from "redux-actions";
-import { updateAuth, changeSavedUserStats, changeUserSearchInfo, changeAppliedUserStats, updatePostingsViewed, updateCurrentFilters } from "./actions";
+import { updateAuth, changeSavedUserStats, changeUserSearchInfo, changeAppliedUserStats, updatePostingsViewed, updateCurrentFilters, changeAccountInfo } from "./actions";
 
 const defaultState = {
     authenticated: false,
@@ -104,6 +104,19 @@ const authReducer = handleActions({
                 siteTag: action.payload.siteTag,
                 filterTag: action.payload.filterTag,
                 sortTag: action.payload.sortTag,
+            }
+        }
+    },
+    [changeAccountInfo]: (state, action) => {
+        return {
+            ...state,
+            user: {
+                ...state.user,
+                username: action.payload.username,
+                firstName: action.payload.firstName,
+                lastName: action.payload.lastName,
+                userCity: action.payload.userCity,
+                userStateCode: action.payload.userStateCode,
             }
         }
     },

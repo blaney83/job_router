@@ -94,4 +94,26 @@ router.post("/signup", function (req, res) {
         });
 });
 
+router.patch("/update", function (req, res) {
+    if (req.body.authenticated && req.body.authToken !== undefined && req.body.authToken !== "" && req.body.authToken !== null) {
+        db.User.find({ username: req.body.username }).then(resp => {
+            if (resp === null || resp[0]._id == req.body.userId) {
+                db.User.findOneAndUpdate({ _id: req.body.userId }, { $set: { username: req.body.username, lastName: req.body.lastName, firstName: req.body.firstName, userStateCode: req.body.userStateCode, userCity: req.body.userCity } })
+                    .then(userModel => {
+                        if (userModel !== null) {
+                            res.status(200).send("Profile Updated!")
+                        } else if (userModel === null) {
+                            res.status(202).send("Couldn't find your account!")
+                        }
+                    })
+                    .catch(err => console.log(err))
+            } else {
+                res.status(204).send("Username already exists!")
+            }
+        }).catch(err => console.log(err))
+    }else{
+        res.status(401).send("You are not authorized to access this site. Please create an account to access our server.")
+    }
+})
+
 module.exports = router;

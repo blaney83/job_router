@@ -198,7 +198,7 @@ function mapDispatchToProps(dispatch) {
                     userCity: res.data.userCity,
                     userStateCode: res.data.userStateCode,
                     numberSaved: res.data.numberSaved,
-                    numberApplied: res.data.numberSaved,
+                    numberApplied: res.data.numberApplied,
                     savedChartData: res.data.savedChartData,
                     appliedChartData: res.data.appliedChartData,
                     postingsViewed: res.data.postingsViewed,

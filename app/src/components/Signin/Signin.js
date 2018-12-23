@@ -100,6 +100,7 @@ function mapDispatchToProps(dispatch) {
     return {
         signin(email, password, reroute) {
             axios.post("/v1/auth/signin", { email, password }).then(res => {
+                console.log(res.data.postingsApplied)
                 dispatch(updateAuth({
                     token: res.data.token,
                     username: res.data.username,
@@ -109,7 +110,7 @@ function mapDispatchToProps(dispatch) {
                     userCity: res.data.userCity,
                     userStateCode: res.data.userStateCode,
                     numberSaved: res.data.numberSaved,
-                    numberApplied: res.data.numberSaved,
+                    numberApplied: res.data.numberApplied,
                     savedChartData: res.data.savedChartData,
                     appliedChartData: res.data.appliedChartData,
                     postingsViewed: res.data.postingsViewed,

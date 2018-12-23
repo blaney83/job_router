@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { changeAccountInfo } from "../../state/auth/actions";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -13,22 +14,41 @@ import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import axios from "axios";
+import { Typography } from "@material-ui/core";
 
 const styles = () => ({
     header1: {
         backgroundImage: "linear-gradient(to right, #c24a04 , #ffe291); !important",
     },
+    generalMessage: {
+        color: "black"
+    },
+    goodMessage: {
+        color: "green"
+    },
+    cautionMessage: {
+        color: "#d09c00"
+    },
+    badMessage: {
+        color: "red"
+    },
 })
 
 function Account(props) {
     const { classes } = props;
-    // const [email, setEmail] = useState("");
-    // const [password, setPassword] = useState("");
     const [username, setUsername] = useState(props.user.username);
     const [firstName, setFirstName] = useState(props.user.firstName);
     const [lastName, setLastName] = useState(props.user.lastName);
     const [userCity, setUserCity] = useState(props.user.userCity);
     const [userStateCode, setUserStateCode] = useState(props.user.userStateCode);
+    const [origUsername, setOrigUsername] = useState(props.user.username);
+    const [origFirstName, setOrigFirstName] = useState(props.user.firstName);
+    const [origLastName, setOrigLastName] = useState(props.user.lastName);
+    const [origUserCity, setOrigUserCity] = useState(props.user.userCity);
+    const [origUserStateCode, setOrigUserStateCode] = useState(props.user.userStateCode);
+    const [changeMessage, setChangeMessage] = useState("Use the form below to submit any changes you would like to make to your account!");
+    const [messageClass, setMessageClass] = useState(classes.generalMessage);
 
     return (
         <Card className={classes.card}>
@@ -38,26 +58,25 @@ function Account(props) {
                 titleTypographyProps={{ variant: "h4" }}
             />
             <CardContent>
-                {/* <TextField
-                    // id="standard-with-placeholder"
-                    label="Email"
-                    placeholder="example@example.com"
-                    className={classes.textField}
-                    margin="normal"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <TextField
-                    // id="standard-with-placeholder"
-                    label="Password"
-                    placeholder="Secret123!@#"
-                    className={classes.textField}
-                    margin="normal"
-                    type="password"
-                    autoComplete="current-password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                /> */}
+                <Typography variant="h5" className={messageClass}>{changeMessage}<br /></Typography>
+                <Grid container justify="space-between">
+                    <Grid item xs={6}>
+                        Current Username: {origUsername} <br />
+                        Current First Name: {origFirstName}<br />
+                        Current Last Name: {origLastName}<br />
+                        Current City: {origUserCity} <br />
+                        Current State: {origUserStateCode}
+                    </Grid>
+                    <Grid item xs={6}>
+                        New Username: {username} <br />
+                        New First Name: {firstName}<br />
+                        New Last Name: {lastName}<br />
+                        New City: {userCity} <br />
+                        New State: {userStateCode}
+                    </Grid>
+                </Grid>
+            </CardContent>
+            <CardContent>
                 <TextField
                     label="Username"
                     placeholder="JohnDoe123"
@@ -156,21 +175,22 @@ function Account(props) {
             </CardContent>
             <CardActions>
                 <Grid container direction="row" alignItems="center" justify="space-between">
-                    <Grid item >
-                        <Button
-                            variant="contained"
-                            color="primary"
-                        // onClick={() => props.signup(email, password, username, firstName, lastName, userCity, userStateCode, props.router.history)}
-                        >
-                            Update Account
+                    {/* <Grid item > */}
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        fullWidth={true}
+                        onClick={() => props.updateAccount(props.user.userId, props.auth.token, props.auth.authenticated, username, firstName, lastName, userCity, userStateCode, setChangeMessage, setOrigUsername, setOrigFirstName, setOrigLastName, setOrigUserCity, setOrigUserStateCode, changeAccountInfo, setMessageClass, classes)}
+                    >
+                        Update Account
                         </Button>
-                    </Grid>
-                    <Grid item >or</Grid>
+                    {/* </Grid> */}
+                    {/* <Grid item >or</Grid>
                     <Grid item >
                         <Link to="/">
                             <Button variant="contained">Sign In</Button>
                         </Link>
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             </CardActions>
         </Card>
@@ -179,31 +199,69 @@ function Account(props) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        // signin(email, password, reroute) {
-        //     axios.post("/v1/auth/signin", { email, password }).then(res => {
-        //         console.log(res.data)
-        //         dispatch(updateAuth({
-        //             token: res.data.token,
-        //             username: res.data.username,
-        //             firstName: res.data.firstName,
-        //             lastName: res.data.lastName,
-        //             userCity: res.data.userCity,
-        //             userStateCode: res.data.userStateCode,
-        //             numberSaved: res.data.numberSaved,
-        //             numberApplied: res.data.numberSaved,
-        //             userId: res.data._id,
-        //             recentSearches: []
-        //         }));
-        //         reroute.push("/dashboard")
-        //     }).catch(err => {
-        //         console.error(err);
-        //     })
-        // }
+        updateAccount(userId, authToken, authenticated, requestedUserName, firstName, lastName, userCity, userStateCode, setChangeMessage, setOrigUsername, setOrigFirstName, setOrigLastName, setOrigUserCity, setOrigUserStateCode, changeAccountInfo, setMessageClass, classes) {
+            if (userId && authToken && authenticated && requestedUserName && firstName && lastName && userCity && userStateCode) {
+                if (authenticated && authToken !== undefined && authToken !== "" && authToken !== null) {
+                    let data = {
+                        userId: userId,
+                        authToken: authToken,
+                        authenticated: authenticated,
+                        username: requestedUserName,
+                        firstName: firstName,
+                        lastName: lastName,
+                        userCity: userCity,
+                        userStateCode: userStateCode
+                    }
+                    axios.patch("/v1/auth/update", data)
+                        .then(resp => {
+                            switch (resp.status) {
+                                case (200):
+                                    setChangeMessage("You account was successfully updated!")
+                                    setMessageClass(classes.goodMessage)
+                                    setOrigUsername(requestedUserName)
+                                    setOrigFirstName(firstName)
+                                    setOrigLastName(lastName)
+                                    setOrigUserCity(userCity)
+                                    setOrigUserStateCode(userStateCode)
+                                    dispatch(changeAccountInfo({
+                                        username: requestedUserName,
+                                        firstName: firstName,
+                                        lastName: lastName,
+                                        userCity: userCity,
+                                        userStateCode: userStateCode,
+                                    }))
+                                    return
+                                case (202):
+                                    setMessageClass(classes.badMessage)
+                                    setChangeMessage("Oops! We couldn't find your account... Contact support for more help.")
+                                    return
+                                case (204):
+                                    setMessageClass(classes.cautionMessage)
+                                    setChangeMessage("That username is already in use, please try again!")
+                                    return
+                                case (401):
+                                    setMessageClass(classes.badMessage)
+                                    setChangeMessage("You are not authorized to make changes to this account. If you believe this is an error, please contact support.")
+                                    return
+                                default:
+                                    setMessageClass(classes.badMessage)
+                                    setChangeMessage("Try again!")
+                                    return
+                            }
+                        })
+                        .catch(err => console.log(err))
+                }
+            } else {
+                //please fill out all fields
+                setMessageClass(classes.cautionMessage)
+                setChangeMessage("Please finish filling out the form before hitting submit.")
+            }
+        }
     }
 }
 
 function mapStateToProps(state) {
-    return { user: state.auth.user, email: state.auth.email }
+    return { user: state.auth.user, auth: { authenticated: state.auth.authenticated, token: state.auth.token } }
 }
 
 Account.propTypes = {
