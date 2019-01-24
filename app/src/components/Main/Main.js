@@ -65,7 +65,6 @@ const styles = {
 
 function Main(props) {
     const { classes } = props;
-    console.log(props)
     firstChart.data.series = [props.user.savedChartData, props.user.appliedChartData]
 
     function fixUserName(name) {

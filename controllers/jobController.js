@@ -63,7 +63,7 @@ module.exports = {
     },
 
     findMore: function (req, res) {
-        let mySortingArray = ["CareerBuilder", "Dice", "ZipRecruiter"]
+        let mySortingArray = ["CareerBuilder", "Dice", "ZipRecruiter", "Indeed"]
         let magicNumber = parseInt(req.params.number)
         db.Job.find({ userId: req.body.userId })
             // .limit(magicNumber)
@@ -79,7 +79,7 @@ module.exports = {
     },
 
     sortSite: function (req, res) {
-        let mySortingArray = ["CareerBuilder", "Dice", "ZipRecruiter"]
+        let mySortingArray = ["CareerBuilder", "Dice", "ZipRecruiter", "Indeed"]
         let myReferenceArray = mySortingArray
         let magicNumber = parseInt(req.params.number)
         db.Job.find({ userId: req.body.userId })
