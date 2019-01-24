@@ -1,5 +1,7 @@
+## Job-Router
 
-Very cool job-search-engine amalgamation combining the top 7 leading web sites and delivering location-specific, centralized data for easy navigation and profile tracking. 
+
+This project is a very cool(IMHO) job-search-engine amalgamation combining the top 7 leading web sites and delivering location-specific, centralized data for easy navigation and profile tracking. 
 
 For data gathering intricacies: /dataCalls
 For UI components: /app/src/Components
